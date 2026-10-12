@@ -55,11 +55,13 @@ class GraftTests(unittest.TestCase):
         cache.mkdir()
         request = {'package': str(package), 'root': str(self.root), 'cache': str(cache), 'action': 'query',
                    'question': 'fixture', 'maxChars': 512, 'limit': 6, 'advice': False}
+        # Allow Windows CI process/import latency without changing runtime query limits.
+        timeout = 60 if os.name == 'nt' else 10
         for content in ('x' * 512, 'x' * 1000, 'x' * 466 + '\U0001f600' * 500):
             with self.subTest(length=len(content)):
                 ask.write_text('export function ask(){return {hits: []};} export function formatAsk(){return ' + json.dumps(content) + ';}')
                 result = subprocess.run([node, str(REPO / 'harness_cli/graft_bridge.mjs')], input=json.dumps(request),
-                                        capture_output=True, text=True, timeout=10, check=True)
+                                        capture_output=True, text=True, timeout=timeout, check=True)
                 output = json.loads(result.stdout)
                 self.assertLessEqual(len(output['text'].encode('utf-16-le')) // 2, 512)
                 if len(content) == 512:
