@@ -1,107 +1,107 @@
 # Changelog
 
 | Version | Plan | Manifest | Transaction | Main change or patch |
-| --- | --- | --- | --- | --- |
-| [`v0.35.2‑beta`](#harness-for-codex-v0352-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve configured instructions, refresh locked checkpoints and report external snapshot cleanup failures |
-| [`v0.35.1‑beta`](#harness-for-codex-v0351-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve transaction boundaries, explicit model choices, maintenance timing and evaluation integrity |
-| [`v0.35.0‑beta`](#harness-for-codex-v0350-beta) | Schema 3 | Schema 7 | Schema 2 | Clarify project status, preserve settings and queued actions, and improve terminal management navigation. |
-| [`v0.34.0‑beta`](#harness-for-codex-v0340-beta) | Schema 3 | Schema 7 | Schema 2 | Repair runtime and evaluation boundaries, reduce repeated work, and make bounded collaboration more flexible. |
-| [`v0.33.0‑beta`](#harness-for-codex-v0330-beta) | Schema 3 | Schema 7 | Schema 2 | Relax unnecessary generation and maintenance gates, preserve native update choices, and add fresh-generation comparison. |
-| [`v0.32.4‑beta`](#harness-for-codex-v0324-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve incomplete orphan runtimes before reinstalling and report bootstrap errors in the installation log. |
-| [`v0.32.3‑beta`](#harness-for-codex-v0323-beta) | Schema 3 | Schema 7 | Schema 2 | Align runtime receipt read limits with creation and preserve bounded metadata reads. |
-| [`v0.32.2‑beta`](#harness-for-codex-v0322-beta) | Schema 3 | Schema 7 | Schema 2 | Prevent upgrade verification from writing Python caches into baseline evidence. |
-| [`v0.32.1‑beta`](#harness-for-codex-v0321-beta) | Schema 3 | Schema 7 | Schema 2 | Synchronize manifest template metadata and retain native submission errors and model refresh signals. |
-| [`v0.32.0‑beta`](#harness-for-codex-v0320-beta) | Schema 3 | Schema 7 | Schema 2 | Complete Linux installation with Codex integration and add guided project setup and management menus |
-| [`v0.31.0‑beta`](#harness-for-codex-v0310-beta) | Schema 3 | Schema 7 | Schema 2 | Add qualified in-conversation management, a boxed dashboard, queued project switching and confirmed empty-directory cleanup. |
-| [`v0.30.2‑beta`](#harness-for-codex-v0302-beta) | Schema 3 | Schema 7 | Schema 2 | Bind owned Linux installation paths across mount changes and verify hook execution before trust. |
-| [`v0.30.1‑beta`](#harness-for-codex-v0301-beta) | Schema 3 | Schema 7 | Schema 2 | Refresh host diagnostics when init reuses an existing project harness. |
-| [`v0.30.0‑beta`](#harness-for-codex-v0300-beta) | Schema 3 | Schema 7 | Schema 2 | Add portable root resolution, bounded host sandbox diagnostics, missing-root init and explicit external retrieval. |
-| [`v0.29.4‑beta`](#harness-for-codex-v0294-beta) | Schema 3 | Schema 7 | Schema 2 | Correct release-build regression expectations for supported external directory aliases. |
-| [`v0.29.3‑beta`](#harness-for-codex-v0293-beta) | Schema 3 | Schema 7 | Schema 2 | Prevent accidental menu cancellation, support preference backtracking and clear unacknowledged relay selections. |
-| [`v0.29.2‑beta`](#harness-for-codex-v0292-beta) | Schema 3 | Schema 7 | Schema 2 | Fix project aliases, shared state/lock identity and authenticated Codex picker reconnections. |
-| [`v0.29.1‑beta`](#harness-for-codex-v0291-beta) | Schema 3 | Schema 7 | Schema 2 | Fix linked Linux installation parents and remote Jev browser setup. |
-| [`v0.29.0‑beta`](#harness-for-codex-v0290-beta) | Schema 3 | Schema 7 | Schema 2 | Consistent confirmations, truthful update output and scoped maintenance recovery; evaluation storage and transaction fixes. |
-| [`v0.28.0‑beta`](#harness-for-codex-v0280-beta) | Schema 3 | Schema 7 | Schema 2 | Improve approval prompts and reversible configuration menus |
-| [`v0.27.4‑beta`](#harness-for-codex-v0274-beta) | Schema 3 | Schema 7 | Schema 2 | Fix configuration approval whitespace and expose native rejection results |
-| [`v0.27.3‑beta`](#harness-for-codex-v0273-beta) | Schema 3 | Schema 7 | Schema 2 | Remove duplicated Linux installer progress lines |
-| [`v0.27.2‑beta`](#harness-for-codex-v0272-beta) | Schema 3 | Schema 7 | Schema 2 | Resolve Conda interpreter aliases when identifying owned maintenance hooks |
-| [`v0.27.1‑beta`](#harness-for-codex-v0271-beta) | Schema 3 | Schema 7 | Schema 2 | Restore hook state on failed uninstall and clean owned native trust |
-| [`v0.27.0‑beta`](#harness-for-codex-v0270-beta) | Schema 3 | Schema 7 | Schema 2 | Prepare owned hook trust during init without enabling project features |
-| [`v0.26.0‑beta`](#harness-for-codex-v0260-beta) | Schema 3 | Schema 7 | Schema 2 | Choose maintenance and adaptive Auto preferences during init |
-| [`v0.25.2‑beta`](#harness-for-codex-v0252-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve per-request execution context in adaptive routing evidence |
-| [`v0.25.1‑beta`](#harness-for-codex-v0251-beta) | Schema 3 | Schema 7 | Schema 2 | Exclude mixed or stale Auto observations and preserve native execution provenance |
-| [`v0.25.0‑beta`](#harness-for-codex-v0250-beta) | Schema 3 | Schema 7 | Schema 2 | Adaptive maintenance cadence and opt-in observed Auto advice without additional model calls |
-| [`v0.24.1‑beta`](#harness-for-codex-v0241-beta) | Schema 3 | Schema 7 | Schema 2 | Fix installation races, workspace evidence isolation, corrected observations and inference compatibility |
-| [`v0.24.0‑beta`](#harness-for-codex-v0240-beta) | Schema 3 | Schema 7 | Schema 2 | Dynamic model catalogs and inference recovery, bounded maintenance outcome tracking and guarded rollback |
-| [`v0.23.2‑beta`](#harness-for-codex-v0232-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve native arguments and profiles, reject incompatible Codex candidates before activation, and count unique participant observations |
-| [`v0.23.1‑beta`](#harness-for-codex-v0231-beta) | Schema 3 | Schema 7 | Schema 2 | Fix official Codex relay authentication without URL path tokens |
-| [`v0.23.0‑beta`](#harness-for-codex-v0230-beta) | Schema 3 | Schema 7 | Schema 2 | Independent official Codex updates, published-release choices and an external Auto adapter without Codex compilation |
-| [`v0.22.3‑beta`](#harness-for-codex-v0223-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve concurrent configuration during maintenance, enforce the apply deadline after lock waits and correct unsupported-platform guidance |
-| [`v0.22.2‑beta`](#harness-for-codex-v0222-beta) | Schema 3 | Schema 7 | Schema 2 | Reject incomplete generator payloads and corrupt evaluation histories, clean up evaluation children and bound directory traversal |
-| [`v0.22.1‑beta`](#harness-for-codex-v0221-beta) | Schema 3 | Schema 7 | Schema 2 | Use the installed helper interpreter, preserve concurrent edits, reject per-check regressions and recover bounded maintenance/retrieval failures |
-| [`v0.22.0‑beta`](#harness-for-codex-v0220-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve external specialist skills, reuse relevant procedures and strengthen scientific and cross-contract review |
-| [`v0.21.1‑beta`](#harness-for-codex-v0211-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve concurrent user edits, fence checkpoint attempts, recover partial setup and align generated/runtime contracts |
-| [`v0.21.0‑beta`](#harness-for-codex-v0210-beta) | Schema 3 | Schema 7 | Schema 2 | Serialize transaction ownership, recover Jev locks, preserve Graft opt-outs, complete-run checkpoints and bounded workflow guidance |
-| [`v0.20.2‑beta`](#harness-for-codex-v0202-beta) | Schema 3 | Schema 7 | Schema 2 | Correct usable swap capacity and handle unavailable native source evidence |
-| [`v0.20.1‑beta`](#harness-for-codex-v0201-beta) | Schema 3 | Schema 7 | Schema 2 | Bound Linux native build concurrency, reserve memory headroom and log runner resources |
-| [`v0.20.0‑beta`](#harness-for-codex-v0200-beta) | Schema 3 | Schema 7 | Schema 2 | Guided TypeSafe login, private user-local credentials and immediate reuse |
-| [`v0.19.0‑beta`](#harness-for-codex-v0190-beta) | Schema 3 | Schema 7 | Schema 2 | Automatic Jev shadow setup during init, deferred key use and preference preservation |
-| [`v0.18.0‑beta`](#harness-for-codex-v0180-beta) | Schema 3 | Schema 7 | Schema 2 | Opt-in bounded Jev retrieval advice, local overhead observations and human-labeled ranking comparison |
-| [`v0.17.1‑beta`](#harness-for-codex-v0171-beta) | Schema 3 | Schema 7 | Schema 2 | Refresh transient native dependency downloads and lengthen bounded retry backoff |
-| [`v0.17.0‑beta`](#harness-for-codex-v0170-beta) | Schema 3 | Schema 7 | Schema 2 | Automatic isolated Graft setup during init, reuse and explicit opt-out preservation |
-| [`v0.16.0‑beta`](#harness-for-codex-v0160-beta) | Schema 3 | Schema 7 | Schema 2 | Optional local Graft retrieval, bounded evidence reuse and independent integrity diagnostics |
-| [`v0.15.0‑beta`](#harness-for-codex-v0150-beta) | Schema 3 | Schema 7 | Schema 2 | Opt-in selective checkpoints, shape-based Codex compatibility, bounded Auto routing and explicit commit status |
-| [`v0.14.0‑beta`](#harness-for-codex-v0140-beta) | Schema 3 | Schema 7 | Schema 2 | Auto footer, adaptive request routing and interactive Bash activation |
-| [`v0.13.2‑beta`](#harness-for-codex-v0132-beta) | Schema 3 | Schema 7 | Schema 2 | Bind standalone installers to the built release version |
-| [`v0.13.1‑beta`](#harness-for-codex-v0131-beta) | Schema 3 | Schema 7 | Schema 2 | Remove the first-setup message from installer progress |
-| [`v0.13.0‑beta`](#harness-for-codex-v0130-beta) | Schema 3 | Schema 7 | Schema 2 | Native Codex conversations, persistent project activation and direct Auto integration |
-| [`v0.12.0‑beta`](#harness-for-codex-v0120-beta) | Schema 3 | Schema 7 | Schema 2 | Opt-in conversation UI, Auto-first model menu and bounded per-request model/reasoning routing |
-| [`v0.11.0‑beta`](#harness-for-codex-v0110-beta) | Schema 3 | Schema 7 | Schema 2 | Lean resume, source-drift tolerance, one guide, native model modes and Harness-Codex distribution |
-| [`v0.10.0‑beta`](#harness-for-codex-v0100-beta) | Schema 3 | Schema 7 | Schema 2 | Bounded opt-in maintenance, exact Conda interpreter selection and beta versioning |
-| [`v0.9.11‑beta`](#harness-for-codex-v0911-beta) | Schema 3 | Schema 7 | Schema 2 | Native model/reasoning/permission picker, compact progress and independently validated completion |
-| [`v0.9.10‑beta`](#harness-for-codex-v0910-beta) | Schema 3 | Schema 7 | Schema 2 | Native configuration progress, concise diagnostics, command-specific edition and live installer timers |
-| [`v0.9.9‑beta`](#harness-for-codex-v099-beta) | Schema 3 | Schema 7 | Schema 2 | Shared project harness, native conversation lifecycle, guarded reinstall/uninstall and concise distribution docs |
-| [`v0.9.8‑beta`](#harness-for-codex-v098-beta) | Schema 3 | Schema 7 | Schema 2 | Native Windows PowerShell bootstrap, reproducible ZIP, isolated Conda setup and idempotent user PATH registration |
-| [`v0.9.7‑beta`](#harness-for-codex-v097-beta) | Schema 3 | Schema 7 | Schema 2 | Named Codex command, public one-command Linux bootstrap, automatic isolated environment setup, idempotent Bash PATH registration and config alias |
-| [`v0.9.6‑beta`](#harness-for-codex-v096-beta) | Schema 3 | Schema 7 | Schema 2 | Conditional model workflow guidance, clearer evidence/ownership diagnostics, reviewer examples and native execution validation protocol |
-| [`v0.9.5‑beta`](#harness-for-codex-v095-beta) | Schema 3 | Schema 7 | Schema 2 | Versioned source completeness, caller-environment preservation, guarded launcher migration and bootstrap Git timeouts |
-| [`v0.9.4‑beta`](#harness-for-codex-v094-beta) | Schema 3 | Schema 7 | Schema 2 | Markdown briefs, --agent option, existing-state notices and guarded removal/reset/recovery |
-| [`v0.9.3‑beta`](#harness-for-codex-v093-beta) | Schema 3 | Schema 7 | Schema 2 | Downloadable private-repository bootstrap, reusable Git authentication and explicit runtime selection |
-| [`v0.9.2‑beta`](#harness-for-codex-v092-beta) | Schema 3 | Schema 7 | Schema 2 | Standalone Linux CLI, project initialization and session launch, managed branch updates and release packaging |
-| [`v0.9.1‑beta`](#harness-for-codex-v091-beta) | Schema 3 | Schema 7 | Schema 2 | Installer directory-mode preservation, compatible v0.9.0-beta updates, nonmandatory Git authorization advice |
-| [`v0.9.0‑beta`](#harness-for-codex-v090-beta) | Schema 3 | Schema 7 | Schema 2 | Project-local installer, user-selected folders independent of Git boundaries, Artifact Contract 2, no Git metadata writes |
-| [`v0.8.1‑beta`](#harness-for-codex-v081-beta) | Schema 3 | Schema 6 | Schema 2 | Apply rejects unsupported existing artifact contracts while preserving supported v0.8.0-beta and legacy updates |
-| [`v0.8.0‑beta`](#harness-for-codex-v080-beta) | Schema 3 | Schema 6 | Schema 2 | Authoring Contract 3, Artifact Contract 1, strict frontmatter, topology-bound agent contracts, explicit upgrade status |
-| [`v0.7.6‑beta`](#harness-for-codex-v076-beta) | Schema 3 | Schema 6 | Schema 2 | Activation diagnostics, explicit usage coverage, and lighter direct-task guidance |
-| [`v0.7.5‑beta`](#harness-for-codex-v075-beta) | Schema 3 | Schema 6 | Schema 2 | Opt-in per-turn operations evidence, privacy-safe outcome review, custom-agent load and dependency attribution gaps |
-| [`v0.7.4‑beta`](#harness-for-codex-v074-beta) | Schema 3 | Schema 6 | Schema 2 | Reserved evidence namespaces, shared instruction discovery, project-context parity, effective-config load gaps, literal task-base coverage |
-| [`v0.7.3‑beta`](#harness-for-codex-v073-beta) | Schema 3 | Schema 6 | Schema 2 | Exact ignored/untracked evidence materialization, instruction-provenance isolation gaps, paired pre-task invariants, truthful optional materialization dry-run |
-| [`v0.7.2‑beta`](#harness-for-codex-v072-beta) | Schema 3 | Schema 6 | Schema 2 | Verified local-only paired evaluation, independent no-remote clones, source snapshot preflight, dry-run worktree-count diagnostics |
-| [`v0.7.1‑beta`](#harness-for-codex-v071-beta) | Schema 3 | Schema 6 | Schema 2 | Single-worktree exclusion isolation, literal Git ignore paths, safe synchronous protection rollback, unbound-marker detection |
-| [`v0.7.0‑beta`](#harness-for-codex-v070-beta) | Schema 3 | Schema 6 | Schema 2 | Workspace-first roots, Inventory Schema 4 scan coverage, local-only Git exclusion, tracked-file and user-instruction protection |
-| [`v0.6.10‑beta`](#harness-for-codex-v0610-beta) | Schema 3 | Schema 5 | Schema 2 | Enforced single-root preflight, Inventory Schema 3 role summaries, instruction-state split, Authoring Contract 2 drafts |
-| [`v0.6.9‑beta`](#harness-for-codex-v069-beta) | Schema 3 | Schema 5 | Schema 2 | Deterministic teamplay materialization, nested-root and research-artifact inventory, canonical capability registry, layered validation report |
-| [`v0.6.8‑beta`](#harness-for-codex-v068-beta) | Schema 3 | Schema 5 | Schema 2 | Canonical-handle runtime control, versioned public/local observation profiles, Runtime Receipt Schema 2, required-task accounting, installed draft-plan example |
-| [`v0.6.7‑beta`](#harness-for-codex-v067-beta) | Schema 3 | Schema 5 | Schema 2 | Deterministic contract materialization, spawn/wait liveness gates, version-bound privacy-safe runtime receipts, stale-review and affected-agent relay accounting |
-| [`v0.6.6‑beta`](#harness-for-codex-v066-beta) | Schema 3 | Schema 5 | Schema 2 | Native Codex subagent parent relay, scoped coordination-packet validation, conservative writer isolation and live-smoke accounting |
-| [`v0.6.5‑beta`](#harness-for-codex-v065-beta) | Schema 3 | Schema 5 | Schema 2 | Single-source release metadata, manifest-bound ephemeral runtime plans, bounded teamplay contracts, capability fallback and privacy-safe retention |
-| [`v0.6.4‑beta`](#harness-for-codex-v064-beta) | Schema 3 | Schema 5 | Schema 2 | Stable two-pass fingerprints, expanded repository-state verification checks, process-group cleanup and missing-stratum errors |
-| [`v0.6.3‑beta`](#harness-for-codex-v063-beta) | Schema 3 | Schema 5 | Schema 2 | Derived-view comparison lifecycle, verification-pure task measurement, explicit stratum selection, auxiliary binding and clean-tree hardening |
-| [`v0.6.2‑beta`](#harness-for-codex-v062-beta) | Schema 3 | Schema 5 | Schema 2 | Independent complete evidence units, arm-specific task bases, store-verified proposal eligibility, runtime-stratum and untracked-budget corrections |
-| [`v0.6.1‑beta`](#harness-for-codex-v061-beta) | Schema 3 | Schema 5 | Schema 2 | Plan-bound positive and negative attribution, conservative patch-scope eligibility, exact symmetric support thresholds, v0.6.0-beta/v0.6.1-beta evidence separation |
-| [`v0.6.0‑beta`](#harness-for-codex-v060-beta) | Schema 3 | Schema 5 | Schema 2 | Evaluation Schema 2, declared configuration-delta attribution, observation and annotation lifecycles, derived views, structured ingest, patch-scope evaluation |
-| [`v0.5.5‑beta`](#harness-for-codex-v055-beta) | Schema 3 | Schema 5 | Schema 2 | Canonical discipline enforcement, complete bounded result fingerprints, isolated user homes, annotation semantics, experiment-only positive proposals |
-| [`v0.5.4‑beta`](#harness-for-codex-v054-beta) | Schema 3 | Schema 5 | Schema 2 | Minimal-change discipline, self-contained writer safeguards, four-case behavioral classification probe |
-| [`v0.5.3‑beta`](#harness-for-codex-v053-beta) | Schema 3 | Schema 5 | Schema 2 | Default-off local evaluation, JSONL provenance, isolated paired comparison, immutable records, non-binding evidence proposals |
-| [`v0.5.2‑beta`](#harness-for-codex-v052-beta) | Schema 3 | Schema 5 | Schema 2 | Portable output namespace validation, complete-overlap handoffs, unique decision ownership, linked coordination witnesses, coordinated full-plan integration |
-| [`v0.5.1‑beta`](#harness-for-codex-v051-beta) | Schema 3 | Schema 5 | Schema 2 | Literal/prefix scope correction, portable case collision checks, topology cross-validation, unambiguous routing, exact quality budgets, expanded fixtures and Windows CI |
-| [`v0.5.0‑beta`](#harness-for-codex-v050-beta) | Schema 3 | Schema 5 | Schema 2 | Machine-verifiable material boundaries, persistent topology classes, routing and quality contracts, deterministic golden evaluation |
-| [`v0.4.0‑beta`](#harness-for-codex-v040-beta) | Schema 2 | Schema 4 | Schema 2 | SHA-256-bound structured evidence, line ranges, POSIX permission tracking and recovery |
-| [`v0.3.1‑beta`](#harness-for-codex-v031-beta) | Schema 1 | Schema 3 | Schema 1 | Recovery hardening, orphan inspection and cleanup, directory sync, live smoke-test guide |
-| [`v0.3.0‑beta`](#harness-for-codex-v030-beta) | Schema 1 | Schema 3 | Schema 1 | Journaled multi-file apply, verified staging, rollback, recovery, manifest-last commit |
-| [`v0.2.1‑beta`](#harness-for-codex-v021-beta) | Schema 1 | Schema 2 | None | True no-op updates, complete action-map checks, CI and fixture dry-run corrections |
-| [`v0.2.0‑beta`](#harness-for-codex-v020-beta) | Schema 1 | Schema 2 | None | JSON proposal, no-write dry-run, guarded deterministic apply, instruction precedence |
-| [`v0.1.0‑beta`](#harness-for-codex-v010-beta) | Direct generation | Schema 1 | None | Project-adaptive agents and skills, native Codex paths, initial ownership manifest |
+| :---: | :---: | :---: | :---: | --- |
+| [`v0.35.2‑beta`](#harness-for-codex-v0352-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve configured instructions, refresh locked checkpoints and report external snapshot cleanup failures |
+| [`v0.35.1‑beta`](#harness-for-codex-v0351-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve transaction boundaries, explicit model choices, maintenance timing and evaluation integrity |
+| [`v0.35.0‑beta`](#harness-for-codex-v0350-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Clarify project status, preserve settings and queued actions, and improve terminal management navigation. |
+| [`v0.34.0‑beta`](#harness-for-codex-v0340-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Repair runtime and evaluation boundaries, reduce repeated work, and make bounded collaboration more flexible. |
+| [`v0.33.0‑beta`](#harness-for-codex-v0330-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Relax unnecessary generation and maintenance gates, preserve native update choices, and add fresh-generation comparison. |
+| [`v0.32.4‑beta`](#harness-for-codex-v0324-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve incomplete orphan runtimes before reinstalling and report bootstrap errors in the installation log. |
+| [`v0.32.3‑beta`](#harness-for-codex-v0323-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Align runtime receipt read limits with creation and preserve bounded metadata reads. |
+| [`v0.32.2‑beta`](#harness-for-codex-v0322-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Prevent upgrade verification from writing Python caches into baseline evidence. |
+| [`v0.32.1‑beta`](#harness-for-codex-v0321-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Synchronize manifest template metadata and retain native submission errors and model refresh signals. |
+| [`v0.32.0‑beta`](#harness-for-codex-v0320-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Complete Linux installation with Codex integration and add guided project setup and management menus |
+| [`v0.31.0‑beta`](#harness-for-codex-v0310-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Add qualified in-conversation management, a boxed dashboard, queued project switching and confirmed empty-directory cleanup. |
+| [`v0.30.2‑beta`](#harness-for-codex-v0302-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Bind owned Linux installation paths across mount changes and verify hook execution before trust. |
+| [`v0.30.1‑beta`](#harness-for-codex-v0301-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Refresh host diagnostics when init reuses an existing project harness. |
+| [`v0.30.0‑beta`](#harness-for-codex-v0300-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Add portable root resolution, bounded host sandbox diagnostics, missing-root init and explicit external retrieval. |
+| [`v0.29.4‑beta`](#harness-for-codex-v0294-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Correct release-build regression expectations for supported external directory aliases. |
+| [`v0.29.3‑beta`](#harness-for-codex-v0293-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Prevent accidental menu cancellation, support preference backtracking and clear unacknowledged relay selections. |
+| [`v0.29.2‑beta`](#harness-for-codex-v0292-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Fix project aliases, shared state/lock identity and authenticated Codex picker reconnections. |
+| [`v0.29.1‑beta`](#harness-for-codex-v0291-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Fix linked Linux installation parents and remote Jev browser setup. |
+| [`v0.29.0‑beta`](#harness-for-codex-v0290-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Consistent confirmations, truthful update output and scoped maintenance recovery; evaluation storage and transaction fixes. |
+| [`v0.28.0‑beta`](#harness-for-codex-v0280-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Improve approval prompts and reversible configuration menus |
+| [`v0.27.4‑beta`](#harness-for-codex-v0274-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Fix configuration approval whitespace and expose native rejection results |
+| [`v0.27.3‑beta`](#harness-for-codex-v0273-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Remove duplicated Linux installer progress lines |
+| [`v0.27.2‑beta`](#harness-for-codex-v0272-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Resolve Conda interpreter aliases when identifying owned maintenance hooks |
+| [`v0.27.1‑beta`](#harness-for-codex-v0271-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Restore hook state on failed uninstall and clean owned native trust |
+| [`v0.27.0‑beta`](#harness-for-codex-v0270-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Prepare owned hook trust during init without enabling project features |
+| [`v0.26.0‑beta`](#harness-for-codex-v0260-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Choose maintenance and adaptive Auto preferences during init |
+| [`v0.25.2‑beta`](#harness-for-codex-v0252-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve per-request execution context in adaptive routing evidence |
+| [`v0.25.1‑beta`](#harness-for-codex-v0251-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Exclude mixed or stale Auto observations and preserve native execution provenance |
+| [`v0.25.0‑beta`](#harness-for-codex-v0250-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Adaptive maintenance cadence and opt-in observed Auto advice without additional model calls |
+| [`v0.24.1‑beta`](#harness-for-codex-v0241-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Fix installation races, workspace evidence isolation, corrected observations and inference compatibility |
+| [`v0.24.0‑beta`](#harness-for-codex-v0240-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Dynamic model catalogs and inference recovery, bounded maintenance outcome tracking and guarded rollback |
+| [`v0.23.2‑beta`](#harness-for-codex-v0232-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve native arguments and profiles, reject incompatible Codex candidates before activation, and count unique participant observations |
+| [`v0.23.1‑beta`](#harness-for-codex-v0231-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Fix official Codex relay authentication without URL path tokens |
+| [`v0.23.0‑beta`](#harness-for-codex-v0230-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Independent official Codex updates, published-release choices and an external Auto adapter without Codex compilation |
+| [`v0.22.3‑beta`](#harness-for-codex-v0223-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve concurrent configuration during maintenance, enforce the apply deadline after lock waits and correct unsupported-platform guidance |
+| [`v0.22.2‑beta`](#harness-for-codex-v0222-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Reject incomplete generator payloads and corrupt evaluation histories, clean up evaluation children and bound directory traversal |
+| [`v0.22.1‑beta`](#harness-for-codex-v0221-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Use the installed helper interpreter, preserve concurrent edits, reject per-check regressions and recover bounded maintenance/retrieval failures |
+| [`v0.22.0‑beta`](#harness-for-codex-v0220-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve external specialist skills, reuse relevant procedures and strengthen scientific and cross-contract review |
+| [`v0.21.1‑beta`](#harness-for-codex-v0211-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve concurrent user edits, fence checkpoint attempts, recover partial setup and align generated/runtime contracts |
+| [`v0.21.0‑beta`](#harness-for-codex-v0210-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Serialize transaction ownership, recover Jev locks, preserve Graft opt-outs, complete-run checkpoints and bounded workflow guidance |
+| [`v0.20.2‑beta`](#harness-for-codex-v0202-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Correct usable swap capacity and handle unavailable native source evidence |
+| [`v0.20.1‑beta`](#harness-for-codex-v0201-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Bound Linux native build concurrency, reserve memory headroom and log runner resources |
+| [`v0.20.0‑beta`](#harness-for-codex-v0200-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Guided TypeSafe login, private user-local credentials and immediate reuse |
+| [`v0.19.0‑beta`](#harness-for-codex-v0190-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Automatic Jev shadow setup during init, deferred key use and preference preservation |
+| [`v0.18.0‑beta`](#harness-for-codex-v0180-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Opt-in bounded Jev retrieval advice, local overhead observations and human-labeled ranking comparison |
+| [`v0.17.1‑beta`](#harness-for-codex-v0171-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Refresh transient native dependency downloads and lengthen bounded retry backoff |
+| [`v0.17.0‑beta`](#harness-for-codex-v0170-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Automatic isolated Graft setup during init, reuse and explicit opt-out preservation |
+| [`v0.16.0‑beta`](#harness-for-codex-v0160-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Optional local Graft retrieval, bounded evidence reuse and independent integrity diagnostics |
+| [`v0.15.0‑beta`](#harness-for-codex-v0150-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Opt-in selective checkpoints, shape-based Codex compatibility, bounded Auto routing and explicit commit status |
+| [`v0.14.0‑beta`](#harness-for-codex-v0140-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Auto footer, adaptive request routing and interactive Bash activation |
+| [`v0.13.2‑beta`](#harness-for-codex-v0132-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Bind standalone installers to the built release version |
+| [`v0.13.1‑beta`](#harness-for-codex-v0131-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Remove the first-setup message from installer progress |
+| [`v0.13.0‑beta`](#harness-for-codex-v0130-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Native Codex conversations, persistent project activation and direct Auto integration |
+| [`v0.12.0‑beta`](#harness-for-codex-v0120-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Opt-in conversation UI, Auto-first model menu and bounded per-request model/reasoning routing |
+| [`v0.11.0‑beta`](#harness-for-codex-v0110-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Lean resume, source-drift tolerance, one guide, native model modes and Harness-Codex distribution |
+| [`v0.10.0‑beta`](#harness-for-codex-v0100-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Bounded opt-in maintenance, exact Conda interpreter selection and beta versioning |
+| [`v0.9.11‑beta`](#harness-for-codex-v0911-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Native model/reasoning/permission picker, compact progress and independently validated completion |
+| [`v0.9.10‑beta`](#harness-for-codex-v0910-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Native configuration progress, concise diagnostics, command-specific edition and live installer timers |
+| [`v0.9.9‑beta`](#harness-for-codex-v099-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Shared project harness, native conversation lifecycle, guarded reinstall/uninstall and concise distribution docs |
+| [`v0.9.8‑beta`](#harness-for-codex-v098-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Native Windows PowerShell bootstrap, reproducible ZIP, isolated Conda setup and idempotent user PATH registration |
+| [`v0.9.7‑beta`](#harness-for-codex-v097-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Named Codex command, public one-command Linux bootstrap, automatic isolated environment setup, idempotent Bash PATH registration and config alias |
+| [`v0.9.6‑beta`](#harness-for-codex-v096-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Conditional model workflow guidance, clearer evidence/ownership diagnostics, reviewer examples and native execution validation protocol |
+| [`v0.9.5‑beta`](#harness-for-codex-v095-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Versioned source completeness, caller-environment preservation, guarded launcher migration and bootstrap Git timeouts |
+| [`v0.9.4‑beta`](#harness-for-codex-v094-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Markdown briefs, --agent option, existing-state notices and guarded removal/reset/recovery |
+| [`v0.9.3‑beta`](#harness-for-codex-v093-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Downloadable private-repository bootstrap, reusable Git authentication and explicit runtime selection |
+| [`v0.9.2‑beta`](#harness-for-codex-v092-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Standalone Linux CLI, project initialization and session launch, managed branch updates and release packaging |
+| [`v0.9.1‑beta`](#harness-for-codex-v091-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Installer directory-mode preservation, compatible v0.9.0-beta updates, nonmandatory Git authorization advice |
+| [`v0.9.0‑beta`](#harness-for-codex-v090-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Project-local installer, user-selected folders independent of Git boundaries, Artifact Contract 2, no Git metadata writes |
+| [`v0.8.1‑beta`](#harness-for-codex-v081-beta) | Schema&nbsp;3 | Schema&nbsp;6 | Schema&nbsp;2 | Apply rejects unsupported existing artifact contracts while preserving supported v0.8.0-beta and legacy updates |
+| [`v0.8.0‑beta`](#harness-for-codex-v080-beta) | Schema&nbsp;3 | Schema&nbsp;6 | Schema&nbsp;2 | Authoring Contract 3, Artifact Contract 1, strict frontmatter, topology-bound agent contracts, explicit upgrade status |
+| [`v0.7.6‑beta`](#harness-for-codex-v076-beta) | Schema&nbsp;3 | Schema&nbsp;6 | Schema&nbsp;2 | Activation diagnostics, explicit usage coverage, and lighter direct-task guidance |
+| [`v0.7.5‑beta`](#harness-for-codex-v075-beta) | Schema&nbsp;3 | Schema&nbsp;6 | Schema&nbsp;2 | Opt-in per-turn operations evidence, privacy-safe outcome review, custom-agent load and dependency attribution gaps |
+| [`v0.7.4‑beta`](#harness-for-codex-v074-beta) | Schema&nbsp;3 | Schema&nbsp;6 | Schema&nbsp;2 | Reserved evidence namespaces, shared instruction discovery, project-context parity, effective-config load gaps, literal task-base coverage |
+| [`v0.7.3‑beta`](#harness-for-codex-v073-beta) | Schema&nbsp;3 | Schema&nbsp;6 | Schema&nbsp;2 | Exact ignored/untracked evidence materialization, instruction-provenance isolation gaps, paired pre-task invariants, truthful optional materialization dry-run |
+| [`v0.7.2‑beta`](#harness-for-codex-v072-beta) | Schema&nbsp;3 | Schema&nbsp;6 | Schema&nbsp;2 | Verified local-only paired evaluation, independent no-remote clones, source snapshot preflight, dry-run worktree-count diagnostics |
+| [`v0.7.1‑beta`](#harness-for-codex-v071-beta) | Schema&nbsp;3 | Schema&nbsp;6 | Schema&nbsp;2 | Single-worktree exclusion isolation, literal Git ignore paths, safe synchronous protection rollback, unbound-marker detection |
+| [`v0.7.0‑beta`](#harness-for-codex-v070-beta) | Schema&nbsp;3 | Schema&nbsp;6 | Schema&nbsp;2 | Workspace-first roots, Inventory Schema 4 scan coverage, local-only Git exclusion, tracked-file and user-instruction protection |
+| [`v0.6.10‑beta`](#harness-for-codex-v0610-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Enforced single-root preflight, Inventory Schema 3 role summaries, instruction-state split, Authoring Contract 2 drafts |
+| [`v0.6.9‑beta`](#harness-for-codex-v069-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Deterministic teamplay materialization, nested-root and research-artifact inventory, canonical capability registry, layered validation report |
+| [`v0.6.8‑beta`](#harness-for-codex-v068-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Canonical-handle runtime control, versioned public/local observation profiles, Runtime Receipt Schema 2, required-task accounting, installed draft-plan example |
+| [`v0.6.7‑beta`](#harness-for-codex-v067-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Deterministic contract materialization, spawn/wait liveness gates, version-bound privacy-safe runtime receipts, stale-review and affected-agent relay accounting |
+| [`v0.6.6‑beta`](#harness-for-codex-v066-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Native Codex subagent parent relay, scoped coordination-packet validation, conservative writer isolation and live-smoke accounting |
+| [`v0.6.5‑beta`](#harness-for-codex-v065-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Single-source release metadata, manifest-bound ephemeral runtime plans, bounded teamplay contracts, capability fallback and privacy-safe retention |
+| [`v0.6.4‑beta`](#harness-for-codex-v064-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Stable two-pass fingerprints, expanded repository-state verification checks, process-group cleanup and missing-stratum errors |
+| [`v0.6.3‑beta`](#harness-for-codex-v063-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Derived-view comparison lifecycle, verification-pure task measurement, explicit stratum selection, auxiliary binding and clean-tree hardening |
+| [`v0.6.2‑beta`](#harness-for-codex-v062-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Independent complete evidence units, arm-specific task bases, store-verified proposal eligibility, runtime-stratum and untracked-budget corrections |
+| [`v0.6.1‑beta`](#harness-for-codex-v061-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Plan-bound positive and negative attribution, conservative patch-scope eligibility, exact symmetric support thresholds, v0.6.0-beta/v0.6.1-beta evidence separation |
+| [`v0.6.0‑beta`](#harness-for-codex-v060-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Evaluation Schema 2, declared configuration-delta attribution, observation and annotation lifecycles, derived views, structured ingest, patch-scope evaluation |
+| [`v0.5.5‑beta`](#harness-for-codex-v055-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Canonical discipline enforcement, complete bounded result fingerprints, isolated user homes, annotation semantics, experiment-only positive proposals |
+| [`v0.5.4‑beta`](#harness-for-codex-v054-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Minimal-change discipline, self-contained writer safeguards, four-case behavioral classification probe |
+| [`v0.5.3‑beta`](#harness-for-codex-v053-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Default-off local evaluation, JSONL provenance, isolated paired comparison, immutable records, non-binding evidence proposals |
+| [`v0.5.2‑beta`](#harness-for-codex-v052-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Portable output namespace validation, complete-overlap handoffs, unique decision ownership, linked coordination witnesses, coordinated full-plan integration |
+| [`v0.5.1‑beta`](#harness-for-codex-v051-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Literal/prefix scope correction, portable case collision checks, topology cross-validation, unambiguous routing, exact quality budgets, expanded fixtures and Windows CI |
+| [`v0.5.0‑beta`](#harness-for-codex-v050-beta) | Schema&nbsp;3 | Schema&nbsp;5 | Schema&nbsp;2 | Machine-verifiable material boundaries, persistent topology classes, routing and quality contracts, deterministic golden evaluation |
+| [`v0.4.0‑beta`](#harness-for-codex-v040-beta) | Schema&nbsp;2 | Schema&nbsp;4 | Schema&nbsp;2 | SHA-256-bound structured evidence, line ranges, POSIX permission tracking and recovery |
+| [`v0.3.1‑beta`](#harness-for-codex-v031-beta) | Schema&nbsp;1 | Schema&nbsp;3 | Schema&nbsp;1 | Recovery hardening, orphan inspection and cleanup, directory sync, live smoke-test guide |
+| [`v0.3.0‑beta`](#harness-for-codex-v030-beta) | Schema&nbsp;1 | Schema&nbsp;3 | Schema&nbsp;1 | Journaled multi-file apply, verified staging, rollback, recovery, manifest-last commit |
+| [`v0.2.1‑beta`](#harness-for-codex-v021-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | True no-op updates, complete action-map checks, CI and fixture dry-run corrections |
+| [`v0.2.0‑beta`](#harness-for-codex-v020-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | JSON proposal, no-write dry-run, guarded deterministic apply, instruction precedence |
+| [`v0.1.0‑beta`](#harness-for-codex-v010-beta) | Direct&nbsp;generation | Schema&nbsp;1 | None | Project-adaptive agents and skills, native Codex paths, initial ownership manifest |
 
 ## Harness for Codex v0.35.2-beta
 
