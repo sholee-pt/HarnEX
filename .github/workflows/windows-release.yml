@@ -139,7 +139,8 @@ jobs:
           conda run -n harness just fmt
           cd "$GITHUB_WORKSPACE/source"
           conda run -n harness python -B build/native_ui/review.py --root "$RUNNER_TEMP/codex-windows"
-          conda run --no-capture-output -n harness python -B build/native_ui/run_tests.py --root "$RUNNER_TEMP/codex-windows" --target x86_64-pc-windows-msvc
+          conda run --no-capture-output -n harness python -B ../validation/test/integration/run_windows_native_tests.py --source-root . --root "$RUNNER_TEMP/codex-windows" --target x86_64-pc-windows-msvc
+          conda run -n harness python -B build/native_ui/review.py --root "$RUNNER_TEMP/codex-windows"
           conda run -n harness python -B build/native_ui/source.py
       - name: Preserve test results and reclaim test output
         if: always()
