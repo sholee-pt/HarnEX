@@ -2,6 +2,7 @@
 
 | Version | Plan | Manifest | Transaction | Main change or patch |
 | :---: | :---: | :---: | :---: | --- |
+| [`v0.35.3‑beta`](#harness-for-codex-v0353-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve Windows managed-path identity during concurrent parent creation |
 | [`v0.35.2‑beta`](#harness-for-codex-v0352-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve configured instructions, refresh locked checkpoints and report external snapshot cleanup failures |
 | [`v0.35.1‑beta`](#harness-for-codex-v0351-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve transaction boundaries, explicit model choices, maintenance timing and evaluation integrity |
 | [`v0.35.0‑beta`](#harness-for-codex-v0350-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Clarify project status, preserve settings and queued actions, and improve terminal management navigation. |
@@ -102,6 +103,12 @@
 | [`v0.2.1‑beta`](#harness-for-codex-v021-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | True no-op updates, complete action-map checks, CI and fixture dry-run corrections |
 | [`v0.2.0‑beta`](#harness-for-codex-v020-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | JSON proposal, no-write dry-run, guarded deterministic apply, instruction precedence |
 | [`v0.1.0‑beta`](#harness-for-codex-v010-beta) | Direct&nbsp;generation | Schema&nbsp;1 | None | Project-adaptive agents and skills, native Codex paths, initial ownership manifest |
+
+## Harness for Codex v0.35.3-beta
+
+- Compare Windows managed paths in the same extended-path namespace, then return the selected root's path spelling. Concurrent parent creation no longer falsely rejects pending or completed evaluation directories as outside the state root.
+- Preserve symlink/reparse rejection and containment checks; add deterministic Windows race coverage and reject resolution redirected to the root or outside it.
+- Keep the eight-process evaluation test and compare installation upgrades with the published v0.35.2-beta source. This development correction does not replace existing release assets.
 
 ## Harness for Codex v0.35.2-beta
 

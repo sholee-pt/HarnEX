@@ -776,6 +776,40 @@ class StoreTests(unittest.TestCase):
             self.assertEqual(evaluation_store.repository_root(repository_id), target.resolve())
             self.assertTrue((target / "runs" / "pending").is_dir())
 
+    @unittest.skipUnless(os.name == "nt", "Windows realpath uses Win32 missing-path errors")
+    def test_run_directories_survive_parent_creation_during_windows_resolution(self) -> None:
+        import ntpath
+
+        native_final_path = ntpath._getfinalpathname
+        for name in ("pending", "completed"):
+            for extended in (False, True):
+                with self.subTest(name=name, extended=extended), tempfile.TemporaryDirectory() as directory:
+                    state = Path(directory) / "state"
+                    if extended:
+                        state = harness_state.io_path(state)
+                    repository = state / "repositories" / uuid_text(1)
+                    repository.mkdir(parents=True)
+                    target = repository / "runs" / name
+                    errors = []
+
+                    def create_parent_after_missing_lookup(path):
+                        try:
+                            return native_final_path(path)
+                        except OSError as exc:
+                            if ntpath.normcase(str(path)) == ntpath.normcase(str(target)):
+                                errors.append(exc.winerror)
+                                if exc.winerror == 3:
+                                    target.parent.mkdir(exist_ok=True)
+                            raise
+
+                    evaluation_store = store_module.EvaluationStore(state)
+                    with mock.patch.object(ntpath, "_getfinalpathname", side_effect=create_parent_after_missing_lookup):
+                        checked = evaluation_store.checked(target)
+                    self.assertEqual(errors[:2], [3, 2])
+                    self.assertEqual(checked, target)
+                    self.assertEqual(checked.relative_to(evaluation_store.root).as_posix(), f"repositories/{uuid_text(1)}/runs/{name}")
+                    self.assertFalse(target.exists())
+
     def assert_repository_parent_link_is_rejected(self, *, outside: bool) -> None:
         with tempfile.TemporaryDirectory() as directory:
             parent = Path(directory)

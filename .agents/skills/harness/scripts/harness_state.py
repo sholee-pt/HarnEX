@@ -214,7 +214,7 @@ def sync_directory(path: Path) -> bool:
 
 
 def io_path(path: Path) -> Path:
-    """Use the extended Windows path only at filesystem I/O boundaries."""
+    """Use one extended Windows spelling for I/O and containment comparisons."""
     if os.name == "nt":
         absolute = str(path.absolute())
         if not absolute.startswith("\\\\?\\"):
@@ -280,9 +280,12 @@ def resolve_inside(root: Path, relative: str, *, must_exist: bool = False) -> Pa
             & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0)
         ):
             raise StateError(f"managed path uses a symlink or reparse point: {relative}")
-    candidate = candidate.resolve()
-    if candidate == resolved_root or resolved_root not in candidate.parents:
+    # Concurrent parent creation can make Windows realpath retain a \\?\ prefix.
+    resolved_candidate = io_path(candidate.resolve())
+    boundary_root = io_path(resolved_root)
+    if resolved_candidate == boundary_root or boundary_root not in resolved_candidate.parents:
         raise StateError(f"managed path escapes workspace root: {relative}")
+    candidate = resolved_root / resolved_candidate.relative_to(boundary_root)
     if must_exist and not io_path(candidate).is_file():
         raise StateError(f"managed file is missing: {relative}")
     return candidate

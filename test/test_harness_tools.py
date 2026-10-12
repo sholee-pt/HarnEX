@@ -402,6 +402,21 @@ class StateTests(unittest.TestCase):
                 "evidence.txt",
             )
 
+    def test_resolve_inside_rejects_resolution_redirected_after_path_checks(self) -> None:
+        native_resolve = Path.resolve
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "repository"
+            root.mkdir()
+            candidate = root / "evidence.txt"
+            for redirected in (root, root.parent / "repository-other" / "evidence.txt"):
+                with self.subTest(redirected=redirected):
+                    def resolve(path, *args, **kwargs):
+                        return harness_state.io_path(redirected) if path == candidate else native_resolve(path, *args, **kwargs)
+                    with mock.patch.object(Path, "resolve", resolve):
+                        with self.assertRaisesRegex(harness_state.StateError, "escapes workspace root"):
+                            harness_state.resolve_inside(root, "evidence.txt")
+            self.assertEqual(list(root.iterdir()), [])
+
     def test_record_status_and_rebaseline_refusal(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

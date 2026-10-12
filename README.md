@@ -5,8 +5,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/sholee-pt/Harness-Codex/tree/v0.35.2-beta"><img src="https://img.shields.io/badge/Version-v0.35.2--beta-2563EB.svg?style=flat-square" alt="Version: v0.35.2-beta"></a>
-  <a href="https://github.com/sholee-pt/Harness-Codex/actions/workflows/codex-beta.yml"><img src="https://github.com/sholee-pt/Harness-Codex/actions/workflows/codex-beta.yml/badge.svg?branch=v0.35.2-beta&amp;event=workflow_dispatch" alt="Linux verification and release status"></a>
+  <a href="https://github.com/sholee-pt/Harness-Codex/tree/v0.35.3-beta"><img src="https://img.shields.io/badge/Version-v0.35.3--beta-2563EB.svg?style=flat-square" alt="Version: v0.35.3-beta"></a>
+  <a href="https://github.com/sholee-pt/Harness-Codex/actions/workflows/codex-beta.yml"><img src="https://github.com/sholee-pt/Harness-Codex/actions/workflows/codex-beta.yml/badge.svg?branch=v0.35.3-beta&amp;event=workflow_dispatch" alt="Linux verification and release status"></a>
   <a href="#agent-editions"><img src=".github/badges/agent-codex.svg" alt="Agent: Codex"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Proprietary-64748B.svg?style=flat-square" alt="License: Proprietary"></a>
 </p>
@@ -25,24 +25,24 @@
 
 Generate and maintain one shared project harness with Codex-native agents and skills. **Harness-Codex configures and maintains the project harness. Codex owns conversations and interactive work.** Plain folders, Git worktrees and workspaces containing multiple repositories are supported.
 
-**Development beta:** The current source is **v0.35.2-beta**. The version badge identifies development source; the Linux installation command below uses the latest published release. Development changes become available in release downloads only after the required Linux and official Codex compatibility checks pass.
+**Development beta:** The current source is **v0.35.3-beta**. The version badge identifies development source; the Linux installation command below uses the latest published release. Development changes become available in release downloads only after the required Linux and official Codex compatibility checks pass.
 
 ## Installation Guide
 
 ### For Linux
 
-**Latest release: [v0.32.4-beta](https://github.com/sholee-pt/Harness-Codex/releases/tag/v0.32.4-beta)** (published Linux assets)
+**Latest release: [v0.35.2-beta](https://github.com/sholee-pt/Harness-Codex/releases/tag/v0.35.2-beta)** (published Linux assets)
 
 ```bash
-curl -fsSL https://github.com/sholee-pt/Harness-Codex/releases/download/v0.32.4-beta/install_harness_codex.sh | sh
+curl -fsSL https://github.com/sholee-pt/Harness-Codex/releases/download/v0.35.2-beta/install_harness_codex.sh | sh
 ```
 
 Previous releases retain their version tags and installation commands on the [Releases page](https://github.com/sholee-pt/Harness-Codex/releases).
 
-To install the current **v0.35.2-beta development source**, including changes not yet published as release assets:
+To install the current **v0.35.3-beta development source**, including changes not yet published as release assets:
 
 ```bash
-git clone --branch v0.35.2-beta --single-branch https://github.com/sholee-pt/Harness-Codex.git Harness-Codex
+git clone --branch v0.35.3-beta --single-branch https://github.com/sholee-pt/Harness-Codex.git Harness-Codex
 bash Harness-Codex/installer/install.sh
 harness-codex --version
 ```
@@ -53,7 +53,7 @@ Supports Linux x86_64 and aarch64. Source cloning requires Git; installation req
 
 Windows release assets are not currently available. Windows support remains in the source tree, but publication is paused until its separate validation passes. Use Windows release installation only when the [release assets](https://github.com/sholee-pt/Harness-Codex/releases) include `install_harness_codex.ps1`, `harness-codex-VERSION-windows.zip` and the matching Windows native package. See [source installation options](docs/installation.md) for development use.
 
-When migrating from 0.10.0-beta, run this installer once: its updater cannot discover the new unprefixed branches. If installation traces exist, choose **`reuse`** to retain tool preferences or **`reset`** to reset Harness update preferences, its check cache and managed PATH registration. Project harnesses and unrelated settings are preserved. Unattended installation accepts `--existing reuse|reset` on Linux or `-Existing reuse|reset` on Windows. See [installation options](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.2-beta/docs/installation.md).
+When migrating from 0.10.0-beta, run this installer once: its updater cannot discover the new unprefixed branches. If installation traces exist, choose **`reuse`** to retain tool preferences or **`reset`** to reset Harness update preferences, its check cache and managed PATH registration. Project harnesses and unrelated settings are preserved. Unattended installation accepts `--existing reuse|reset` on Linux or `-Existing reuse|reset` on Windows. See [installation options](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.3-beta/docs/installation.md).
 
 ## Quick Start
 
@@ -191,19 +191,19 @@ After reinstalling, run `status` in a project to recognize its retained harness.
 ## Documentation
 
 - [Native Codex integration and automatic model routing](docs/routing.md)
-- [Installation, reinstall choices and troubleshooting](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.2-beta/docs/installation.md)
-- [Project and conversation lifecycle](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.2-beta/docs/sessions.md)
+- [Installation, reinstall choices and troubleshooting](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.3-beta/docs/installation.md)
+- [Project and conversation lifecycle](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.3-beta/docs/sessions.md)
 - [Bounded maintenance and local records](docs/maintenance.md)
 - [Optional task checkpoints and selective resume](.agents/skills/harness/references/task-checkpoints.md)
 - [Optional local Graft retrieval](docs/retrieval.md)
 - [Optional Jev advice, local observations and evaluation limits](docs/jev.md)
 - [Dependency and optimization review](docs/optimization-review.md)
 - [Beta versioning and migration](docs/versioning.md)
-- [Generated structure and design](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.2-beta/docs/architecture.md)
-- [Quality evaluation and optional local evidence](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.2-beta/docs/evaluation.md)
+- [Generated structure and design](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.3-beta/docs/architecture.md)
+- [Quality evaluation and optional local evidence](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.3-beta/docs/evaluation.md)
 - [Workflow efficiency, instruction inventory and selected OMX concepts](docs/workflow-efficiency.md)
 - [External specialist skills and selected upstream improvements](docs/external-skills.md)
-- [Release assets and verification](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.2-beta/docs/distribution.md)
+- [Release assets and verification](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.3-beta/docs/distribution.md)
 - [Changelog](CHANGELOG.md) · [GitHub Releases](https://github.com/sholee-pt/Harness-Codex/releases) · [Contributing](CONTRIBUTING.md)
 
 ## Agent editions
