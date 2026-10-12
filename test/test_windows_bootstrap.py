@@ -119,11 +119,20 @@ try {
 @unittest.skipUnless(POWERSHELL, 'Requires native Windows PowerShell')
 class WindowsSourceInstallerTests(unittest.TestCase):
     def test_git_metadata_paths_are_rejected_before_logs_or_conda(self):
+        native_environment = os.environ.copy()
+        native_environment.pop('PSModulePath', None)
+        native_environment.pop('PSMODULEPATH', None)
+        policy = subprocess.check_output([POWERSHELL, '-NoProfile', '-NonInteractive', '-Command', 'Get-ExecutionPolicy'],
+                                         text=True, env=native_environment, timeout=30).strip()
+        if policy in {'Restricted', 'AllSigned'}:
+            if os.environ.get('GITHUB_ACTIONS') == 'true':
+                self.fail('Windows CI must permit the source installer under its existing policy: ' + policy)
+            self.skipTest('Existing PowerShell policy prevents source installer execution: ' + policy)
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory).resolve()
             for option in ('DataDir', 'BinDir', 'CondaHome'):
                 with self.subTest(option=option):
-                    environment = {**os.environ, 'TEMP': str(base), 'TMP': str(base)}
+                    environment = {**native_environment, 'TEMP': str(base), 'TMP': str(base)}
                     result = subprocess.run([POWERSHELL, '-NoProfile', '-NonInteractive', '-File',
                                              str(ROOT / 'installer/install.ps1'), '-' + option, str(base / '.git/tool')],
                                             env=environment, capture_output=True, text=True, timeout=30)

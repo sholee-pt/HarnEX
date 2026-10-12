@@ -227,6 +227,10 @@ def populate(folder: Path, entries: dict[str, Entry]) -> None:
 
 def remove_prepared_tree(folder: Path) -> None:
     """Remove only an installer-created staging tree or a committed backup."""
+    folder = checked_path(folder)
+    if os.name == "nt" and not str(folder).startswith("\\\\?\\"):
+        text = str(folder)
+        folder = Path("\\\\?\\UNC\\" + text[2:] if text.startswith("\\\\") else "\\\\?\\" + text)
     if os.name == "posix":
         def make_removable(path: Path) -> None:
             checked_path(path)

@@ -255,6 +255,7 @@ def atomic_write_text(path: Path, text: str, *, mode: int | None = None) -> None
 
 
 def resolve_inside(root: Path, relative: str, *, must_exist: bool = False) -> Path:
+    validate_managed_path(relative)
     if not isinstance(relative, str) or "\\" in relative:
         raise StateError(f"managed path must use POSIX separators: {relative!r}")
     if any(ord(character) < 32 or ord(character) == 127 for character in relative):
@@ -300,6 +301,14 @@ def portable_path_key(relative: str) -> tuple[str, ...]:
     ):
         raise StateError(f"managed path must be a normalized relative path: {relative}")
     return tuple(part.casefold() for part in path.parts)
+
+
+def validate_managed_path(relative: str) -> None:
+    parts = portable_path_key(relative)
+    reserved = {"con", "prn", "aux", "nul"} | {f"{prefix}{number}" for prefix in ("com", "lpt") for number in range(1, 10)}
+    for part in parts:
+        if part.endswith((".", " ")) or any(c in ':<>"|?*' for c in part) or part.split(".", 1)[0] in reserved:
+            raise StateError(f"nonportable managed path: {relative}")
 
 
 def validate_evidence_relative(relative: str) -> tuple[str, ...]:
@@ -356,42 +365,63 @@ def resolve_lexical_regular_inside(
 
 
 def project_instruction_candidates(root: Path) -> list[str]:
-    """Return root instruction candidates in Codex precedence order."""
+    """Resolve on-disk fallback settings without launching Codex or changing trust."""
     candidates = list(DEFAULT_INSTRUCTION_CANDIDATES)
-    config_path = root / PROJECT_CONFIG_RELATIVE
-    if config_path.exists() or config_path.is_symlink():
-        path, present = resolve_lexical_regular_inside(
-            root,
-            PROJECT_CONFIG_RELATIVE,
-            must_exist=True,
-            label="project Codex config",
-        )
-        if not present:
-            raise StateError("project Codex config is missing")
+    root = root.resolve()
+    home = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex").expanduser()
+    if not home.is_absolute():
+        raise StateError("CODEX_HOME must be absolute for instruction discovery")
+    project_roots = [root]
+    if not os.path.lexists(root / ".git"):
+        for parent in root.parents:
+            project_roots.append(parent)
+            if os.path.lexists(parent / ".git"):
+                break
+        else:
+            project_roots = [root]
+    locations = ([] if os.name == "nt" else [Path("/etc/codex/config.toml")])
+    locations += [home / "config.toml", *(parent / PROJECT_CONFIG_RELATIVE for parent in reversed(project_roots))]
+    fallbacks = []
+    seen = set()
+    for config_path in locations:
+        if config_path in seen:
+            continue
+        seen.add(config_path)
+        path = checked_absolute(config_path)
         try:
-            config_bytes = path.read_bytes()
+            if not stat.S_ISREG(path.stat().st_mode):
+                raise StateError("Codex instruction config must be a regular file")
+            with path.open("rb") as stream:
+                if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+                    raise StateError("Codex instruction config must be a regular file")
+                config_bytes = stream.read(PROJECT_CONFIG_MAX_BYTES + 1)
             if len(config_bytes) > PROJECT_CONFIG_MAX_BYTES:
-                raise StateError("project Codex config exceeds the size limit")
+                raise StateError("Codex instruction config exceeds the size limit")
             config = tomllib.loads(config_bytes.decode("utf-8"))
+        except FileNotFoundError:
+            continue
         except StateError:
             raise
         except (OSError, UnicodeError, tomllib.TOMLDecodeError) as exc:
-            raise StateError(f"invalid project Codex config: {exc}") from exc
-        fallbacks = config.get("project_doc_fallback_filenames", [])
-        if not isinstance(fallbacks, list) or any(
-            not isinstance(value, str) for value in fallbacks
+            raise StateError("invalid or unreadable Codex instruction config") from exc
+        configured = config.get("project_doc_fallback_filenames", fallbacks)
+        if not isinstance(configured, list) or any(
+            not isinstance(value, str) for value in configured
         ):
             raise StateError(
                 "project_doc_fallback_filenames must be an array of filenames"
             )
-        for fallback in fallbacks:
+        for fallback in configured:
+            validate_managed_path(fallback)
             key = portable_path_key(fallback)
             if len(key) != 1:
                 raise StateError(
                     "project_doc_fallback_filenames entries must be root filenames"
                 )
-            if key not in {portable_path_key(value) for value in candidates}:
-                candidates.append(fallback)
+        fallbacks = configured
+    for fallback in fallbacks:
+        if portable_path_key(fallback) not in {portable_path_key(value) for value in candidates}:
+            candidates.append(fallback)
     return candidates
 
 

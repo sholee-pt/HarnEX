@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import threading
 import time
 import unittest
 from unittest import mock
@@ -96,6 +97,45 @@ class CheckpointTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'dependency'):
             self.call('start', task='qa')
         self.assertNotIn('alpha', self.call('status')['reusable'])
+
+    def test_lock_wait_rechecks_changed_inputs_outputs_and_dependencies(self):
+        self.finish('alpha')
+        self.finish('beta')
+        for action, filename in (('resume', 'alpha.in'), ('status', 'alpha.out'), ('start', 'alpha.out')):
+            with self.subTest(action=action):
+                path = self.root / filename
+                before = path.read_bytes()
+                waiting = threading.Event()
+                acquire = checkpoint.FileLock.acquire
+                result = {}
+                def observed_acquire(lock):
+                    waiting.set()
+                    return acquire(lock)
+                def work():
+                    try:
+                        if action == 'resume':
+                            result['report'] = self.call(action, run='second', previous='first', keep_days=1)
+                        else:
+                            result['report'] = self.call(action, task='qa' if action == 'start' else None)
+                    except Exception as error:
+                        result['error'] = error
+                with checkpoint.FileLock(self.store / '.lock'):
+                    with mock.patch.object(checkpoint.FileLock, 'acquire', observed_acquire):
+                        worker = threading.Thread(target=work)
+                        worker.start()
+                        self.assertTrue(waiting.wait(5))
+                        path.write_text('changed during lock wait')
+                worker.join(15)
+                self.assertFalse(worker.is_alive())
+                if action == 'start':
+                    self.assertIsInstance(result.get('error'), ValueError)
+                    self.assertIn('dependency', str(result['error']))
+                else:
+                    self.assertNotIn('error', result)
+                    key = 'reused' if action == 'resume' else 'reusable'
+                    self.assertNotIn('alpha', result['report'][key])
+                    self.assertIn('inputs-changed' if filename.endswith('.in') else 'outputs-changed', result['report']['pending']['alpha'])
+                path.write_bytes(before)
 
     def test_result_does_not_release_writer_and_stop_request_is_not_stop(self):
         self.call('start', task='alpha')

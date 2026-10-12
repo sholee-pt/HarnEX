@@ -834,6 +834,8 @@ def _apply_application(application: dict) -> dict:
     action_by_path = application_actions(application)
     desired_modes = application_modes(application)
     root = application["manifestPath"].parents[1]
+    if application.get("instructionRelative") != harness_state.active_instruction_relative(root):
+        raise PlanError("active Codex instruction changed before apply; review the current configuration")
     for entry in application["evidencePreconditions"]:
         relative, expected = entry["path"], entry["sha256"]
         path = harness_state.resolve_inside(root, relative, must_exist=True)

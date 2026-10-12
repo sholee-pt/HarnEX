@@ -49,6 +49,8 @@ harness-codex checkpoint remove --project /project --store ~/.local/state/harnes
 
 `resume` preserves the previous run record and copies only valid accepted results. An input, contract, context or output change invalidates that task and dependent consumers. A newly added task does not invalidate independent work. `status` recomputes validity without rewriting state. Source evidence changes do not automatically block ordinary native conversation resume.
 
+잠금을 기다린 뒤에는 입력·출력 해시를 다시 계산하여 resume·status·start를 판정할 것. 저장소 잠금은 외부 편집자의 파일 변경을 막는 잠금이 아니므로 결과를 통합할 때도 현재 입력과 검증 조건을 확인할 것.
+
 `record` and `quiesce` must receive the `--attempt` returned for that execution. Missing or stale tokens cannot update a new attempt. Legacy entries without a token remain readable; new starts always issue one.
 
 A completed result does not establish that an agent stopped writing. Record `idle`, `stopped` or `closed` only from an actual native observation. `stop-requested` retains ownership. These records are explicitly caller-observed; the helper cannot authenticate native tool activity by itself. Use existing runtime receipts for stronger evidence. The store enforces one active writer and at most eight active tasks across its runs. This is advisory coordination, not an OS sandbox or a registry of unrelated Codex sessions/stores. Preserve actual native isolation and existing permissions; if other writers cannot be ruled out, do not dispatch another writer.

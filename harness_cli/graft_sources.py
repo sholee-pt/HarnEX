@@ -123,7 +123,9 @@ def snapshot(folder, files):
                 desired[parent.as_posix()] = old.get(parent.as_posix(), Entry(None, 0o700, stamp))
     data = (json.dumps({'owner': 'harness-graft-sources-v1', 'files': current}, sort_keys=True) + '\n').encode()
     desired[receipt_name] = Entry(data, 0o600, stamp)
-    replace_folder(tree, old, desired, old_root, old_root or DirectoryState(0o700, stamp, stamp, 0, 0))
+    warnings = replace_folder(tree, old, desired, old_root, old_root or DirectoryState(0o700, stamp, stamp, 0, 0))
+    if warnings:
+        raise OSError('External snapshot updated but cleanup is incomplete: ' + '; '.join(warnings))
     return tree
 
 

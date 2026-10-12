@@ -57,7 +57,7 @@ Use the templates in `assets/` as structural starting points, then tailor them t
 - `.codex/agents/<role>.toml` for justified agents
 - `.agents/skills/<skill>/SKILL.md` for justified project skills
 - `.agents/skills/project-harness/SKILL.md` for orchestration
-- root instruction 후보의 우선순위와 빈 파일 여부를 반영한 inventory의 `plannedRootInstruction`에 managed pointer block 하나를 계획할 것. `.codex/config.toml`의 `project_doc_fallback_filenames`로 선택된 파일도 지원 대상임. `instructionSelectionErrors`가 있으면 선택이 미확인인 상태이므로 파일명을 추정하지 말고 원인을 해결할 것.
+- root instruction 후보의 우선순위와 빈 파일 여부를 반영한 inventory의 `plannedRootInstruction`에 managed pointer block 하나를 계획할 것. 사용자 `CODEX_HOME/config.toml`(기본 `~/.codex/config.toml`)과 프로젝트 `.codex/config.toml`의 `project_doc_fallback_filenames`로 선택된 파일도 지원 대상임. `instructionSelectionErrors`가 있으면 선택이 미확인인 상태이므로 파일명을 추정하지 말고 원인을 해결할 것. 정적 파일 선택은 native trust·profile·CLI override의 실제 적용을 입증하지 않으므로 별도 session override가 있으면 실제 instruction sources와 대조할 것.
 
 The apply script derives `.harness/manifest.json` from the validated plan. Reviewed configuration appends or updates only the Harness-owned root activation block, preserving all surrounding user text. Existing unowned or modified marker blocks remain conflicts. `explicit-skill` is a readable legacy activation state, not the default for new configuration.
 

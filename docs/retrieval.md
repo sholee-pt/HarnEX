@@ -118,6 +118,9 @@ collection and indexing are skipped (`externalSkipped: output-budget-exhausted`)
 so no external hit count is claimed. `--limit 1` still permits one external hit
 when output space remains. External failures are reported in `externalWarning`
 and in text when the remaining budget permits.
+Snapshot cleanup failures retain the primary result and report the preserved backup
+path in `externalWarning` and on terminal stderr. Inspect that exact backup before
+manually removing it; a failed cleanup is not permission to delete other cache files.
 External results never enter Jev network advice. Removing a binding immediately
 excludes it from queries; disposable snapshots may remain in user-local cache.
 Opt-ins, executable provenance and external bindings are local selections, so

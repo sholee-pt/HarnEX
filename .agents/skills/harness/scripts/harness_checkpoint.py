@@ -216,6 +216,9 @@ def operate(root, store, plan, action, run, *, task=None, previous=None, keep_da
     store.mkdir(parents=True, exist_ok=True)
     path = checked(store / "checkpoint.json")
     with FileLock(checked(store / ".lock")):
+        # Lock waits can outlive the input snapshot used for initial validation.
+        if action not in {"quiesce", "remove"}:
+            tasks, names = compile_plan(root, plan)
         if path.exists():
             state = read_json(path)
             if not isinstance(state, dict) or state.get("integrity") != digest({key: value for key, value in state.items() if key != "integrity"}):

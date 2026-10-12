@@ -174,6 +174,7 @@ The builder requires authoring contract 3 and every target exactly once, validat
 - Generated skill frontmatter follows the strict string-only subset in [generated-contracts.md](generated-contracts.md). Use the shared renderer for quoting; collections, duplicate keys, coercible plain types, and surrogate escapes fail.
 - Include every generated dedicated file in `artifacts`, including supporting references, scripts, and assets.
 - Artifact paths must remain unique under portable case-folded comparison. Two file outputs may not have an ancestor/descendant relationship.
+- 관리 경로에는 끝의 점·공백, Windows 장치명, stream 구분자와 비이식 문자를 사용하지 말 것. 플랫폼에 관계없이 적용 전 거부되는 경로임.
 - Every project, boundary, persistence record, quality policy, route, skill, and agent that requires evidence uses at least one structured evidence object.
 - Optional evidence line ranges are inclusive and one-based and apply only to UTF-8 text files.
 - Every artifact declares a four-digit POSIX permission mode such as `0644` or `0755`; special permission bits are unsupported.
@@ -183,7 +184,7 @@ The builder requires authoring contract 3 and every target exactly once, validat
 - If an agent lists a skill dependency, mention that skill in its generated `developer_instructions`.
 - Do not include `.harness/manifest.json`; the apply script derives Manifest Schema 7.
 - Do not specify the root instruction path. Harness selects the active path and creates or appends an owned pointer block. Existing user text outside that block is preserved byte-for-byte. Modified or unowned Harness markers block apply. Manifest Schema 7 records `managed-pointer` activation; legacy `explicit-skill` installations remain readable.
-- `.codex/config.toml`의 `project_doc_fallback_filenames`로 선택된 root instruction도 생성·검증·복구·제거에서 같은 managed-block 소유권을 적용할 것. 설정되지 않은 임의 root 파일이나 instruction 전체를 Harness 소유로 취급하지 말 것.
+- 사용자 `CODEX_HOME/config.toml`과 프로젝트 `.codex/config.toml`의 `project_doc_fallback_filenames`로 선택된 root instruction도 생성·검증·복구·제거에서 같은 managed-block 소유권을 적용할 것. 가장 가까운 Git root부터 선택 폴더까지 프로젝트 설정을 상속하며 가까운 설정의 배열이 앞선 배열을 대체하는 것임. 설정 오류나 apply 직전 활성 지침 변경은 적용을 중단하는 조건임. 설정되지 않은 임의 root 파일이나 instruction 전체를 Harness 소유로 취급하지 말 것.
 - Do not specify Git or GitHub state in the plan. Manifest Schema 7 records the selected workspace context and `not-managed` Git protection; generation does not edit Git metadata.
 - Do not include `taskExecution`, `taskExecutionClass`, the current task's selected agent list, or runtime-only quality decisions.
 - Keep the plan in a temporary location. It is a proposal, not managed project state.

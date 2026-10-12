@@ -9,6 +9,7 @@ import platform
 import shutil
 import socket
 import subprocess
+import sys
 import tempfile
 import time
 import uuid
@@ -382,6 +383,8 @@ def run(args, source_root):
         print(json.dumps(result, ensure_ascii=False, indent=2))
     elif action == 'query':
         print(result['text'])
+        if result.get('externalWarning'):
+            print('External retrieval warning: ' + result['externalWarning'], file=sys.stderr)
     else:
         print('Graft: ' + action)
         for key, value in result.items():

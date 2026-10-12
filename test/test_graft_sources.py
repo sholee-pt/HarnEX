@@ -1,5 +1,6 @@
 """External retrieval stays explicit, bounded, local and independently removable."""
 import json
+import io
 import os
 from pathlib import Path
 import tempfile
@@ -73,6 +74,37 @@ class ExternalSourcesTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.execute('add', str(self.external), '--name', 'large')
         self.assertEqual(path.read_bytes(), before)
+
+    def test_snapshot_cleanup_failure_preserves_primary_result_and_reports_backup(self):
+        from harness_cli import project_installer
+        self.execute('add', str(self.external), '--name', 'library')
+        files = graft_sources.collect(self.root, {'library': str(self.external)})
+        folder = graft.storage(self.root) / 'external'
+        tree = graft_sources.snapshot(folder, files)
+        original = (tree / 'library/model.py').read_bytes()
+        (self.external / 'model.py').write_text('def changed(): pass\n')
+        try:
+            with mock.patch.object(project_installer, 'remove_prepared_tree', side_effect=PermissionError('fixture cleanup denied')):
+                with mock.patch.object(graft, '_invoke', return_value={'text': 'primary result', 'hits': 1}), mock.patch.object(jev, 'enabled', return_value=False):
+                    result = self.execute('query', 'predict')
+            self.assertTrue(result['text'].startswith('primary result'))
+            self.assertEqual(result['hits'], 1)
+            self.assertIn('cleanup is incomplete', result['externalWarning'])
+            backups = list(folder.glob('.harness-install-backup-*'))
+            self.assertEqual(len(backups), 1)
+            self.assertIn(str(backups[0]), result['externalWarning'])
+            backup_file = backups[0] / 'library/model.py'
+            if os.name == 'nt' and not str(backup_file).startswith('\\\\?\\'):
+                backup_file = Path('\\\\?\\' + str(backup_file))
+            self.assertEqual(backup_file.read_bytes(), original)
+            self.assertEqual((tree / 'library/model.py').read_text(), 'def changed(): pass\n')
+            options = main.build_parser(REPO).parse_args(['graft', 'query', 'predict', '--project', str(self.root)])
+            with mock.patch.object(graft, 'execute', return_value=result), mock.patch('sys.stdout', new_callable=io.StringIO), mock.patch('sys.stderr', new_callable=io.StringIO) as error:
+                graft.run(options, REPO)
+            self.assertIn(str(backups[0]), error.getvalue())
+        finally:
+            for backup in folder.glob('.harness-install-backup-*'):
+                project_installer.remove_prepared_tree(backup)
 
     def test_failed_snapshot_promotion_preserves_previous_bytes_and_can_retry(self):
         files = graft_sources.collect(self.root, {'library': str(self.external)})

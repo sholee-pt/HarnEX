@@ -2,6 +2,7 @@
 
 | Version | Plan | Manifest | Transaction | Main change or patch |
 | --- | --- | --- | --- | --- |
+| [`v0.35.2‑beta`](#harness-for-codex-v0352-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve configured instructions, refresh locked checkpoints and report external snapshot cleanup failures |
 | [`v0.35.1‑beta`](#harness-for-codex-v0351-beta) | Schema 3 | Schema 7 | Schema 2 | Preserve transaction boundaries, explicit model choices, maintenance timing and evaluation integrity |
 | [`v0.35.0‑beta`](#harness-for-codex-v0350-beta) | Schema 3 | Schema 7 | Schema 2 | Clarify project status, preserve settings and queued actions, and improve terminal management navigation. |
 | [`v0.34.0‑beta`](#harness-for-codex-v0340-beta) | Schema 3 | Schema 7 | Schema 2 | Repair runtime and evaluation boundaries, reduce repeated work, and make bounded collaboration more flexible. |
@@ -101,6 +102,14 @@
 | [`v0.2.1‑beta`](#harness-for-codex-v021-beta) | Schema 1 | Schema 2 | None | True no-op updates, complete action-map checks, CI and fixture dry-run corrections |
 | [`v0.2.0‑beta`](#harness-for-codex-v020-beta) | Schema 1 | Schema 2 | None | JSON proposal, no-write dry-run, guarded deterministic apply, instruction precedence |
 | [`v0.1.0‑beta`](#harness-for-codex-v010-beta) | Direct generation | Schema 1 | None | Project-adaptive agents and skills, native Codex paths, initial ownership manifest |
+
+## Harness for Codex v0.35.2-beta
+
+- Preserve root instructions selected by user-level Codex fallback settings and inherited repository config; recheck the selected instruction before apply.
+- Refresh checkpoint input/output fingerprints after acquiring the store lock, preventing stale resume, status and dependency decisions after lock waits.
+- Report retained external-source snapshot backups through JSON and terminal warnings while preserving primary retrieval results; handle long Windows backup paths during cleanup.
+- Reject nonportable managed filenames before generation writes, including trailing dots/spaces, stream syntax and reserved device names.
+- Add targeted regression coverage and compare upgrades with the immediately preceding v0.35.1-beta source. Native loading, Linux installation and model quality require their separate runtime checks; Windows release remains paused.
 
 ## Harness for Codex v0.35.1-beta
 
