@@ -10,6 +10,16 @@ Interactive launch shows progress while checking releases and Auto compatibility
 
 The published v0.35.3-beta release includes separately verified Windows x86_64 assets. Windows installation prepares the management CLI; `init/config` then prepares the matching Harness-versioned native Codex package with Auto. Open a new terminal after integration registers PATH. Linux's official-package adapter, `/harness/` management menu and independent Codex update flow do not apply to that Windows package. Use terminal management commands, and check that a target release includes its Windows ZIP, PowerShell installer and matching native package before updating. Graft automatic setup and persistent Jev login remain Linux-only; environment-provided Jev keys remain supported. See [release verification](distribution.md).
 
+## Windows setup and updates
+
+First configuration needs an existing Codex CLI with working account/provider access. The Windows installer prepares Harness only; a new project's `init` resolves and runs Codex before downloading Harness's native integration. Check the selected command with `Get-Command codex -All`. Pass `--codex-binary 'C:\path\to\codex.exe'` when needed; `.cmd` and `.bat` wrappers are refused. `--native-ui-archive` supplies the package for the later integration step and does not replace this prerequisite. `init --install-only` installs just the project generator without Codex, but does not configure a project harness or prepare Auto.
+
+Run full `init/config` in an interactive terminal, including when using `--json` or `--settings native`. Those options do not enable unattended configuration. After successful setup, open a new terminal and use `codex --cd 'C:\path\to\project'`; `--project` does not change the parent shell's working directory. If another Codex still wins PATH lookup, compare `Get-Command codex -All` with `codexIntegration.directory` in `harness-codex status --project PATH --json`, and select the owned native executable explicitly.
+
+`update --check` chooses the highest published Harness version without checking Windows asset availability. The management-source updater uses the Linux-named archive on both platforms; that archive contains shared source, not a Linux Codex executable. When an integration already exists, `update` activates the new tool source before refreshing the matching native package. Missing Windows assets or an integration failure can therefore leave the tool updated while Codex integration still needs attention. Interactive `init/config` can also offer this unfiltered Harness update; skip it until that version has a verified Windows supplement, or use `--no-update-check` for that invocation. This flag does not make later configuration downloads offline.
+
+For a selected verified Windows release, run its version-bound PowerShell installer with `-Existing reuse`, then use `init --project PATH` without a brief to retain an existing harness while refreshing integration, or `config --project PATH` for a reviewed project update. This reuse path requires an existing valid/compatible harness; resolve `status/doctor` errors first. A same-version `update` reports current and does not repair an earlier integration failure. Run `init/config` after resolving that failure. Reinstallation preserves downgrade checks; an older installer is not an automatic rollback.
+
 ## Options
 
 The default Linux install prepares the official Codex package and registers the
@@ -35,6 +45,8 @@ points are preserved by either opt-out; they are not uninstalled.
 
 `reuse` retains the repository transport and automatic-update policy. Branch pins are retained except for the [one-time legacy-to-beta migration](versioning.md). `reset` applies the supplied/default preferences, clears the update-check cache and rebuilds the exact managed PATH registration. Both preserve verified releases and runtime files, project harnesses, unrelated shell/registry settings and modified user content. Reset does not authorize removing unknown directories. Without a terminal, an existing installation requires an explicit choice.
 
+`--auto-update` / `-AutoUpdate` are installer options, not `codex` launch arguments. Passing a different policy together with `reuse` keeps the old policy; use the explicit `reset` choice to apply changed installer preferences, or `HARNESS_NO_UPDATE_CHECK=1` to suppress checks for the current process without resetting preferences. Neither setting prevents downloads required by an explicitly requested installation/configuration.
+
 Choose an existing published tag from Releases for `RELEASE_TAG`; a branch's newer commits are not included in its already published assets.
 
 ```bash
@@ -57,6 +69,8 @@ source ~/.bashrc
 ```
 
 On Windows, the source installer can be exercised from PowerShell for development: `& ./Harness-Codex/installer/install.ps1` under your normal script execution policy. This does not establish a verified Windows native release. The source scripts install an existing checkout; `install_harness_codex.sh` and `.ps1` first download a release and then invoke the corresponding source installer. Installation does not alter project Git state.
+
+Selecting a branch in `git clone` selects the initial source only; it does not pin Harness's update channel. New installations without an explicit Harness branch pin follow published releases, while `reuse` preserves an existing pin. For deliberate development tracking, the Linux source installer accepts `--branch v0.35.3-beta`; the installed CLI also accepts `harness-codex update --branch v0.35.3-beta`. That CLI command can update source immediately and saves the pin. It does not publish or verify a matching Windows native package.
 
 The v0.33.0-beta updater introduces a source-layout contract while retaining the
 complete earlier file layout as an upgrade bridge. Later refactors can declare
@@ -146,7 +160,7 @@ in the diagnostic log; parent-shell and project environment settings are preserv
 
 The Linux installer asks whether to open a new Bash after installation. Enter or yes opens an interactive child shell that reads `~/.bashrc`; `exit` returns to the original shell. This executes your existing Bash startup instructions, including any environment initialization you have configured. It does not modify the parent shell. Choose no to skip. To apply settings in the original Bash, run **`source ~/.bashrc`**, or open a new terminal. Running `~/.bashrc` as a command tries to execute it and may report permission denied; executable permissions are not needed to source it. Use `~/.local/bin/harness-codex --version` to distinguish PATH lookup from command installation. A `bash installer/install.sh` child cannot export variables back into its parent shell. GitHub CLI is not required.
 
-Windows registers user PATH and refreshes the current PowerShell PATH. Other open terminals need restarting. A shared bin directory may remain on PATH after uninstall to preserve other commands.
+The Windows PowerShell installer registers user PATH and refreshes that PowerShell process's PATH for the Harness command. Codex integration configured by `init/config` updates user PATH but cannot update its parent shell; open a new terminal and verify command resolution. A shared bin directory may remain on PATH after uninstall to preserve other commands.
 
 The installer displays an animated indicator and live elapsed seconds on an interactive terminal, with a detailed log location. It pauses animation while asking for a reinstall choice. Noninteractive/redirected output contains ordinary stage lines; Linux skips child-shell activation when there is no controlling terminal or `--no-modify-path` is selected. Failed downloads, environment setup or installation retain a diagnostic log. Colors are presentation only; redirected output remains readable. An incomplete pre-existing environment is preserved for review instead of being overwritten.
 

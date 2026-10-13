@@ -24,6 +24,8 @@ root instruction file (`AGENTS.override.md` before `AGENTS.md`). They do not
 create an override to bypass existing guidance. Existing explicit-skill projects
 remain readable and migrate to a managed pointer on reviewed `config`.
 
+For an existing harness, `init` without `--goal` or `--goal-file` skips the configuration conversation and retains generated artifacts, but can still prepare preferences, hooks, retrieval and Codex integration. Supplying either brief option requests a reviewed update. Full configuration requires an interactive terminal and a resolvable Codex executable even with `--json` or `--settings native`; on Windows select the actual `codex.exe`, not a `.cmd`/`.bat` wrapper. See [Windows setup prerequisites](installation.md#windows-setup-and-updates).
+
 Normal `init --project PATH` creates a missing directory and its parents after
 input and Codex preflight. `init --install-only` also allows an empty new project.
 `init --dry-run` previews creation without writing anything. `config`, `status`
@@ -37,7 +39,7 @@ folder and completed setup files for retry.
 
 Generated procedures use project-relative references. `.harness/context.json`
 records up to 16 observed root paths and host-specific sandbox checks separately
-from the manifest. Configuration records it; the registered `codex` entry point
+from the manifest. Configuration records it; the registered Linux `codex` entry point
 refreshes existing context on interactive launch, including from a subdirectory.
 Raw official Codex outside the registered entry point does not run this check.
 No extra model call or bootstrap user turn is added.
@@ -140,7 +142,7 @@ Interactive progress uses cyan for headings and selections, green for approval r
 
 ## Project brief and guide
 
-`--goal-file` accepts a regular UTF-8 Markdown file, with optional BOM. The old 64 KiB cap is removed. Validation streams the file; the model receives its path and instructions to inspect relevant sections in bounded chunks. Large files are not copied wholesale into the initial prompt. Native access rules still apply to files outside the project. Inline `--goal` and native argument transport retain their finite limits; use a file for a large brief.
+`--goal-file` requires an existing, nonempty regular `.md` or `.markdown` file in UTF-8, with optional BOM. Relative paths are resolved from the calling terminal's directory, independently of `--project`; use an absolute brief path when selecting another project. Omit the option when no brief exists. The old 64 KiB cap is removed. Validation streams the file; the model receives its path and instructions to inspect relevant sections in bounded chunks. Large files are not copied wholesale into the initial prompt. Native access rules still apply to files outside the project. Inline `--goal` and native argument transport retain their finite limits; use a file for a large brief.
 
 The CLI maintains `.harness/GUIDE.md` after successful init/config. The same path is refreshed for the current tool/harness revision; unchanged content is not rewritten. A checksum marker distinguishes the unchanged CLI guide from user edits. Edited or unrelated guides are preserved, not overwritten or deleted. Existing unknown guide copies are not treated as owned. `remove` and `reset` include an unchanged owned guide in the ordinary recoverable removal transaction.
 

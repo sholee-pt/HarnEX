@@ -13,7 +13,9 @@ respective menu. JSON, redirected output, dry-run and install-only never prompt;
 `config` and `reset` preserve these choices unless explicit flags are supplied.
 Inspect or change them later with the commands below and `harness-codex routing
 --adaptive status|on|off`. Adaptive Auto is a separate option; it neither selects
-Auto in `/model` nor automatically judges task quality.
+Auto in `/model` nor automatically judges task quality. Its live observation and
+selection path requires the Linux adapter; the Windows native package does not
+apply this advice. See [Auto advice support](routing.md#optional-outcome-based-auto-advice).
 
 `harness-codex status --project "선택한 프로젝트 경로"`는 저장된 설정과 자동 유지보수의
 현재 전제조건을 구분해 표시하는 오프라인 조회임. hook 정의 누락·수정·중복, 기록된

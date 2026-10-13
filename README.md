@@ -60,15 +60,15 @@ Invoke-WebRequest 'https://github.com/sholee-pt/Harness-Codex/releases/download/
 harness-codex --version
 ```
 
-The installer verifies the ZIP, prepares an isolated Python 3.11 environment and Git, and registers the command in user PATH. It does not prepare Codex integration until project setup:
+The installer verifies the ZIP, prepares an isolated Python 3.11 environment and Git, and registers the command in user PATH. First project setup requires an already installed Codex CLI with working account/provider access: Harness runs that CLI before installing its own Windows integration. Use an interactive PowerShell terminal. If `codex` resolves to a `.cmd` or `.bat` wrapper, select the actual native `codex.exe` with `--codex-binary`; batch wrappers are rejected. Replace the paths below with your project, existing Markdown brief and native executable:
 
 ```powershell
-harness-codex init --project 'C:\path\to\project' --goal-file 'C:\path\to\PROJECT.md'
+harness-codex init --project 'C:\path\to\project' --goal-file 'C:\path\to\PROJECT.md' --codex-binary 'C:\path\to\codex.exe'
 # Open a new terminal after integration changes PATH:
-codex
+codex --cd 'C:\path\to\project'
 ```
 
-`init/config` downloads the matching Windows native package with Auto and Windows helpers. This is separate from Linux's official-package adapter: the `/harness/` management menu and independent official Codex update flow below apply to Linux. Use terminal `harness-codex` commands on Windows. Graft automatic setup and persistent Jev login remain Linux-only. Windows publication requires separate authorization and validation for each release; future Linux releases do not imply Windows assets. See [platform details and installation options](docs/installation.md).
+After successful project configuration, `init/config` downloads the matching Windows native package with Auto and Windows helpers. This is separate from Linux's official-package adapter: the `/harness/` management menu, independent official Codex updates and observed-outcome Auto advice below apply to Linux. Use terminal `harness-codex` commands on Windows. Graft automatic setup and persistent Jev login remain Linux-only. Windows publication requires separate authorization and validation for each release; future Linux releases do not imply Windows assets. The updater does not filter out releases missing Windows assets, so confirm the target's Windows files before accepting an update. See [Windows setup and updates](docs/installation.md#windows-setup-and-updates).
 
 When migrating from 0.10.0-beta, run this installer once: its updater cannot discover the new unprefixed branches. If installation traces exist, choose **`reuse`** to retain tool preferences or **`reset`** to reset Harness update preferences, its check cache and managed PATH registration. Project harnesses and unrelated settings are preserved. Unattended installation accepts `--existing reuse|reset` on Linux or `-Existing reuse|reset` on Windows. See [installation options](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.3-beta/docs/installation.md).
 
@@ -98,13 +98,13 @@ codex resume
 codex resume --last
 ```
 
-`PROJECT.md` is an optional UTF-8 Markdown brief describing the project's purpose, responsibilities and constraints. `init` uses Codex to inspect the project and create its harness, showing live stages and elapsed seconds instead of the internal setup prompt. Native approval requests and additional questions remain visible. It then validates the resulting files. Existing harnesses are reported and retained. You can also provide a short description with `--goal "..."`, or run `init` without a brief.
+`PROJECT.md` is an optional UTF-8 Markdown brief describing the project's purpose, responsibilities and constraints. When `--goal-file` is supplied, the file must already exist and contain nonempty Markdown; a relative path is resolved from the calling terminal's directory, not from `--project`. `init` uses Codex to inspect the project and create its harness, showing live stages and elapsed seconds instead of the internal setup prompt. Native approval requests and additional questions remain visible. It then validates the resulting files. For an existing harness, `init` without a brief retains generated artifacts and skips the configuration conversation; supplying `--goal` or `--goal-file` requests a reviewed update. You can also provide a short description with `--goal "..."`, or omit both brief options.
 
 On Linux, `init` also prepares local Graft retrieval and enables Jev shadow advice automatically. The first setup downloads Graft's isolated runtime; subsequent projects reuse it. If no TypeSafe key is available, init guides you to its key page and accepts hidden input once, saving it for later projects without shell exports or restart. A newly entered key uses one small authentication request; existing credentials make no init API call. You can skip login and continue ordinary retrieval. Eligible Jev queries may send bounded code snippets to TypeSafe. Use `--retrieval off` to skip both setups, or `harness-codex jev disable` to keep only local retrieval. Explicit opt-outs survive repeated init. See [retrieval controls](docs/retrieval.md) and [Jev authentication and behavior](docs/jev.md).
 
 Choose **Codex defaults** or **Manual** with the arrow keys and Enter. Codex defaults uses the recommended model and reasoning from your Codex catalog for configuration; it does not enable per-request Harness Auto routing. Manual offers the available models, reasoning levels and permissions. `--settings auto|manual|native` selects a mode directly. Three concise stages show configuration progress and file validation. Questions and approvals stay visible. See [session settings](docs/sessions.md#session-settings).
 
-After successful setup, interactive `init` offers two project preferences: **maintenance** (`off`, `suggest`, `auto`) and **observed-outcome advice for Auto** (`off`, `on`). Each menu explains its effect; Enter keeps the current setting. New projects start with both off. Maintenance reviews can use conversation tokens; local Auto advice makes no extra model call and needs recorded quality feedback. Change either later with `harness-codex maintenance --mode suggest` or `harness-codex routing --adaptive on`. These commands and status checks are also listed in `.harness/GUIDE.md`. See [maintenance](docs/maintenance.md) and [Auto advice](docs/routing.md#optional-outcome-based-auto-advice).
+After successful setup, interactive `init` offers two project preferences: **maintenance** (`off`, `suggest`, `auto`) and **observed-outcome advice for Auto** (`off`, `on`). Each menu explains its effect; Enter keeps the current setting. New projects start with both off. Maintenance reviews can use conversation tokens; local Auto advice makes no extra model call and needs recorded quality feedback. Its observation and selection path requires the Linux adapter; enabling the preference does not add it to the Windows native package. Change either later with `harness-codex maintenance --mode suggest` or `harness-codex routing --adaptive on`. These commands and status checks are also listed in `.harness/GUIDE.md`. See [maintenance](docs/maintenance.md) and [Auto advice](docs/routing.md#optional-outcome-based-auto-advice).
 
 `init` also registers and trusts only Harness maintenance hooks through Codex's native interface, even when both preferences are off. Trust stays ready when a project feature is enabled later; it does not enable the feature. Use `init --hook-trust manual` to leave trust unchanged. Unsupported Codex capabilities or managed restrictions produce manual guidance instead.
 
@@ -126,7 +126,7 @@ is preserved. Codex updates no longer require a Harness-specific Codex build.
 When update checks are enabled, interactive launches check official Codex and,
 for release-channel installations, published Harness releases. Branch-pinned
 installations check only Codex; use `harness-codex update` to update the pinned
-Harness source branch. `--auto-update off` or `HARNESS_NO_UPDATE_CHECK=1` skips both checks.
+Harness source branch. The installer's `--auto-update off` policy or `HARNESS_NO_UPDATE_CHECK=1` skips both checks.
 An arrow-key menu offers **update both**, **Codex only**, **Harness only**, or
 **skip this time** when applicable. Downloads begin only after your selection,
 before the conversation opens. Offline checks continue with installed files.

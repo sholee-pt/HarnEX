@@ -13,6 +13,8 @@ Default Linux installation prepares the isolated tool environment, official Code
 
 On Linux, official Codex is downloaded independently during integration setup and confirmed updates; no Codex build is required. The terminal release gate runs on Linux x86_64. Linux aarch64 package resolution is supported but not covered by that gate. Windows assets require a separately authorized and verified supplement; use Windows installation only when this release lists its PowerShell installer, Windows ZIP and matching native package. For Linux migration from the old patched integration, use this installer with `--existing reuse`, then run `config` once.
 
+For a Windows supplement, first project configuration requires an existing native Codex executable and working account/provider access; the Windows installer prepares Harness only. In an interactive PowerShell terminal, pass `--codex-binary 'C:\path\to\codex.exe'` to `init/config` when needed; `.cmd`/`.bat` wrappers are refused. The matching native integration is installed after successful configuration. Confirm that a newer release has Windows assets before accepting a Harness update; the updater does not filter releases by platform availability.
+
 ### Release assets and verification
 
 | Asset | Purpose |

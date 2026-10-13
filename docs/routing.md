@@ -14,7 +14,7 @@ The Linux `codex` entry checks published updates, then launches the unmodified o
 
 ## Updates without rebuilding Codex
 
-Official Codex and Harness have independent version pointers. When update checks are enabled, an interactive launch checks the official Codex release channel and, for release-channel Harness installations, the Harness release channel, with a short network timeout. `--auto-update off` or `HARNESS_NO_UPDATE_CHECK=1` skips both checks; an explicit Harness branch pin skips its release-channel check. Available updates appear before the conversation, with arrow-key choices to update both, either tool, or skip. No model request or token usage is involved. The default choice is skip. Offline checks retain installed versions.
+Official Codex and Harness have independent version pointers. When update checks are enabled, an interactive launch checks the official Codex release channel and, for release-channel Harness installations, the Harness release channel, with a short network timeout. The installer's `--auto-update off` policy or `HARNESS_NO_UPDATE_CHECK=1` skips both checks; an explicit Harness branch pin skips its release-channel check. Available updates appear before the conversation, with arrow-key choices to update both, either tool, or skip. No model request or token usage is involved. The default choice is skip. Offline checks retain installed versions.
 
 Official packages are downloaded from `openai/codex`, checked against GitHub's asset SHA-256, extracted within bounds, and started with `--version`. Before enabling the adapter, the staged candidate must also advertise the authenticated remote interface and pass app-server initialization and the model-catalog check. If that Auto probe fails, an interactive installation/update offers keeping the current installation or explicitly selecting the verified candidate in native mode. The default preserves the current installation; unattended failures never select native mode. Integrity or executable-version failures cannot use this exception. Native selection disables Harness Auto and `/harness/` controls while preserving the existing package and conversation permissions. It remains native through later updates until `codex update --auto` passes the compatibility check. A declined probe leaves the current package active and removes the new staging directory. This is an installation check, not a per-request operation or proof of all future TUI behavior. No Rust compilation or patched Codex binary is involved. Harness uses published releases, including beta releases; development branch commits are not normal automatic updates. Explicit branch pins retain the developer source path for `harness-codex update`.
 
@@ -56,6 +56,8 @@ harness-codex config --auto-model auto --routing-profiles models.json
 ```
 
 ## Optional outcome-based Auto advice
+
+Live observation and outcome-based selection use the Linux adapter. The Windows native package uses ordinary Auto routing and optional model profiles; it neither records turns through this observer nor applies its advice. The shared CLI can store an adaptive preference on Windows, but that alone does not enable these runtime features.
 
 Adaptive evidence is separately opt-in per selected Harness workspace; existing
 opt-outs and manual model choices are preserved. It makes no extra model call and
