@@ -1,5 +1,7 @@
 # Official Codex with Harness Auto
 
+This page describes the Linux official-package adapter. The separately verified Windows x86_64 release uses a Harness-versioned native package with Auto; its installation and update path is described in [installation](installation.md). The Linux adapter's management menu, protocol checks and independent Codex updates do not describe the Windows package.
+
 ```bash
 harness-codex init --goal-file PROJECT.md
 source ~/.bashrc
@@ -138,4 +140,4 @@ The opt-in paid model-switch smoke requires a preference file selecting two dist
 
 Before connecting, Harness checks for the official remote interface and a usable model catalog. If those checks fail it offers native mode or exit. Unexpected protocol failure stops the adapter and directs the user to resume; it never silently resubmits a request. Capability checks do not prove all future APIs, account restrictions or live tool behavior. Linux CI uses real official TUI and app-server processes with a synthetic local model provider, not paid inference.
 
-Confirmed uninstall removes unchanged owned entry points, preferences, packages and exact PATH blocks. Edited or unknown files are preserved for review. Native history, authentication, standalone Codex and project harnesses remain intact. Windows integration releases remain paused; retained legacy build sources are not part of the Linux publication workflow.
+Confirmed uninstall removes unchanged owned entry points, preferences, packages and exact PATH blocks. Edited or unknown files are preserved for review. Native history, authentication, standalone Codex and project harnesses remain intact. Windows native builds require a separately authorized workflow and are not part of Linux publication; see [release verification](distribution.md).

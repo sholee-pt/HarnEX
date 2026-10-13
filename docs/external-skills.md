@@ -22,7 +22,7 @@ Use the license filename actually present in the checked-out repository. If its 
 
 The original skill name, metadata and resource bytes remain intact. A separate `.harness-external.json` inside the copied skill records imported file hashes and modes. Generated skills retain their stricter frontmatter contract. External metadata discovery supports unquoted top-level keys with single-line `name` and `description`; optional metadata is preserved but not fully YAML-validated. Unsupported headers are reported, not rewritten. Missing package dependencies, relative resources outside the copied bundle and live Codex discovery still need task-specific review.
 
-Import refuses existing destinations, name collisions, links/reparse points, repository metadata, and overlapping source/destination trees. It stages the complete bundle before publishing it without replacing an existing directory. Import is bounded to 1024 files, 2048 entries and 64 MiB; these are bundle-import limits, not limits on the project's source files. It needs Linux `renameat2` support; Windows implementation remains retained source without a new Windows release.
+Import refuses existing destinations, name collisions, links/reparse points, repository metadata, and overlapping source/destination trees. It stages the complete bundle before publishing it without replacing an existing directory. Import is bounded to 1024 files, 2048 entries and 64 MiB; these are bundle-import limits, not limits on the project's source files. Linux requires `renameat2` support; Windows uses its non-replacing directory rename. Other platforms are rejected.
 
 ```bash
 harness-codex skills verify --project /path/to/project --name scanpy

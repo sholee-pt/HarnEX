@@ -84,7 +84,7 @@ ask Codex to re-read the project instructions; use a fresh conversation when a
 new native component is unavailable. No automatic user turn is inserted to do this.
 
 Strong integrity and compatibility checks run in `init/config/status/doctor`.
-Plain `codex` checks tool updates and Auto capabilities before launch, without
+The Linux `codex` integration checks tool updates and Auto capabilities before launch, without
 validating or regenerating project artifacts. Generated instructions
 require reporting detected managed corruption, preserving the manifest and
 consulting `doctor`; ordinary source drift requires a current source read.
@@ -95,7 +95,7 @@ compliance. Inspect questionable installations explicitly before relying on them
 
 Run `harness-codex update`, then `harness-codex config` in each project you want to
 migrate to native instruction activation. Apply the PATH change in a fresh terminal.
-The old `new`, `resume` and `start` commands remain hidden for this release only.
+The old `new`, `resume` and `start` commands remain hidden compatibility aliases.
 They forward to native Codex with a deprecation notice, without project validation,
 GUIDE updates, metadata lookup or activation prompts. Legacy `--ui`, `--settings`
 and `--reload-harness` flags do not configure native work sessions; use `/model`.

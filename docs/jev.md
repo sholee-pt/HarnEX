@@ -78,8 +78,8 @@ The file is plaintext with restricted access, not an encrypted keyring. Harness
 does not copy keys into `.bashrc`, project settings, manifests, observations,
 logs or command arguments. No `source` or terminal restart is needed;
 projects on the same machine and OS account reuse the key. Project opt-outs remain
-independent. Windows persistent login is not provided while Windows work is paused;
-environment keys remain supported.
+independent. Windows persistent login is not implemented; use `TYPESAFE_API_KEY`
+on Windows. Publication of a Windows installer does not add credential storage.
 
 Logout removes only the owned saved credential, leaves project settings intact,
 and cannot unset a parent shell's environment key. `jev logout --yes` supports

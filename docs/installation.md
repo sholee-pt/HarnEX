@@ -2,13 +2,13 @@
 
 The [README installation guide](../README.md#installation-guide) provides the standard commands. Release installers are version-bound; subsequent `harness-codex update` follows published Harness releases. Explicit `--branch` pins retain the developer source-update path.
 
-For the transition from a patched Codex installation, run the current release installer with `--existing reuse`, then `harness-codex config` once. This preserves project artifacts and moves the owned PATH entry to the official-release adapter. An older updater can install the new management source but still report a missing old-style native package; running the now-updated `config` completes that transition. Subsequent official Codex updates require no Harness rebuild. Auto's WebSocket dependency is prepared in the selected Harness interpreter during integration setup.
+On Linux, for the transition from a patched Codex installation, run the current release installer with `--existing reuse`, then `harness-codex config` once. This preserves project artifacts and moves the owned PATH entry to the official-release adapter. An older updater can install the new management source but still report a missing old-style native package; running the now-updated `config` completes that transition. Subsequent official Codex updates require no Harness rebuild. Auto's WebSocket dependency is prepared in the selected Harness interpreter during integration setup.
 
-Interactive `codex` launches without a branch pin check both release channels and require a selection before downloads. Branch-pinned installations check official Codex only; run `harness-codex update` explicitly to update Harness from the selected source branch. Both historical `compatible` and `check` settings now request consent; `off` and `HARNESS_NO_UPDATE_CHECK=1` skip checks. Help, version, doctor, dry runs and noninteractive Codex commands do not check releases. For private GitHub access, an explicitly configured `HARNESS_GITHUB_TOKEN` or `GH_TOKEN` can authorize API calls; Git user.name/email are not authentication. Credentials are never forwarded to asset redirects.
+Interactive Linux `codex` launches without a branch pin check both release channels and require a selection before downloads. Branch-pinned installations check official Codex only; run `harness-codex update` explicitly to update Harness from the selected source branch. Both historical `compatible` and `check` settings now request consent; `off` and `HARNESS_NO_UPDATE_CHECK=1` skip checks. Help, version, doctor, dry runs and noninteractive Codex commands do not check releases. For private GitHub access, an explicitly configured `HARNESS_GITHUB_TOKEN` or `GH_TOKEN` can authorize API calls; Git user.name/email are not authentication. Credentials are never forwarded to asset redirects.
 
 Interactive launch shows progress while checking releases and Auto compatibility. A failed release check keeps installed files available. Native fallback preserves Codex settings and history, but disables both Harness Auto and `/harness/` management for that session. The terminal displays `status`, `init` and `config` commands for the selected project; run them after exiting Codex. An explicit native profile or `HARNESS_CODEX_NATIVE=1` keeps its original arguments and receives the same management guidance. Help and automation remain quiet native commands.
 
-Current releases and CI target Linux. Windows installation code and the option references below are retained for future work; no Windows installer or native package is published while Windows validation is paused.
+The published v0.35.3-beta release includes separately verified Windows x86_64 assets. Windows installation prepares the management CLI; `init/config` then prepares the matching Harness-versioned native Codex package with Auto. Open a new terminal after integration registers PATH. Linux's official-package adapter, `/harness/` management menu and independent Codex update flow do not apply to that Windows package. Use terminal management commands, and check that a target release includes its Windows ZIP, PowerShell installer and matching native package before updating. Graft automatic setup and persistent Jev login remain Linux-only; environment-provided Jev keys remain supported. See [release verification](distribution.md).
 
 ## Options
 
@@ -35,17 +35,17 @@ points are preserved by either opt-out; they are not uninstalled.
 
 `reuse` retains the repository transport and automatic-update policy. Branch pins are retained except for the [one-time legacy-to-beta migration](versioning.md). `reset` applies the supplied/default preferences, clears the update-check cache and rebuilds the exact managed PATH registration. Both preserve verified releases and runtime files, project harnesses, unrelated shell/registry settings and modified user content. Reset does not authorize removing unknown directories. Without a terminal, an existing installation requires an explicit choice.
 
-Choose an existing published tag from Releases for `RELEASE_TAG`; the current development branch is source-only.
+Choose an existing published tag from Releases for `RELEASE_TAG`; a branch's newer commits are not included in its already published assets.
 
 ```bash
 curl -fsSL https://github.com/sholee-pt/Harness-Codex/releases/download/RELEASE_TAG/install_harness_codex.sh | sh -s -- --existing reuse
 source ~/.bashrc
 ```
 
-For Windows source development, run from an existing checkout:
+For Windows release reinstallation, download the PowerShell installer from the selected release as shown in the [README](../README.md#for-windows), then run:
 
 ```powershell
-./installer/install.ps1 -Existing reset
+& ./install_harness_codex.ps1 -Existing reuse
 ```
 
 ## Source installation

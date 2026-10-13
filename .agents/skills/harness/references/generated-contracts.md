@@ -54,7 +54,7 @@ conda run -n harness python -m pip install -r test/requirements-validation.txt
 conda run -n harness python test/integration/frontmatter_differential.py --seed 20260905 --count 11000 --output FRONTMATTER_REPORT.json
 ```
 
-The report records Python/oracle versions, corpus/generator/input hashes, accepted/rejected counts, mismatches, and surrogate code points. Agreement is limited to the tested accepted subset; it does not establish complete YAML or Unicode compatibility. Current CI runs this oracle on Linux. Windows release validation is paused.
+The report records Python/oracle versions, corpus/generator/input hashes, accepted/rejected counts, mismatches, and surrogate code points. Agreement is limited to the tested accepted subset; it does not establish complete YAML or Unicode compatibility. Current CI runs this oracle on Linux; the separately authorized Windows release workflow does not run this differential oracle.
 
 For real upgrade reproduction, use `test/integration/prepare_release_baselines.py` to materialize the immediately preceding release, then run `test/integration/verify_release_upgrade.py --baseline BASELINE_SOURCE --output UPGRADE_REPORT.json`. The prior generator creates a real installation; current tools check compatibility, clean update, repeated no-op, user-edit preservation and static instruction-size deltas. Older contract regressions remain in focused unit fixtures; do not recreate the complete historical source matrix.
 

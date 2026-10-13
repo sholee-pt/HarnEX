@@ -81,7 +81,7 @@ project does not authorize execution through another user's saved settings.
 Character-based estimates from Graft are not reported as measured token savings.
 Measure actual task correctness, elapsed time, billed tokens and rework on paired
 tasks, including initial indexing and maintenance cost, before claiming benefit.
-Windows native Graft validation is not part of this Linux release.
+Graft automatic setup and its native release validation remain Linux-only; publication of Windows Harness assets does not establish Windows Graft support.
 
 ## Explicit external code
 

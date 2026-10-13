@@ -8,8 +8,9 @@ Default Linux installation prepares this integration before any project has a
 harness. Apply the installer's PATH change in a new shell, run `codex` from any
 existing working directory, and choose **Project → Init** in `/harness/`. Tool-only installs
 (`--no-codex-integration` or `--no-modify-path`) skip that connection. Codex still
-handles account login and project trust. Windows installation is unchanged while
-its release path is paused.
+handles account login and project trust. These in-conversation controls use the
+Linux adapter. The separately published Windows native package uses terminal
+`harness-codex` commands for project management; see [installation](installation.md).
 
 ## Guided setup
 

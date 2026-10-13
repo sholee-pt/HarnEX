@@ -18,6 +18,7 @@
 
 <p align="center">
   <a href="#for-linux">Linux install</a> &middot;
+  <a href="#for-windows">Windows install</a> &middot;
   <a href="#quick-start">Quick start</a> &middot;
   <a href="https://github.com/sholee-pt/Harness-Codex/releases">Release</a> &middot;
   <a href="CHANGELOG.md">Changelog</a>
@@ -25,21 +26,21 @@
 
 Generate and maintain one shared project harness with Codex-native agents and skills. **Harness-Codex configures and maintains the project harness. Codex owns conversations and interactive work.** Plain folders, Git worktrees and workspaces containing multiple repositories are supported.
 
-**Development beta:** The current source is **v0.35.3-beta**. The version badge identifies development source; the Linux installation command below uses the latest published release. Development changes become available in release downloads only after the required Linux and official Codex compatibility checks pass.
+**Development beta:** The current source is **v0.35.3-beta**. The version badge identifies development source; installation commands below are pinned to verified published assets. Linux and Windows have separate release checks and integration paths; a newer source commit is not automatically a new release download.
 
 ## Installation Guide
 
 ### For Linux
 
-**Latest release: [v0.35.2-beta](https://github.com/sholee-pt/Harness-Codex/releases/tag/v0.35.2-beta)** (published Linux assets)
+**Latest release: [v0.35.3-beta](https://github.com/sholee-pt/Harness-Codex/releases/tag/v0.35.3-beta)** (published Linux and Windows assets)
 
 ```bash
-curl -fsSL https://github.com/sholee-pt/Harness-Codex/releases/download/v0.35.2-beta/install_harness_codex.sh | sh
+curl -fsSL https://github.com/sholee-pt/Harness-Codex/releases/download/v0.35.3-beta/install_harness_codex.sh | sh
 ```
 
 Previous releases retain their version tags and installation commands on the [Releases page](https://github.com/sholee-pt/Harness-Codex/releases).
 
-To install the current **v0.35.3-beta development source**, including changes not yet published as release assets:
+To install the current **v0.35.3-beta development branch**, which may advance beyond the published release:
 
 ```bash
 git clone --branch v0.35.3-beta --single-branch https://github.com/sholee-pt/Harness-Codex.git Harness-Codex
@@ -51,7 +52,23 @@ Supports Linux x86_64 and aarch64. Source cloning requires Git; installation req
 
 ### For Windows
 
-Windows release assets are not currently available. Windows support remains in the source tree, but publication is paused until its separate validation passes. Use Windows release installation only when the [release assets](https://github.com/sholee-pt/Harness-Codex/releases) include `install_harness_codex.ps1`, `harness-codex-VERSION-windows.zip` and the matching Windows native package. See [source installation options](docs/installation.md) for development use.
+**Windows x86_64 release: [v0.35.3-beta](https://github.com/sholee-pt/Harness-Codex/releases/tag/v0.35.3-beta)**. Run in 64-bit PowerShell under your normal script execution policy:
+
+```powershell
+Invoke-WebRequest 'https://github.com/sholee-pt/Harness-Codex/releases/download/v0.35.3-beta/install_harness_codex.ps1' -OutFile ./install_harness_codex.ps1
+& ./install_harness_codex.ps1
+harness-codex --version
+```
+
+The installer verifies the ZIP, prepares an isolated Python 3.11 environment and Git, and registers the command in user PATH. It does not prepare Codex integration until project setup:
+
+```powershell
+harness-codex init --project 'C:\path\to\project' --goal-file 'C:\path\to\PROJECT.md'
+# Open a new terminal after integration changes PATH:
+codex
+```
+
+`init/config` downloads the matching Windows native package with Auto and Windows helpers. This is separate from Linux's official-package adapter: the `/harness/` management menu and independent official Codex update flow below apply to Linux. Use terminal `harness-codex` commands on Windows. Graft automatic setup and persistent Jev login remain Linux-only. Windows publication requires separate authorization and validation for each release; future Linux releases do not imply Windows assets. See [platform details and installation options](docs/installation.md).
 
 When migrating from 0.10.0-beta, run this installer once: its updater cannot discover the new unprefixed branches. If installation traces exist, choose **`reuse`** to retain tool preferences or **`reset`** to reset Harness update preferences, its check cache and managed PATH registration. Project harnesses and unrelated settings are preserved. Unattended installation accepts `--existing reuse|reset` on Linux or `-Existing reuse|reset` on Windows. See [installation options](https://github.com/sholee-pt/Harness-Codex/blob/v0.35.3-beta/docs/installation.md).
 
@@ -93,7 +110,7 @@ After successful setup, interactive `init` offers two project preferences: **mai
 
 ### Conversations and project maintenance
 
-Inside an integrated Codex conversation, type `/harness/status` for the boxed
+Inside a Linux adapter conversation, type `/harness/status` for the boxed
 dashboard or `/harness/settings` for preferences. `/harness/init` and
 `/harness/config` use the current conversation for generation and review.
 These qualified inputs are handled by the adapter; they are not entries in the
@@ -101,7 +118,7 @@ built-in `/` completion menu. Terminal commands remain available. See
 [management commands, project switching and removal](docs/management.md).
 
 After `init`, run **`codex`** and select **Auto** at the top of `/model`.
-The integration downloads an unmodified official Codex release and connects its
+The Linux integration downloads an unmodified official Codex release and connects its
 original terminal to a local Auto adapter. The composer, colors, shortcuts,
 approvals and native history remain Codex-owned. Your separately installed Codex
 is preserved. Codex updates no longer require a Harness-specific Codex build.
