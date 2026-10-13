@@ -8,7 +8,7 @@
   <a href="https://github.com/sholee-pt/Harness-Codex/tree/v0.35.3-beta"><img src="https://img.shields.io/badge/Version-v0.35.3--beta-2563EB.svg?style=flat-square" alt="Version: v0.35.3-beta"></a>
   <a href="https://github.com/sholee-pt/Harness-Codex/actions/workflows/codex-beta.yml"><img src="https://github.com/sholee-pt/Harness-Codex/actions/workflows/codex-beta.yml/badge.svg?branch=v0.35.3-beta&amp;event=workflow_dispatch" alt="Linux verification and release status"></a>
   <a href="#agent-editions"><img src=".github/badges/agent-codex.svg" alt="Agent: Codex"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Proprietary-64748B.svg?style=flat-square" alt="License: Proprietary"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-64748B.svg?style=flat-square" alt="License: Apache 2.0"></a>
 </p>
 
 <p align="center">
@@ -229,4 +229,6 @@ This repository provides **`harness-codex`** and needs no `--agent` option. Hidd
 
 ## License
 
-See [LICENSE](LICENSE) for the current terms. Repository visibility does not change the license.
+Copyright 2026 sholee-pt. Licensed under the [Apache License, Version 2.0](LICENSE).
+
+Third-party material remains subject to its respective copyright, license and notice terms.
