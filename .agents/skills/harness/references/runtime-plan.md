@@ -105,7 +105,7 @@ Provisional greenfield participants use `runtimeParticipantId` instead of `agent
 ## Validation
 
 ```shell
-harness-codex helper validate_runtime_plan \
+harnex helper validate_runtime_plan \
   --root TARGET_REPOSITORY \
   --plan RUNTIME_PLAN.json
 ```
@@ -115,7 +115,7 @@ The command is no-write. A valid result proves source binding, references, task 
 After each delegated task, validate the returned parent-facing packet against the same plan:
 
 ```shell
-harness-codex helper validate_coordination_packet \
+harnex helper validate_coordination_packet \
   --root TARGET_REPOSITORY \
   --plan RUNTIME_PLAN.json \
   --packet COORDINATION_PACKET.json

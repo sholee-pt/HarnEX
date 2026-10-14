@@ -1,28 +1,28 @@
-# Official Codex with Harness Auto
+# Official Codex with HarnEX Auto
 
 This page describes the Linux official-package adapter. The separately verified Windows x86_64 release uses a Harness-versioned native package with Auto; its installation and update path is described in [installation](installation.md). The Linux adapter's management menu, protocol checks and independent Codex updates do not describe the Windows package.
 
 ```bash
-harness-codex init --goal-file PROJECT.md
+harnex init --goal-file PROJECT.md
 source ~/.bashrc
 codex
 codex resume
 codex resume --last
 ```
 
-The Linux `codex` entry checks published updates, then launches the unmodified official terminal. Its original renderer connects to a loopback adapter, which relays to the same official executable's app-server. Authentication, history, tools, approvals and sandbox enforcement remain in Codex. No activation prompt or extra work conversation is created by Harness.
+The Linux `codex` entry checks published updates, then launches the unmodified official terminal. Its original renderer connects to a loopback adapter, which relays to the same official executable's app-server. Authentication, history, tools, approvals and sandbox enforcement remain in Codex. No activation prompt or extra work conversation is created by HarnEX.
 
 ## Updates without rebuilding Codex
 
-Official Codex and Harness have independent version pointers. When update checks are enabled, an interactive launch checks the official Codex release channel and, for release-channel Harness installations, the Harness release channel, with a short network timeout. The installer's `--auto-update off` policy or `HARNESS_NO_UPDATE_CHECK=1` skips both checks; an explicit Harness branch pin skips its release-channel check. Available updates appear before the conversation, with arrow-key choices to update both, either tool, or skip. No model request or token usage is involved. The default choice is skip. Offline checks retain installed versions.
+Official Codex and HarnEX have independent version pointers. When update checks are enabled, an interactive launch checks the official Codex release channel and, for release-channel HarnEX installations, the HarnEX release channel, with a short network timeout. The installer's `--auto-update off` policy or `HARNESS_NO_UPDATE_CHECK=1` skips both checks; an explicit HarnEX branch pin skips its release-channel check. Available updates appear before the conversation, with arrow-key choices to update both, either tool, or skip. No model request or token usage is involved. The default choice is skip. Offline checks retain installed versions.
 
-Official packages are downloaded from `openai/codex`, checked against GitHub's asset SHA-256, extracted within bounds, and started with `--version`. Before enabling the adapter, the staged candidate must also advertise the authenticated remote interface and pass app-server initialization and the model-catalog check. If that Auto probe fails, an interactive installation/update offers keeping the current installation or explicitly selecting the verified candidate in native mode. The default preserves the current installation; unattended failures never select native mode. Integrity or executable-version failures cannot use this exception. Native selection disables Harness Auto and `/harness/` controls while preserving the existing package and conversation permissions. It remains native through later updates until `codex update --auto` passes the compatibility check. A declined probe leaves the current package active and removes the new staging directory. This is an installation check, not a per-request operation or proof of all future TUI behavior. No Rust compilation or patched Codex binary is involved. Harness uses published releases, including beta releases; development branch commits are not normal automatic updates. Explicit branch pins retain the developer source path for `harness-codex update`.
+Official packages are downloaded from `openai/codex`, checked against GitHub's asset SHA-256, extracted within bounds, and started with `--version`. Before enabling the adapter, the staged candidate must also advertise the authenticated remote interface and pass app-server initialization and the model-catalog check. If that Auto probe fails, an interactive installation/update offers keeping the current installation or explicitly selecting the verified candidate in native mode. The default preserves the current installation; unattended failures never select native mode. Integrity or executable-version failures cannot use this exception. Native selection disables HarnEX Auto and `/harnex/` controls while preserving the existing package and conversation permissions. It remains native through later updates until `codex update --auto` passes the compatibility check. A declined probe leaves the current package active and removes the new staging directory. This is an installation check, not a per-request operation or proof of all future TUI behavior. No Rust compilation or patched Codex binary is involved. HarnEX uses published releases, including beta releases; development branch commits are not normal automatic updates. Explicit branch pins retain the developer source path for `harnex update`.
 
 ```bash
 codex update                 # Explicitly update the owned official Codex package
 codex update --auto          # Explicitly re-enable the adapter after compatibility passes
-harness-codex update --check # Check published Harness releases
-harness-codex update         # Explicitly update Harness
+harnex update --check # Check published HarnEX releases
+harnex update         # Explicitly update HarnEX
 HARNESS_NO_UPDATE_CHECK=1 codex
 HARNESS_CODEX_NATIVE=1 codex  # Official UI without the Auto adapter
 ```
@@ -35,15 +35,15 @@ Use the same public installer with `--existing reuse`, followed by `config`, for
 
 `init/config --auto-model auto` enables Auto by default. `--auto-model manual` retains native defaults. A bounded user-local record keeps each thread's Auto or manual preference for resume; it contains no prompts or transcripts. Explicit `--model` or a `-c`/`--config` override of `model` starts with the requested manual choice. Native Codex still interprets the override values and precedence; selecting Auto in `/model` remains available. Global Codex defaults are not rewritten when selecting Auto.
 
-The setup picker labels `--settings auto` **Codex defaults**. It selects the catalog's recommended model/reasoning for that configuration conversation, or preserves an available resumed selection. **Harness Auto** in `/model` is the separate per-turn routing feature described above. Manual setup permissions also apply only to the configuration conversation. The interactive native launch passes the selected workspace roots, command network access, temporary-directory access and approval reviewer as command-line overrides; it does not write global settings. Read-only uses Codex's read-only sandbox, while full access requires confirmation. These controls describe command execution, not separate web-search, app or MCP access. Managed Codex restrictions still apply, and a rejection never triggers a broader retry. See the [official permission configuration keys](https://learn.chatgpt.com/docs/config-file/config-reference) and [sandbox behavior](https://learn.chatgpt.com/docs/sandboxing).
+The setup picker labels `--settings auto` **Codex defaults**. It selects the catalog's recommended model/reasoning for that configuration conversation, or preserves an available resumed selection. **HarnEX Auto** in `/model` is the separate per-turn routing feature described above. Manual setup permissions also apply only to the configuration conversation. The interactive native launch passes the selected workspace roots, command network access, temporary-directory access and approval reviewer as command-line overrides; it does not write global settings. Read-only uses Codex's read-only sandbox, while full access requires confirmation. These controls describe command execution, not separate web-search, app or MCP access. Managed Codex restrictions still apply, and a rejection never triggers a broader retry. See the [official permission configuration keys](https://learn.chatgpt.com/docs/config-file/config-reference) and [sandbox behavior](https://learn.chatgpt.com/docs/sandboxing).
 
-An explicit native `--profile`/`-p` selection runs the original Codex terminal with the original arguments and a short notice that Harness Auto is unavailable for that launch. The current external app-server interface cannot preserve the selected profile's full configuration contract; Harness neither discards it nor flattens it into higher-priority permission overrides. To use Auto, launch without this explicit profile selector. Help (including `codex resume --help`), native utility commands and explicit `--remote` connections bypass update checks and the adapter. See [official profile configuration](https://learn.chatgpt.com/docs/config-file/config-advanced#profiles).
+An explicit native `--profile`/`-p` selection runs the original Codex terminal with the original arguments and a short notice that HarnEX Auto is unavailable for that launch. The current external app-server interface cannot preserve the selected profile's full configuration contract; HarnEX neither discards it nor flattens it into higher-priority permission overrides. To use Auto, launch without this explicit profile selector. Help (including `codex resume --help`), native utility commands and explicit `--remote` connections bypass update checks and the adapter. See [official profile configuration](https://learn.chatgpt.com/docs/config-file/config-advanced#profiles).
 
 Routing uses the current request, advertised model catalog and a small in-memory continuation context. Clear complex work, including explicit whole-repository audits, can raise the tier immediately; two clearly lighter requests permit lowering it. Ambiguous continuations retain the current pair. “New task:” or “다음 작업:” allows immediate reassessment and removes the previous task's stricter adaptive switching threshold for that request. A completed turn alone does not declare a multi-turn task finished. Resume seeds its context from native saved inference settings, not a replayed transcript. These are deterministic preferences, not measured performance rankings.
 
 There are no built-in model-ID preferences. Without a user preference file, Auto retains an available continuation model or uses the catalog's recommended default. It does not infer speed or quality from model names or list order. Known effort meanings (`low`, `medium`, `high`) remain task preferences only, never an availability allowlist: each selection must be advertised by that model, otherwise its supported default is used. New effort names are accepted without a source edit. User preference IDs remain explicit configuration, not built-in assumptions; an advertised `upgrade` can resolve a no-longer-visible preference when the catalog includes its successor information.
 
-Catalog pages are bounded and combined at launch, when the native model menu requests them, and before the next request after a model/effort availability error. Ordinary turns reuse metadata and make no extra routing-model call. CLI versions and server-side catalog changes are independent. Resume reads metadata only (`thread/read`, without turns); when a server omits saved inference metadata, settings returned by resume are checked before the next task. Auto replaces unavailable selections with a supported catalog default and displays a warning. Manual selections require a new `/model` choice; if resume cannot open, use `codex --model AVAILABLE_MODEL resume SESSION_ID`. A failed inference request is never automatically replayed. Empty catalogs and missing usable defaults request a manual selection/native mode rather than inventing a model. Major protocol changes can still require a Harness update.
+Catalog pages are bounded and combined at launch, when the native model menu requests them, and before the next request after a model/effort availability error. Ordinary turns reuse metadata and make no extra routing-model call. CLI versions and server-side catalog changes are independent. Resume reads metadata only (`thread/read`, without turns); when a server omits saved inference metadata, settings returned by resume are checked before the next task. Auto replaces unavailable selections with a supported catalog default and displays a warning. Manual selections require a new `/model` choice; if resume cannot open, use `codex --model AVAILABLE_MODEL resume SESSION_ID`. A failed inference request is never automatically replayed. Empty catalogs and missing usable defaults request a manual selection/native mode rather than inventing a model. Major protocol changes can still require a HarnEX update.
 
 Image-containing, image-only and oversized text requests keep the current native inference settings. The 32 KiB routing bound does not truncate or reject their content. Optional preference files use real visible catalog model IDs:
 
@@ -52,14 +52,14 @@ Image-containing, image-only and oversized text requests keep the current native
 ```
 
 ```bash
-harness-codex config --auto-model auto --routing-profiles models.json
+harnex config --auto-model auto --routing-profiles models.json
 ```
 
 ## Optional outcome-based Auto advice
 
 Live observation and outcome-based selection use the Linux adapter. The Windows native package uses ordinary Auto routing and optional model profiles; it neither records turns through this observer nor applies its advice. The shared CLI can store an adaptive preference on Windows, but that alone does not enable these runtime features.
 
-Adaptive evidence is separately opt-in per selected Harness workspace; existing
+Adaptive evidence is separately opt-in per selected HarnEX workspace; existing
 opt-outs and manual model choices are preserved. It makes no extra model call and
 does not run paid comparison trials. Enable it before starting/resuming Codex:
 
@@ -72,12 +72,12 @@ or change manual model choices. Quality feedback is still required before
 observations can support performance advice.
 
 ```sh
-harness-codex routing --adaptive on
-harness-codex routing --adaptive status
-harness-codex routing --feedback work-item:OPAQUE_ID --outcome verified --source verification
-harness-codex routing --feedback work-item:OPAQUE_ID --outcome failed --source verification --cause inference
-harness-codex routing --adaptive off
-harness-codex routing --adaptive clear --yes
+harnex routing --adaptive on
+harnex routing --adaptive status
+harnex routing --feedback work-item:OPAQUE_ID --outcome verified --source verification
+harnex routing --feedback work-item:OPAQUE_ID --outcome failed --source verification --cause inference
+harnex routing --adaptive off
+harnex routing --adaptive clear --yes
 ```
 
 Completed observed Auto and manual turns contribute duration and, when a reliable
@@ -140,6 +140,6 @@ not proof that differently worded tasks have identical difficulty. Inspect with
 
 The opt-in paid model-switch smoke requires a preference file selecting two distinct available models. It does not guess model rankings or override the default routing policy. From a repository checkout, use `conda run -n harness python -B test/integration/verify_live_routing.py --live --profiles models.json --output /tmp/harness-routing-smoke.json`. The check consumes two model turns and verifies saved conversation continuity; it does not measure task quality or cost savings.
 
-Before connecting, Harness checks for the official remote interface and a usable model catalog. If those checks fail it offers native mode or exit. Unexpected protocol failure stops the adapter and directs the user to resume; it never silently resubmits a request. Capability checks do not prove all future APIs, account restrictions or live tool behavior. Linux CI uses real official TUI and app-server processes with a synthetic local model provider, not paid inference.
+Before connecting, HarnEX checks for the official remote interface and a usable model catalog. If those checks fail it offers native mode or exit. Unexpected protocol failure stops the adapter and directs the user to resume; it never silently resubmits a request. Capability checks do not prove all future APIs, account restrictions or live tool behavior. Linux CI uses real official TUI and app-server processes with a synthetic local model provider, not paid inference.
 
 Confirmed uninstall removes unchanged owned entry points, preferences, packages and exact PATH blocks. Edited or unknown files are preserved for review. Native history, authentication, standalone Codex and project harnesses remain intact. Windows native builds require a separately authorized workflow and are not part of Linux publication; see [release verification](distribution.md).

@@ -13,7 +13,7 @@ import urllib.request
 
 from . import distribution as dist
 
-REPOSITORY = 'sholee-pt/Harness-Codex'
+REPOSITORY = 'sholee-pt/HarnEX'
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -22,10 +22,10 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 def request(url, *, timeout=5, accept='application/vnd.github+json'):
-    if not url.startswith(('https://api.github.com/repos/sholee-pt/Harness-Codex/',
+    if not url.startswith(('https://api.github.com/repos/sholee-pt/HarnEX/',
                            'https://api.github.com/repos/openai/codex/')):
         raise ValueError('Unexpected release API URL')
-    headers = {'User-Agent': 'Harness-Codex-updater', 'Accept': accept}
+    headers = {'User-Agent': 'HarnEX-updater', 'Accept': accept}
     token = os.environ.get('HARNESS_GITHUB_TOKEN') or os.environ.get('GH_TOKEN')
     if token:
         headers['Authorization'] = 'Bearer ' + token
@@ -88,7 +88,7 @@ def latest_harness(*, timeout=5):
     candidates = [item for item in releases if not item.get('draft') and
                   isinstance(item.get('tag_name'), str) and re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+(?:-beta)?', item['tag_name'])]
     if not candidates:
-        raise ValueError('No published Harness release is available')
+        raise ValueError('No published HarnEX release is available')
     return max(candidates, key=lambda item: dist._version(item['tag_name'][1:]))
 
 
@@ -111,10 +111,10 @@ def update(data_root, *, selected=None, timeout=120):
         return {**selected, 'updated': False, 'installation': before}
     version = selected['availableVersion']
     if dist._version(version) <= dist._version(before['version']):
-        raise ValueError('Harness update would not be a forward version change')
+        raise ValueError('HarnEX update would not be a forward version change')
     release = selected['release']
     if release.get('draft') or release.get('tag_name') != 'v' + version:
-        raise ValueError('Selected Harness release identity changed')
+        raise ValueError('Selected HarnEX release identity changed')
     value = asset(release, f'harness-codex-{version}-linux.tar.gz', REPOSITORY)
     with tempfile.TemporaryDirectory(prefix='harness-release-') as temporary:
         temporary = Path(temporary).resolve()
@@ -131,11 +131,11 @@ def update(data_root, *, selected=None, timeout=120):
         with dist._lock(root):
             current = dist.installed_status(root)
             if current != before:
-                raise ValueError('Harness installation changed during download; retry')
+                raise ValueError('HarnEX installation changed during download; retry')
             active = {key: item for key, item in before.items() if key not in {'dataRoot', 'sourceRoot', 'releasePath', 'release_root'}}
             active.update(version=version, commit=commit)
             installation = dist._activate(snapshot, root, active)
     from .installation_paths import repair_entrypoints
     repair_entrypoints(root)
-    installation = dist.installed_status(root)
+    installation = dist.migrate_command(root)
     return {**selected, 'status': 'updated', 'updated': True, 'installation': installation}

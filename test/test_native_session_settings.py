@@ -67,7 +67,7 @@ class NativeSessionSettingsTests(unittest.TestCase):
         with mock.patch.object(session_settings, 'choose', return_value=0) as choose:
             self.assertEqual(session_settings.mode_choice(mock.Mock(), 'ask'), 'auto')
         self.assertIn('Codex defaults', choose.call_args.args[2][0])
-        self.assertIn('Harness Auto routing is selected separately in /model.', choose.call_args.kwargs['summary'])
+        self.assertIn('HarnEX Auto routing is selected separately in /model.', choose.call_args.kwargs['summary'])
 
     def test_failed_native_launch_is_returned_without_retry_or_broader_permissions(self):
         root = Path('/selected/project')

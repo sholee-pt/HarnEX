@@ -124,7 +124,7 @@ class ProjectCliTests(unittest.TestCase):
             self.assertEqual(preferences.call_count, 1)
             self.assertEqual(self.run_cli('init')[0], 0)
             self.assertEqual(preferences.call_count, 2)
-            self.assertIn('harness-codex routing --adaptive', (self.root / '.harness/GUIDE.md').read_text())
+            self.assertIn('harnex routing --adaptive', (self.root / '.harness/GUIDE.md').read_text())
 
     def test_dry_run_does_not_need_codex_or_terminal_and_does_not_write(self):
         (self.root / "user.txt").write_text("keep", encoding="utf-8")
@@ -219,7 +219,7 @@ class ProjectCliTests(unittest.TestCase):
     def test_configure_requires_generator_installation(self):
         code, out, err = self.run_cli("configure")
         self.assertEqual(code, 1)
-        self.assertIn(presentation.command(['harness-codex', 'init', '--project', self.root]), err)
+        self.assertIn(presentation.command(['harnex', 'init', '--project', self.root]), err)
         self.assertEqual(list(self.root.iterdir()), [])
         self.assertFalse(self.log.exists())
 
@@ -527,7 +527,7 @@ class ProjectCliTests(unittest.TestCase):
         code, out, err = self.run_cli("status", tty=False)
         report = json.loads(out)
         self.assertEqual((code, report["state"]), (1, "invalid"), err)
-        self.assertEqual(report["nextCommand"], project.ui.command(['harness-codex', 'doctor', '--project', self.root]))
+        self.assertEqual(report["nextCommand"], project.ui.command(['harnex', 'doctor', '--project', self.root]))
         self.assertEqual(report["summary"]["managedArtifacts"], "failed")
         self.assertEqual(report["summary"]["sourceEvidence"], "failed")
         code, out, err = self.run_cli("doctor", tty=False)

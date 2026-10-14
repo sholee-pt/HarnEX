@@ -163,7 +163,7 @@ The draft uses deterministic placeholders instead of reproducing fixed contracts
 Materialize the draft before dry-run:
 
 ```shell
-harness-codex helper harness_plan_builder \
+harnex helper harness_plan_builder \
   --root <repo-root> \
   --input DRAFT_PLAN.json \
   --output PLAN.json

@@ -24,7 +24,7 @@ def register(commands):
 def run(args, source_root):
     script = checked_path(Path(source_root) / '.agents/skills/harness/scripts' / (args.helper_name + '.py'))
     # The interpreter is dedicated; checks launched by helpers retain the user's
-    # project PATH and environment. Do not activate Harness in the project shell.
+    # project PATH and environment. Do not activate HarnEX in the project shell.
     result = subprocess.run([sys.executable, '-B', str(script), *args.helper_arguments],
                             env=codex_environment(), check=False)
     return result.returncode if result.returncode >= 0 else 128 - result.returncode

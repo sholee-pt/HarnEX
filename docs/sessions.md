@@ -1,22 +1,22 @@
 # Project management and native conversations
 
-Harness creates and maintains one project-local harness. Codex uses it through
-its native root instructions, agents and skills. Harness adds no bootstrap user
+HarnEX creates and maintains one project-local harness. Codex uses it through
+its native root instructions, agents and skills. HarnEX adds no bootstrap user
 turn. Its local Auto preference record contains thread IDs and booleans only;
 Codex remains the owner of conversation history and resume.
 
 ```bash
 cd /path/to/project
-harness-codex init --goal-file PROJECT.md
+harnex init --goal-file PROJECT.md
 # Press Enter after init to open Bash with ~/.bashrc loaded.
 codex
 codex resume
 codex resume --last
 codex resume SESSION_ID
 # Review changed project responsibilities when needed:
-harness-codex config --goal-file UPDATED_PROJECT.md
-harness-codex status
-harness-codex doctor --json
+harnex config --goal-file UPDATED_PROJECT.md
+harnex status
+harnex doctor --json
 ```
 
 `init/config` preserve user text and place a separately owned block in the active
@@ -45,12 +45,12 @@ Raw official Codex outside the registered entry point does not run this check.
 No extra model call or bootstrap user turn is added.
 
 ```bash
-harness-codex context --project /new/mount/project
-harness-codex context --project /new/mount/project --resolve /old/mount/project/src/model.py
+harnex context --project /new/mount/project
+harnex context --project /new/mount/project --resolve /old/mount/project/src/model.py
 # For legacy projects whose old prefix was never recorded:
-harness-codex context --project /new/mount/project --remember-root /old/mount/project
+harnex context --project /new/mount/project --remember-root /old/mount/project
 # After host/sandbox repair:
-harness-codex context --project /new/mount/project --refresh
+harnex context --project /new/mount/project --refresh
 # Keep native resume's working directory on the new mount too:
 codex --cd /new/mount/project resume SESSION_ID
 ```
@@ -95,7 +95,7 @@ compliance. Inspect questionable installations explicitly before relying on them
 
 ## Migration from v0.12
 
-Run `harness-codex update`, then `harness-codex config` in each project you want to
+Run `harnex update`, then `harnex config` in each project you want to
 migrate to native instruction activation. Apply the PATH change in a fresh terminal.
 The old `new`, `resume` and `start` commands remain hidden compatibility aliases.
 They forward to native Codex with a deprecation notice, without project validation,
@@ -109,13 +109,13 @@ and `--reload-harness` flags do not configure native work sessions; use `/model`
 Long choices show an ellipsis in the list. Press Tab to read the complete selected choice and its context; further Tab presses advance through detail pages and return to the list. Up/Down still changes the selected choice, and Enter accepts it. A terminal too small for the interactive controls switches to numbered choices, retaining the highlighted choice and showing the full text.
 
 ```bash
-harness-codex init --settings auto --goal-file PROJECT.md
-harness-codex config --settings manual
+harnex init --settings auto --goal-file PROJECT.md
+harnex config --settings manual
 # Work-session settings are selected in native Codex:
 codex
 ```
 
-Codex defaults selects the catalog's recommended model and its advertised supported default reasoning level for new/configuration work. Resume reads saved settings without loading turns and preserves an available model/effort pair. If that pair is removed or unknown, it selects and reports a supported default before opening the session. No usable resume default requires manual selection. This configuration choice is separate from per-request Harness Auto routing. It does not run a separate model to choose a model, infer pricing, or claim command-specific optimal performance. For new work, a catalog with no supported recommendation retains native settings; an empty catalog or connection failure reports an error with the `--settings native` fallback.
+Codex defaults selects the catalog's recommended model and its advertised supported default reasoning level for new/configuration work. Resume reads saved settings without loading turns and preserves an available model/effort pair. If that pair is removed or unknown, it selects and reports a supported default before opening the session. No usable resume default requires manual selection. This configuration choice is separate from per-request HarnEX Auto routing. It does not run a separate model to choose a model, infer pricing, or claim command-specific optimal performance. For new work, a catalog with no supported recommendation retains native settings; an empty catalog or connection failure reports an error with the `--settings native` fallback.
 
 Manual lists visible models and supported reasoning levels from the installed Codex catalog. A removed saved model requires a current choice; a removed effort or changed model offers its supported default effort. Choices apply only to this native conversation; global settings remain unchanged. Changing a model after generating a harness does not require regenerating the harness. Supported tools, reasoning choices and output quality may differ by model.
 
@@ -126,17 +126,17 @@ Permissions default to the native policy. Manual choices can request read-only w
 `init`, `config` and applied `reset` use the native Codex App Server. Three stages show generator readiness, configuration and independent file validation. Elapsed seconds update while running. `--details` shows the model summary and session ID; `--interactive` uses the native Codex screen. Questions, incomplete outcomes and approval previews remain visible. The wrapper hides transport JSON, not the native conversation history.
 
 ```bash
-harness-codex config --timeout 3600
-harness-codex config --details
-harness-codex config --resume SESSION_ID --goal "The dataset is ..."
-harness-codex config --interactive
+harnex config --timeout 3600
+harnex config --details
+harnex config --resume SESSION_ID --goal "The dataset is ..."
+harnex config --interactive
 ```
 
 A fresh setup conversation is archived only after a completed model outcome and independently valid project files. Archiving keeps its history but removes it from the ordinary active picker. Interrupted, failed and question-waiting setup conversations stay available. A session explicitly supplied to `config --resume` is never automatically archived. Interactive fallback sessions also stay under native control. Settings discovery uses metadata APIs only and creates no conversation. Native `codex` creates work conversations and native resume reuses them. Existing historical duplicates are not automatically removed.
 
-The default configuration deadline is 1,800 seconds. Ctrl+C, connection failure and timeout close the child connection and preserve project files for inspection. Continue incomplete setup with `config --resume SESSION_ID`. Harness keeps no transport transcript or project session registry.
+The default configuration deadline is 1,800 seconds. Ctrl+C, connection failure and timeout close the child connection and preserve project files for inspection. Continue incomplete setup with `config --resume SESSION_ID`. HarnEX keeps no transport transcript or project session registry.
 
-Command/file approval uses `Approve? [Y/n]`: Enter, `y` or `yes` approves this request; `n` or `no` declines. Surrounding whitespace and letter case are ignored; other input asks again without sending a decision. The display separates the command, directory and reason, and hides unused protocol metadata and persistent-rule proposals. File diffs and additional requested access remain visible. Approval is for this request only, not a saved rule or proof of successful execution; unrestricted conversation access still requires its separate explicit confirmation. Native `failed`/`declined` outcomes are shown separately, even without an exit code, with at most the final 2,000 characters of command output. A model's final explanation is not an approval receipt. Use `codex --cd /path/to/project resume SESSION_ID` to inspect the retained conversation with native approval controls. To continue configuration through Harness progress, use `harness-codex config --project /path/to/project --resume SESSION_ID --settings native`. Host sandbox restrictions still require separate diagnosis; Harness never automatically grants broader access.
+Command/file approval uses `Approve? [Y/n]`: Enter, `y` or `yes` approves this request; `n` or `no` declines. Surrounding whitespace and letter case are ignored; other input asks again without sending a decision. The display separates the command, directory and reason, and hides unused protocol metadata and persistent-rule proposals. File diffs and additional requested access remain visible. Approval is for this request only, not a saved rule or proof of successful execution; unrestricted conversation access still requires its separate explicit confirmation. Native `failed`/`declined` outcomes are shown separately, even without an exit code, with at most the final 2,000 characters of command output. A model's final explanation is not an approval receipt. Use `codex --cd /path/to/project resume SESSION_ID` to inspect the retained conversation with native approval controls. To continue configuration through HarnEX progress, use `harnex config --project /path/to/project --resume SESSION_ID --settings native`. Host sandbox restrictions still require separate diagnosis; HarnEX never automatically grants broader access.
 
 Interactive progress uses cyan for headings and selections, green for approval responses, yellow for declined requests or warnings, and red for execution failures. Redirected output, `TERM=dumb` and `NO_COLOR` omit color. Successful command output and transport JSON remain hidden; prompts and diagnostic outcomes are separated with blank lines.
 
@@ -150,4 +150,4 @@ The CLI maintains `.harness/GUIDE.md` after successful init/config. The same pat
 
 Human output states that checks cover project files and contracts. `runtimeLoading: not-tested` and `taskQuality: not-measured` remain in `--json` because static validation cannot prove live component loading or task quality. They are not generation errors or counters that become successful after a fixed number of sessions. Live discovery requires an observed native session; correctness and harness benefit require a concrete task and the separate opt-in evaluation workflow. See [evaluation](evaluation.md).
 
-During configuration, native command failures mentioning bubblewrap, namespace setup or `RTM_NEWADDR` receive host/container troubleshooting guidance. Approval-limit failures receive reviewer guidance. Harness does not configure bubblewrap, weaken the sandbox, or reset approval budgets. Reproduce a simple file read in native Codex under the same environment and inspect host namespace settings. In interactive work sessions, native Codex owns the error display; Harness does not intercept its terminal or claim to repair the host.
+During configuration, native command failures mentioning bubblewrap, namespace setup or `RTM_NEWADDR` receive host/container troubleshooting guidance. Approval-limit failures receive reviewer guidance. HarnEX does not configure bubblewrap, weaken the sandbox, or reset approval budgets. Reproduce a simple file read in native Codex under the same environment and inspect host namespace settings. In interactive work sessions, native Codex owns the error display; HarnEX does not intercept its terminal or claim to repair the host.

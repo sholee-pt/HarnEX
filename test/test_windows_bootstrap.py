@@ -44,7 +44,7 @@ class WindowsBootstrapTests(unittest.TestCase):
 $ErrorActionPreference = 'Stop'
 function Invoke-WebRequest {
     param($Uri, $OutFile, [switch]$UseBasicParsing, $TimeoutSec)
-    if ($Uri -notlike 'https://github.com/sholee-pt/Harness-Codex/releases/download/v0.12.0-beta/*') { throw 'Unexpected network request' }
+    if ($Uri -notlike 'https://github.com/sholee-pt/HarnEX/releases/download/v0.12.0-beta/*') { throw 'Unexpected network request' }
     Copy-Item -LiteralPath (Join-Path $env:TEST_ASSETS ([Uri]$Uri).Segments[-1]) -Destination $OutFile
 }
 try {
@@ -236,7 +236,7 @@ if "%~1"=="create" (
 )
 echo {"treeHash":"internal-receipt","branch":null}
 echo {"state":"unchanged","writes":0}
-echo Installed harness-codex in fixture-bin. PATH registration skipped; invoke the command by its full path.
+echo Installed harnex in fixture-bin. PATH registration skipped; invoke the command by its full path.
 exit /b 0
 ''')
                 env = {**os.environ, "TEST_BASE": str(base), "TEST_SOURCE": str(ROOT / "installer/install.ps1"),
@@ -265,7 +265,7 @@ exit $result
                 else:
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     self.assertRegex(result.stdout, r'\[3/3\].*: done \(\d+s\)')
-                    self.assertIn('Installed harness-codex in fixture-bin', result.stdout)
+                    self.assertIn('Installed harnex in fixture-bin', result.stdout)
                     self.assertIn('PATH registration skipped', result.stdout)
                     for detail in ('"treeHash"', '"writes":0', 'advisory warning'):
                         self.assertNotIn(detail, result.stdout + result.stderr)

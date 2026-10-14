@@ -1,4 +1,4 @@
-"""User-requested /harness/ controls over the native protocol, without inference for queries.
+"""User-requested /harnex/ controls over the native protocol, without inference for queries.
 
 The qualified namespace passes the native path-input parser. It is not a new
 built-in slash menu and does not intercept terminal keys or relax permissions.
@@ -19,7 +19,7 @@ from .paths import project_root
 
 COMMANDS = ('status', 'settings', 'init', 'config', 'maintenance', 'doctor', 'routing', 'jev', 'graft', 'switch', 'update', 'remove', 'reset', 'tool', 'help')
 REVIEW_PROMPT = (
-    'Review this project\'s eligible Harness maintenance concerns using its installed maintenance workflow. '
+    'Review this project\'s eligible HarnEX maintenance concerns using its installed maintenance workflow. '
     'Read current status first. Respect existing off/suggest/auto mode, review leases, budgets, active sessions and existing-skill scope. '
     'Do not manufacture a concern or bypass a limit. If no review is eligible, report that without regenerating the harness. '
     'Use the current conversation permissions and record the actual outcome; do not claim measured savings without evidence.')
@@ -38,14 +38,15 @@ def parse(params):
     if not isinstance(items, list) or len(items) != 1 or not isinstance(items[0], dict) or items[0].get('type') != 'text':
         return None
     text = items[0].get('text', '')
-    if not isinstance(text, str) or not text.startswith('/harness/'):
+    if not isinstance(text, str) or not text.startswith(('/harnex/', '/harness/')):
         return None
     if len(text) > 8192 or '\n' in text or '\r' in text:
-        raise ValueError('Use one bounded /harness/ command; quote ordinary discussion of this namespace.')
-    arguments = shlex.split(text[len('/harness/'):])
+        raise ValueError('Use one bounded /harnex/ command; quote ordinary discussion of this namespace.')
+    namespace = '/harnex/' if text.startswith('/harnex/') else '/harness/'
+    arguments = shlex.split(text[len(namespace):])
     command = arguments.pop(0) if arguments else 'help'
     if command not in COMMANDS:
-        raise ValueError('Unknown Harness command. Use /harness/help.')
+        raise ValueError('Unknown HarnEX command. Use /harnex/help.')
     return command, arguments
 
 
@@ -146,7 +147,7 @@ class Controls:
         if truncated:
             raise ValueError('Management output exceeded its display limit. Inspect the project with the terminal CLI before continuing.')
         if process.returncode:
-            raise ValueError(text[-12000:] or 'Harness command did not complete')
+            raise ValueError(text[-12000:] or 'HarnEX command did not complete')
         return text
 
     async def ask(self, thread, turn, question, options=None):
@@ -156,7 +157,7 @@ class Controls:
         try:
             await self.send({'id': identity, 'method': 'item/tool/requestUserInput', 'params': {
                 'threadId': thread, 'turnId': turn, 'itemId': identity, 'isBlocking': True,
-                'questions': [{'id': 'choice', 'header': 'Harness', 'question': question, 'isOther': False, 'isSecret': False,
+                'questions': [{'id': 'choice', 'header': 'HarnEX', 'question': question, 'isOther': False, 'isSecret': False,
                                'options': [{'label': label, 'description': description} for label, description in options] if options is not None else None}]}})
             value = await future
             answers = (value.get('result', {}).get('answers', {}).get('choice') or {}).get('answers', [])
@@ -166,7 +167,7 @@ class Controls:
             if (len(answers) != 1 or not isinstance(answers[0], str) or not answers[0].strip()
                     or len(answers[0]) > 4000 or any(ord(c) < 32 and c not in '\n\t' for c in answers[0])
                     or options is not None and answers[0] not in [label for label, _ in options]):
-                raise ValueError('No valid Harness input was confirmed; nothing further was applied.')
+                raise ValueError('No valid HarnEX input was confirmed; nothing further was applied.')
             return answers[0]
         finally:
             self.answers.pop(identity, None)
@@ -187,7 +188,7 @@ class Controls:
             return 'After exit: no action queued.'
         kind = action.get('action')
         label = {'switch': 'Open project conversation', 'configure': 'Configure project',
-                 'update': 'Update Harness', 'uninstall': 'Uninstall Harness', 'jev': 'Private Jev ' + action.get('operation', '')}.get(kind, 'Unknown action')
+                 'update': 'Update HarnEX', 'uninstall': 'Uninstall HarnEX', 'jev': 'Private Jev ' + action.get('operation', '')}.get(kind, 'Unknown action')
         if action.get('root'):
             label += ': ' + ui.clean(action['root'])
         if kind == 'switch':
@@ -250,10 +251,10 @@ class Controls:
         parsed = parse(params)
         if parsed is None:
             if self.tasks:
-                raise ValueError('Finish or cancel the Harness menu before submitting another task.')
+                raise ValueError('Finish or cancel the HarnEX menu before submitting another task.')
             return False
         if method == 'turn/steer' or self.busy or self.tasks:
-            raise ValueError('Wait for the current task to finish before running Harness management.')
+            raise ValueError('Wait for the current task to finish before running HarnEX management.')
         command, arguments = parsed
         root = await self.root(params)
         if command in {'init', 'config'} and arguments:
@@ -263,7 +264,7 @@ class Controls:
                     raise ValueError('Use the Init menu to open another project with its own conversation and permissions.')
                 root, arguments = selected, arguments[2:]
             if arguments and (arguments[0] not in {'--goal', '--goal-file'} or len(arguments) != 2):
-                raise ValueError('Use /harness/' + command + ' [--goal "DESCRIPTION" | --goal-file "PATH"].')
+                raise ValueError('Use /harnex/' + command + ' [--goal "DESCRIPTION" | --goal-file "PATH"].')
             if command == 'init' and (root / '.harness/manifest.json').exists():
                 command, arguments = 'status', []
             else:
@@ -296,7 +297,7 @@ class Controls:
                     raise ValueError('Native review submission is unavailable; no model task was started.')
                 submission = {**params, 'input': [{'type': 'text', 'text': REVIEW_PROMPT}]}
                 text = 'Starting the requested maintenance review with the current model and permissions.'
-            await self.text(thread, turn, 'Harness management · local command\n\n```text\n' + text.replace('```', "'''") + '\n```')
+            await self.text(thread, turn, 'HarnEX management · local command\n\n```text\n' + text.replace('```', "'''") + '\n```')
         except asyncio.CancelledError:
             status = 'interrupted'
             self.configuring.pop(thread, None)
@@ -304,7 +305,7 @@ class Controls:
             status = 'failed'
             value['error'] = {'message': ui.clean(exc), 'codexErrorInfo': None, 'additionalDetails': None}
             self.configuring.pop(thread, None)
-            await self.text(thread, turn, 'Harness management: ' + ui.clean(exc))
+            await self.text(thread, turn, 'HarnEX management: ' + ui.clean(exc))
         finally:
             await self.event('turn/completed', threadId=thread, turn={**value, 'status': status})
         if submission is not None and status == 'completed':
@@ -319,7 +320,7 @@ class Controls:
     async def execute(self, thread, turn, root, command, arguments, *, from_menu=False):
         if command == 'help':
             if arguments:
-                raise ValueError('Use /harness/help without arguments.')
+                raise ValueError('Use /harnex/help without arguments.')
             from .management_wizard import menu
             return await menu(self, thread, turn, root)
         if command == 'settings' and not arguments:
@@ -331,7 +332,7 @@ class Controls:
                 raise ValueError('Removal accepts only --include-generator; reset accepts no arguments.')
             plan = json.loads(await self.cli(root, ['remove', *arguments, '--dry-run', '--json'], output_limit=4 * 1024 * 1024))
             if not plan.get('actions'):
-                return 'No owned files to remove. Use /harness/init to configure the project.'
+                return 'No owned files to remove. Use /harnex/init to configure the project.'
             preview = '\n'.join(item['action'] + ': ' + item['path'] for item in plan['actions'])
             await self.text(thread, turn, '```text\n' + preview.replace('```', "'''") + '\n```')
             choice = await self.choose(thread, turn, 'Remove only the displayed owned project files?', [('Remove', 'Apply the reviewed removal'), ('Back', 'Preserve all files')])
@@ -344,7 +345,7 @@ class Controls:
             from .project_cleanup import candidates, remove_empty
             selected = candidates(root, report)
             if report.get('state') != 'removed' or report.get('recoveryRequired'):
-                return 'Removal needs attention. Use /harness/doctor before continuing.\n' + result
+                return 'Removal needs attention. Use /harnex/doctor before continuing.\n' + result
             if selected:
                 choice = await self.choose(thread, turn, 'Owned files removed. Also remove empty component folders? User files and global Codex settings remain protected.',
                     [('Remove empty folders', 'Only empty parents of removed files'), ('Keep folders', 'Leave remaining directories in place')])
@@ -356,7 +357,7 @@ class Controls:
             else:
                 result = 'No empty component parents remain.'
             if command == 'reset':
-                return 'Owned files removed. ' + result + '\nRun /harness/init to review the new design with the current model and permissions. No replacement was generated yet.'
+                return 'Owned files removed. ' + result + '\nRun /harnex/init to review the new design with the current model and permissions. No replacement was generated yet.'
             return 'Owned files removed. ' + result + '\nExisting conversation context may still contain old instructions; use a fresh conversation before further project work.'
         if command == 'switch':
             return await self.switch(thread, turn, root, arguments, from_menu=from_menu)
@@ -364,7 +365,7 @@ class Controls:
             if arguments == ['--cancel']:
                 return self.cancel_queued('update')
             if arguments not in ([], ['--check']):
-                raise ValueError('Use /harness/update or /harness/update --check.')
+                raise ValueError('Use /harnex/update or /harnex/update --check.')
             value = json.loads(await self.cli(root, ['update', '--check', '--json'], timeout=45, global_command=True))
             import io
             from contextlib import redirect_stdout
@@ -374,12 +375,12 @@ class Controls:
             if arguments or not value.get('updateAvailable'):
                 return report + '\n' + self.queued_action()
             await self.text(thread, turn, report)
-            choice = await self.choose(thread, turn, 'Install a Harness update after leaving this Codex screen?',
+            choice = await self.choose(thread, turn, 'Install a HarnEX update after leaving this Codex screen?',
                 [('Later', 'Keep this installation and conversation running'), ('Update after exit', 'Run the updater when you exit Codex normally')])
             if choice == 'Update after exit':
                 if not await self.queue(thread, turn, {'action': 'update'}):
                     return 'Existing reservation retained.\n' + self.queued_action()
-                return 'Update queued. Finish active work, then use /quit. Harness will update outside the conversation; launch codex again afterwards.'
+                return 'Update queued. Finish active work, then use /quit. HarnEX will update outside the conversation; launch codex again afterwards.'
             return 'No new update was queued.\n' + self.queued_action()
         if command in {'init', 'config'}:
             from .management_wizard import configure
@@ -395,7 +396,7 @@ class Controls:
         if any(word.startswith(('--project', '--data-dir', '--codex-binary', '--hook', '--runtime', '--agent', '--json')) for word in arguments):
             raise ValueError('Project and runtime come from the current conversation. Use the CLI for another target.')
         if command == 'jev' and any(word in {'login', 'logout', '--replace-key'} for word in arguments):
-            return 'Run harness-codex jev login/logout in your terminal. Never paste API keys into a Codex conversation.'
+            return 'Run harnex jev login/logout in your terminal. Never paste API keys into a Codex conversation.'
         if command == 'routing' and not arguments:
             arguments = ['--adaptive', 'status']
         if command == 'graft' and not arguments:
@@ -458,10 +459,10 @@ class Controls:
             observer = getattr(getattr(self.relay, 'policy', None), 'observer', None)
             if observer is not None:
                 observer.managers.clear()
-            await self.text(thread, turn, 'Harness configuration validation\n\n```text\n' + result.replace('```', "'''") + '\n```\nUse /harness/settings for preferences. Native agent loading still requires confirmation.')
+            await self.text(thread, turn, 'HarnEX configuration validation\n\n```text\n' + result.replace('```', "'''") + '\n```\nUse /harnex/settings for preferences. Native agent loading still requires confirmation.')
             return True
         except (OSError, ValueError, TimeoutError) as exc:
-            await self.text(thread, turn, 'Harness configuration not confirmed: ' + ui.clean(exc))
+            await self.text(thread, turn, 'HarnEX configuration not confirmed: ' + ui.clean(exc))
             return False
 
     async def close(self):

@@ -16,7 +16,7 @@ Record a signal only at such an event, using an existing turn/run reference, nev
 raw conversation text. The file is a relevant project source, not a log or transcript:
 
 ```sh
-harness-codex maintenance signal \
+harnex maintenance signal \
   --reason workflow-gap --evidence PROJECT.md --observation TURN_OR_RUN_REFERENCE \
   --session-ref CURRENT_HOOK_SESSION_REF
 ```
@@ -36,7 +36,7 @@ ref를 생략한 신호, 구형 기록, 종료 또는 compaction으로 문맥을
 원문과 경로를 사용자 로컬 관찰 기록에 저장하지 말 것.
 
 ```sh
-harness-codex maintenance begin --evidence PROJECT.md
+harnex maintenance begin --evidence PROJECT.md
 ```
 
 현재 Codex 대화 안에서 수동 검토를 시작하면 `--session-ref CURRENT_HOOK_SESSION_REF`를
@@ -80,7 +80,7 @@ Never reduce verification or claim a quality/cost benefit merely from token coun
 검토 결과 변경할 필요가 없을 때 다음처럼 파일 변경 없이 lease를 마칠 것.
 
 ```sh
-harness-codex maintenance finish \
+harnex maintenance finish \
   --lease LEASE_ID --decision unchanged
 ```
 
@@ -103,7 +103,7 @@ validation alone does not prove a semantic improvement. If that cannot be verifi
 within the lease, choose `proposed` or `deferred`.
 
 ```sh
-harness-codex maintenance finish \
+harnex maintenance finish \
   --lease LEASE_ID --decision apply --plan PATH_TO_VALIDATED_PLAN.json
 ```
 
@@ -132,7 +132,7 @@ Do not infer a harness defect from an ordinary code bug, compare unrelated tasks
 guess a model/runtime identity, or call an extra evaluation model each turn.
 
 ```sh
-harness-codex maintenance observe --change CHANGE_ID --revision USED_REVISION \
+harnex maintenance observe --change CHANGE_ID --revision USED_REVISION \
   --observation WORK_ITEM_ID --outcome failed --source verification \
   --model OBSERVED_MODEL --effort OBSERVED_EFFORT --category testing --runtime OBSERVED_RUNTIME
 ```

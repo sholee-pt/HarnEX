@@ -49,7 +49,7 @@ def remove_empty(root, selected):
     for entry in selected:
         relative = Path(entry['path'])
         if relative.is_absolute() or '..' in relative.parts or not relative.parts or relative.parts[0] not in ROOTS:
-            raise ValueError('Directory cleanup is restricted to project-local Harness component parents')
+            raise ValueError('Directory cleanup is restricted to project-local HarnEX component parents')
         path = checked_path(root / relative)
         if not path.is_relative_to(root) or path == root or any(path == item or path in item.parents or item in path.parents for item in blocked):
             raise ValueError('Directory cleanup cannot remove Codex home or user-level settings')

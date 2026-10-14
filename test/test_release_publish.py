@@ -25,7 +25,7 @@ class ReleasePublishTests(unittest.TestCase):
         self.files = {'harness.py': b'# committed source\n', '_release.json': json.dumps({
             'version': self.tag[1:], 'commit': self.commit, 'runtime': 'codex'}).encode()}
         self.bootstraps = {'install_harness_codex.sh': b'VERSION=0.12.0-beta\n',
-                           'install_harness_codex.ps1': b"$version = '0.12.0-beta'\n# Harness for Codex 0.12.0-beta Windows installer.\n"}
+                           'install_harness_codex.ps1': b"$version = '0.12.0-beta'\n# HarnEX 0.12.0-beta Windows installer.\n"}
         write_artifacts(self.dist, self.tag[1:], self.commit, self.files, self.bootstraps)
         patcher = mock.patch.object(release_publish, 'collect_source', return_value=(
             self.tag[1:], self.commit, self.files.copy(), self.bootstraps))
@@ -36,7 +36,7 @@ class ReleasePublishTests(unittest.TestCase):
 
     def publish(self):
         with contextlib.redirect_stdout(io.StringIO()):
-            release_publish.publish(self.dist, self.commit, self.tag, self.notes, 'sholee-pt/Harness-Codex')
+            release_publish.publish(self.dist, self.commit, self.tag, self.notes, 'sholee-pt/HarnEX')
 
     def test_mismatching_existing_tag_refuses_publication_without_moving_tag(self):
         with mock.patch.object(release_publish, 'gh', return_value=json.dumps({'object': {'type': 'commit', 'sha': 'c' * 40}})) as gh:
@@ -64,7 +64,7 @@ class ReleasePublishTests(unittest.TestCase):
         with mock.patch.object(release_publish, 'gh', side_effect=responses) as gh:
             self.publish()
         endpoints = [call.args[1] for call in gh.call_args_list[:-1]]
-        self.assertEqual(endpoints, ['repos/sholee-pt/Harness-Codex/' + suffix for suffix in (
+        self.assertEqual(endpoints, ['repos/sholee-pt/HarnEX/' + suffix for suffix in (
             'git/ref/tags/' + self.tag, 'git/tags/' + 'a' * 40, 'git/tags/' + 'c' * 40)])
 
     def test_cyclic_annotation_refuses_publication_without_writes(self):

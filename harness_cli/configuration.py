@@ -40,7 +40,7 @@ class Result:
 
     def show_resume(self, root):
         if self.session_id:
-            print(clean('To continue in this project: ' + ui.command(['harness-codex', 'config', '--project', root, '--resume', self.session_id])), flush=True)
+            print(clean('To continue in this project: ' + ui.command(['harnex', 'config', '--project', root, '--resume', self.session_id])), flush=True)
 
 
 class Server:
@@ -65,7 +65,7 @@ class Server:
 
     def initialize(self, timeout=30):
         from .main import version
-        self.call('initialize', {'clientInfo': {'name': 'harness_codex', 'title': 'Harness for Codex',
+        self.call('initialize', {'clientInfo': {'name': 'harness_codex', 'title': 'HarnEX',
                   'version': version(Path(__file__).resolve().parents[1])}}, timeout=timeout)
         self.send({'method': 'initialized', 'params': {}})
 
@@ -431,5 +431,5 @@ def run(command: list[str], root: Path, prompt: str, *, timeout=1800, resume_id=
             return Result(130, server.thread_id)
         finally:
             if server.thread_id and not completed:
-                progress.line('To continue configuration: ' + ui.command(['harness-codex', 'config', '--project', root, '--resume', server.thread_id]))
+                progress.line('To continue configuration: ' + ui.command(['harnex', 'config', '--project', root, '--resume', server.thread_id]))
             server.close()

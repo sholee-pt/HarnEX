@@ -41,7 +41,7 @@ def evidence_module(source_root):
     try:
         module = importlib.import_module('harness_routing_evidence')
         if Path(module.__file__).resolve().parent != scripts:
-            raise ValueError('Another Harness evidence helper is loaded; start a fresh command')
+            raise ValueError('Another HarnEX evidence helper is loaded; start a fresh command')
         return module
     finally:
         sys.path.remove(str(scripts))

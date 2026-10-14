@@ -1,11 +1,11 @@
 # Workflow efficiency and integration scope
 
-Harness v0.21.0-beta selectively applies concepts reviewed in
+HarnEX v0.21.0-beta selectively applies concepts reviewed in
 [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex/tree/cdc24a71408ebd6bd0362f52170f0d7998f77007)
 (package 0.21.6). The implementation is independently authored; OMX source,
 prompts and runtime are not bundled or installed as dependencies.
 
-| Reviewed concept | Harness behavior |
+| Reviewed concept | HarnEX behavior |
 | --- | --- |
 | [Ordinary-task routing](https://github.com/Yeachan-Heo/oh-my-codex/blob/cdc24a71408ebd6bd0362f52170f0d7998f77007/docs/ordinary-task-routing.md) | The project router receives concise guidance distinguishing actual requests from quoted workflow names. Small tasks keep direct execution; scope growth does not require extra agents. |
 | [Prompt inventory](https://github.com/Yeachan-Heo/oh-my-codex/blob/cdc24a71408ebd6bd0362f52170f0d7998f77007/src/scripts/prompt-inventory.ts) | Materialization and doctor report static bytes/characters, discovery-description size and repeated prose. No scan runs per conversation turn, and no model is called. |
@@ -13,15 +13,15 @@ prompts and runtime are not bundled or installed as dependencies.
 | [Bounded verification](https://github.com/Yeachan-Heo/oh-my-codex/blob/cdc24a71408ebd6bd0362f52170f0d7998f77007/skills/ultraqa/SKILL.md) | Verification scenarios follow the changed behavior. Existing retry budgets remain; a repeated failure without new evidence stops the loop. Actual check results remain necessary for checkpoint completion. |
 
 These additions do not install OMX's tmux/team runtime, global configuration,
-prompts, keyword hooks or model selection. Harness retains one project router,
+prompts, keyword hooks or model selection. HarnEX retains one project router,
 native Codex sessions and permissions, optional Graft navigation and bounded Jev
 advice. No tool can declare task success from a verifier's prose alone.
 
 ## Inspect instruction overhead
 
 ```sh
-harness-codex doctor --project /path/to/project
-harness-codex doctor --project /path/to/project --json
+harnex doctor --project /path/to/project
+harnex doctor --project /path/to/project --json
 ```
 
 `instructionInventory` covers root instruction candidates, the installed generator
@@ -53,8 +53,8 @@ as a scheduler or prove that a deadline was enforced.
 
 ## Existing projects and state
 
-Update the tool with `harness-codex update`. Existing supported project contracts
-remain usable. Use `harness-codex config --project /path/to/project` when you want a
+Update the tool with `harnex update`. Existing supported project contracts
+remain usable. Use `harnex config --project /path/to/project` when you want a
 reviewed update to generated instructions; no reset is required. Already installed
 project-local helper copies keep their existing code until that configuration
 refresh. Tool-only updates do not silently rewrite project files.
@@ -62,7 +62,7 @@ refresh. Tool-only updates do not silently rewrite project files.
 Project mutations use OS advisory locks in a user-specific directory in the OS
 temporary directory (override with `HARNESS_LOCK_HOME`). This does not require
 permission to write the user's home from a project sandbox. Lock files may remain, but process exit releases their
-locks automatically. Do not delete a lock file while another Harness command is
+locks automatically. Do not delete a lock file while another HarnEX command is
 active. Apply, recovery and removal for the same project must use the same lock
 home and OS temporary directory on the same host. This is not a distributed lock
 between different machines. Transaction ownership/hashes remain checked independently of that lock.

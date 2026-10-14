@@ -87,7 +87,7 @@ class ReleaseBuildTests(unittest.TestCase):
             self.assertEqual(content, b'Fixture release')
             (self.root / 'harness.py').write_text('# changed after the build\n')
             with mock.patch.object(release_publish, 'gh') as github, self.assertRaisesRegex(ValueError, 'clean committed source'):
-                release_publish.publish(self.output, self.commit, 'v' + self.version, notes, 'sholee-pt/Harness-Codex')
+                release_publish.publish(self.output, self.commit, 'v' + self.version, notes, 'sholee-pt/HarnEX')
             github.assert_not_called()
 
     def test_clean_build_binds_payload_checksums_metadata_and_commit(self):
@@ -116,7 +116,7 @@ class ReleaseBuildTests(unittest.TestCase):
         self.assertEqual(windows_files, files)
         bootstrap = self.output / 'install_harness_codex.ps1'
         self.assertIn("$version = '" + self.version + "'\n", bootstrap.read_text())
-        self.assertIn('Harness for Codex ' + self.version + ' Windows installer.', bootstrap.read_text())
+        self.assertIn('HarnEX ' + self.version + ' Windows installer.', bootstrap.read_text())
         self.assertEqual(report['windowsBootstrapSha256'], hashlib.sha256(bootstrap.read_bytes()).hexdigest())
         metadata = json.loads(files["_release.json"])
         self.assertEqual(metadata, {"runtime": "codex", "version": self.version, "commit": self.commit,

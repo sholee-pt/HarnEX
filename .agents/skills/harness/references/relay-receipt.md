@@ -38,7 +38,7 @@ Revisions are contiguous from zero, stay within the runtime-plan round budget, a
 Seal an unsigned completed envelope before validation:
 
 ```shell
-harness-codex helper harness_relay_receipt \
+harnex helper harness_relay_receipt \
   --root TARGET_REPOSITORY \
   --plan RUNTIME_PLAN.json \
   --receipt RELAY_RECEIPT_DRAFT.json \
@@ -49,7 +49,7 @@ harness-codex helper harness_relay_receipt \
 Validate without modifying repository state:
 
 ```shell
-harness-codex helper harness_relay_receipt \
+harnex helper harness_relay_receipt \
   --root TARGET_REPOSITORY \
   --plan RUNTIME_PLAN.json \
   --receipt RELAY_RECEIPT.json

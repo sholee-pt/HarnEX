@@ -28,11 +28,11 @@ from .versions import BRANCH_RE, VERSION_RE, version_key, branch_version
 from .project_installer import GENERATOR_ENTRYPOINTS, InstallError, validate_generator_source
 
 
-DEFAULT_REPOSITORY = "https://github.com/sholee-pt/Harness-Codex.git"
+DEFAULT_REPOSITORY = "https://github.com/sholee-pt/HarnEX.git"
 # Old receipts remain readable. Network operations use the renamed repository.
 REPOSITORIES = frozenset(prefix + name + '.git'
                         for prefix in ('https://github.com/', 'git@github.com:', 'ssh://git@github.com/')
-                        for name in ('sholee-pt/Harness', 'sholee-pt/Harness-Codex'))
+                        for name in ('sholee-pt/Harness', 'sholee-pt/Harness-Codex', 'sholee-pt/HarnEX'))
 COMMIT_RE = re.compile(r"[0-9a-f]{40}\Z")
 RELEASE_RE = re.compile(r"(?:[0-9a-f]{40}|content-[0-9a-f]{64})\Z")
 MAX_FILES = 10000
@@ -146,7 +146,7 @@ TOKEN_HELPER = ('!f() { if test "$1" != get; then return; fi; p=; h=; r=; '
                 'while IFS="=" read -r k v; do case "$k" in '
                 'protocol) p="$v";; host) h="$v";; path) r="$v";; esac; done; '
                 'if test "$p" = https && test "$h" = github.com '
-                '&& { test "$r" = sholee-pt/Harness.git || test "$r" = sholee-pt/Harness-Codex.git; }; then '
+                '&& { test "$r" = sholee-pt/Harness.git || test "$r" = sholee-pt/Harness-Codex.git || test "$r" = sholee-pt/HarnEX.git; }; then '
                 'printf "username=x-access-token\\npassword=%s\\n" "$HARNESS_GITHUB_TOKEN"; '
                 'fi; }; f')
 
@@ -197,12 +197,12 @@ def _branch(value: str) -> tuple[int, int, int, int]:
 
 def _repository(value: str) -> str:
     if value not in REPOSITORIES:
-        raise DistributionError("source must be the sholee-pt/Harness-Codex GitHub repository using HTTPS or SSH")
+        raise DistributionError("source must be the sholee-pt/HarnEX GitHub repository using HTTPS or SSH")
     return value
 
 
 def canonical_repository(value: str) -> str:
-    return _repository(value).replace('sholee-pt/Harness.git', 'sholee-pt/Harness-Codex.git')
+    return _repository(value).replace('sholee-pt/Harness.git', 'sholee-pt/HarnEX.git').replace('sholee-pt/Harness-Codex.git', 'sholee-pt/HarnEX.git')
 
 
 def _read_json(path: Path, *, max_bytes: int = 4 * 1024 * 1024) -> dict:
@@ -479,7 +479,7 @@ def _launcher_source() -> str:
 
 
 def _launchers(data_root: Path, bin_dir: Path, python: str, command: str = "harness") -> dict[Path, bytes]:
-    if command not in {"harness", "harness-codex"}:
+    if command not in {"harness", "harness-codex", "harnex"}:
         raise DistributionError("unsupported launcher command")
     result = {data_root / "launcher.py": _launcher_source().encode("utf-8")}
     result[bin_dir / command] = ("#!/bin/sh\nexec " + shlex.quote(python) + " -B " + shlex.quote(str(data_root / "launcher.py")) + ' "$@"\n').encode()
@@ -574,6 +574,8 @@ def _installation_status(data_root, *, launcher_hashes_override=None) -> dict:
 
 def installed_status(data_root) -> dict:
     """Verify the source, receipts and current launcher hashes without writes."""
+    if os.path.lexists(Path(data_root) / '.command-migration.json'):
+        raise DistributionError('Command replacement is pending; rerun install or update --repair-launcher')
     if os.path.lexists(Path(data_root) / '.entrypoint-migration.json'):
         raise DistributionError('Entrypoint repair is pending; rerun install or update --repair-launcher')
     return _installation_status(data_root)
@@ -887,11 +889,14 @@ def _install_tool(source_root, data_root, bin_dir, python_executable=sys.executa
         commit = _checkout_commit(source_root, snapshot)
     if branch is not None and _branch(branch) != _version(version):
         raise DistributionError("source version does not match pinned branch")
-    command = "harness-codex" if _version(version) >= _version("9.7") else "harness"
+    command = "harnex" if _version(version) >= _version("0.36.0-beta") else "harness-codex" if _version(version) >= _version("9.7") else "harness"
     launchers = _launchers(data_root, bin_dir, python, command)
     existing = None
     if data_root.exists() and any(data_root.iterdir()):
         existing = installed_status(data_root)
+        for path in launchers:
+            if str(path) not in existing['launchers'] and os.path.lexists(path):
+                raise DistributionError('new command path is already user-owned; refusing to replace it')
         command = existing.get("command", "harness")
         if existing["python"] != python or existing["binDir"] != str(bin_dir):
             raise DistributionError("existing installation uses different interpreter or bin directory")
@@ -929,7 +934,7 @@ def _install_tool(source_root, data_root, bin_dir, python_executable=sys.executa
                     with path.open("xb") as stream:
                         created_files[path] = data
                         stream.write(data)
-                    path.chmod(0o755 if path.name == command else 0o644)
+                    path.chmod(0o755 if path.parent == bin_dir and path.suffix != '.cmd' else 0o644)
             active = {"schema": 1, "version": version, "commit": commit, "python": python, "binDir": str(bin_dir), "repository": repository, "branch": branch, "auto_update": auto_update,
                       "launchers": existing["launchers"] if existing else {str(path): hashlib.sha256(data).hexdigest() for path, data in launchers.items()}}
             from .installation_paths import Binding
@@ -1170,11 +1175,77 @@ def _update_tool(data_root, *, branch=None, repository=None, timeout=120, git_ex
         return {**check, "status": "updated", "updated": True, "installation": installation}
 
 
+def migrate_command(data_root) -> dict:
+    """Replace verified old commands with harnex, preserving unrelated user files."""
+    root = _storage_path(data_root)
+    _owned_root(root)
+    with _lock(root):
+        current = _read_json(root / 'active.json')
+        state = _installation_status(root)
+        journal = _path(root / '.command-migration.json')
+        pending = os.path.lexists(journal)
+        if not pending and (current.get('command') == 'harnex' or _version(state['version']) < _version('0.36.0-beta')):
+            return state
+        if os.name == 'nt':
+            from .uninstall import _windows_batch_parent
+            if _windows_batch_parent():
+                raise DistributionError('Run the HarnEX source installer with -Existing reuse to replace Windows commands; a running batch launcher cannot safely remove itself.')
+        if pending:
+            saved = _read_json(journal)
+            if set(saved) != {'schema', 'before'} or saved['schema'] != 1 or not isinstance(saved['before'], dict):
+                raise DistributionError('invalid command recovery record; preserve it')
+            before = saved['before']
+        else:
+            before = current
+        if before.get('command', 'harness') not in {'harness', 'harness-codex'}:
+            raise DistributionError('unsupported command migration; preserve the recovery record')
+        binary = _storage_path(before['binDir'])
+        old_paths = {str(path) for path in _launchers(root, binary, before['python'], before.get('command', 'harness'))}
+        if set(before.get('launchers', {})) != old_paths:
+            raise DistributionError('invalid previous command ownership; preserve the recovery record')
+        desired = _launchers(root, binary, before['python'], 'harnex')
+        created = {path: data for path, data in desired.items() if str(path) not in before['launchers']}
+        retired = {Path(path): digest for path, digest in before['launchers'].items() if Path(path) not in desired}
+        after = {**before, 'command': 'harnex', 'launchers': {
+            str(path): before['launchers'].get(str(path), hashlib.sha256(data).hexdigest()) for path, data in desired.items()}}
+        if current not in (before, after):
+            raise DistributionError('installation changed during command migration; preserve the recovery record')
+        for path, digest in retired.items():
+            if os.path.lexists(path) and (not _path(path).is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != digest):
+                raise DistributionError('previous command was changed; refusing to remove it')
+        for path, data in created.items():
+            if os.path.lexists(path) and (not pending or not _path(path).is_file() or path.read_bytes() != data):
+                raise DistributionError('new command path is user-owned or changed; refusing to replace it')
+        if not pending:
+            _write_json(journal, {'schema': 1, 'before': before})
+        for path, data in created.items():
+            if not os.path.lexists(path):
+                with path.open('xb') as stream:
+                    stream.write(data)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+            path.chmod(0o644 if path.suffix == '.cmd' else 0o755)
+        if _read_json(root / 'active.json') != current:
+            raise DistributionError('installation changed during command migration; retry installation to recover')
+        if current != after:
+            _write_json(root / 'active.json', after)
+        state = _installation_status(root)
+        for path, digest in retired.items():
+            if os.path.lexists(path):
+                if not _path(path).is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+                    raise DistributionError('previous command was changed; refusing to remove it')
+                path.unlink()
+        journal.unlink()
+        return state
+
+
 def install_tool(source_root, data_root, bin_dir, python_executable=sys.executable, branch=None, repository=DEFAULT_REPOSITORY, auto_update="compatible") -> dict:
     # Recovery happens outside the general update lock. A crash in launcher
     # migration must not leave that lock obstructing its explicit recovery path.
     data_root = _storage_path(data_root)
     from .installation_paths import repair_entrypoints
+    if os.path.lexists(data_root / '.command-migration.json'):
+        migrate_command(data_root)
     if os.path.lexists(data_root / '.entrypoint-migration.json'):
         repair_entrypoints(data_root)
     if os.path.lexists(data_root / ".launcher-migration.json"):
@@ -1182,12 +1253,14 @@ def install_tool(source_root, data_root, bin_dir, python_executable=sys.executab
     result = _install_tool(source_root, data_root, bin_dir, python_executable, branch, repository, auto_update)
     repair_launcher(data_root)
     repair_entrypoints(data_root)
-    return installed_status(data_root)
+    return migrate_command(data_root)
 
 
 def update_tool(data_root, *, branch=None, repository=None, timeout=120, git_executable="git", expected_major=None) -> dict:
     data_root = _storage_path(data_root)
     from .installation_paths import repair_entrypoints
+    if os.path.lexists(data_root / '.command-migration.json'):
+        migrate_command(data_root)
     if os.path.lexists(data_root / '.entrypoint-migration.json'):
         repair_entrypoints(data_root)
     if os.path.lexists(data_root / ".launcher-migration.json"):
@@ -1197,7 +1270,7 @@ def update_tool(data_root, *, branch=None, repository=None, timeout=120, git_exe
     result["installation"] = repair_launcher(data_root)["installation"]
     if result.get('updated'):
         repair_entrypoints(data_root)
-        result['installation'] = installed_status(data_root)
+        result['installation'] = migrate_command(data_root)
     return result
 
 

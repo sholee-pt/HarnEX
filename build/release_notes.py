@@ -13,7 +13,7 @@ from build.source import release_version
 
 def release_notes(root: Path) -> str:
     version = release_version(root)
-    heading = '## Harness for Codex v' + version
+    heading = '## HarnEX v' + version
     content = (root / 'CHANGELOG.md').read_text(encoding='utf-8')
     sections = re.findall(r'^' + re.escape(heading) + r'\n(.*?)(?=^## |\Z)', content, re.M | re.S)
     if len(sections) != 1 or not sections[0].strip():

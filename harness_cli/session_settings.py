@@ -13,7 +13,7 @@ def mode_choice(progress, mode):
         'Manual — choose model, reasoning and permissions',
         'Keep native settings',
     ], summary=['These settings apply to this configuration conversation.',
-                'Harness Auto routing is selected separately in /model.'])]
+                'HarnEX Auto routing is selected separately in /model.'])]
 
 
 def current_settings(server, root, deadline):

@@ -95,7 +95,7 @@ Here `complete` means the bounded review is complete, not that an experiment fin
 Validate a returned packet without writing repository state:
 
 ```shell
-harness-codex helper validate_coordination_packet \
+harnex helper validate_coordination_packet \
   --root TARGET_REPOSITORY \
   --plan RUNTIME_PLAN.json \
   --packet COORDINATION_PACKET.json

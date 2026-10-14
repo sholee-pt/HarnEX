@@ -208,7 +208,7 @@ class AutomaticUpdateTests(unittest.TestCase):
 
     def test_all_policies_and_major_updates_require_explicit_selection(self):
         for options in ({"policy": "check"}, {"available": "1.0.0"},
-                        {"policy": "check", "command": "harness-codex"}, {"available": "1.0.0", "command": "harness-codex"}):
+                        {"policy": "check", "command": "harnex"}, {"available": "1.0.0", "command": "harnex"}):
             with self.subTest(options=options), self.fixtures(**options) as mocks:
                 mocks.choose.return_value = 0
                 self.assertIsNone(cli._automatic_update(self.arguments(), REPO, ["start"]))

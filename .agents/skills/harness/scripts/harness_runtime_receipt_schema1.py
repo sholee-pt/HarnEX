@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate frozen Harness for Codex v6.7 Runtime Receipt Schema 1 records."""
+"""Validate frozen HarnEX v6.7 Runtime Receipt Schema 1 records."""
 
 from __future__ import annotations
 

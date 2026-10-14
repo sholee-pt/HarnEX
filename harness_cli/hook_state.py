@@ -118,7 +118,7 @@ def restore_trust(content, records):
         if key not in states:
             continue  # A user deletion must not resurrect an earlier value.
         if section is None or entry['after'] is None or section[2] != entry['after'] or states[key] != entry['expected']:
-            warnings.append('Modified or unconfirmed Harness hook trust preserved: ' + key)
+            warnings.append('Modified or unconfirmed HarnEX hook trust preserved: ' + key)
             continue
         replacement = entry['before'] or ''
         candidate = text[:section[0]] + replacement + text[section[1]:]

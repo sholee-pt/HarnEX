@@ -38,9 +38,9 @@ def offer_activation(*, mode='ask', cwd=None):
     try:
         result = subprocess.run([bash, '--rcfile', str(profile), '-i'], cwd=cwd, env=codex_environment(), check=False)
         if result.returncode:
-            print('The child Bash exited with an error. Harness remains configured.', file=sys.stderr)
+            print('The child Bash exited with an error. HarnEX remains configured.', file=sys.stderr)
     except (OSError, KeyboardInterrupt):
-        print('Shell activation ended. Harness remains configured; apply PATH with source ~/.bashrc.', file=sys.stderr)
+        print('Shell activation ended. HarnEX remains configured; apply PATH with source ~/.bashrc.', file=sys.stderr)
 
 
 def _block(directory: str, home=None) -> bytes:
@@ -126,7 +126,7 @@ def reset_path(bin_dir: Path, *, home: Path | None = None, dry_run: bool = False
     for owned in {block, _block(directory), _block(str(previous or directory))}:
         remainder = remainder.replace(owned, b'')
     if START.encode() in remainder or END.encode() in remainder:
-        raise ValueError('Edited or unrelated Harness PATH block preserved; review it before resetting')
+        raise ValueError('Edited or unrelated HarnEX PATH block preserved; review it before resetting')
     after = remainder + (b'\n' if remainder and not remainder.endswith(b'\n') else b'') + block
     if not dry_run and after != before:
         _replace_profile(profile, before, after)

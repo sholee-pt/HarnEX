@@ -297,7 +297,7 @@ def run(data_root: Path, *, dry_run=False) -> int:
     from . import presentation as ui
     display = ui.Progress('', stream=sys.stdout)
     if not dist._storage_path(data_root).exists():
-        display.line('\nHarness is not installed at ' + str(data_root) + '. Nothing was removed.\n', style='muted')
+        display.line('\nHarnEX is not installed at ' + str(data_root) + '. Nothing was removed.\n', style='muted')
         return 0
     plan = prepare(data_root)
     display.line(f"\nUninstall {plan['command']} {plan['version']}", style='heading')
@@ -324,14 +324,14 @@ def run(data_root: Path, *, dry_run=False) -> int:
         return 0
     if not sys.stdin.isatty() or not sys.stdout.isatty():
         raise ValueError('Uninstall requires an interactive terminal. Use --dry-run to preview without deleting anything.')
-    if not ui.confirm('Uninstall these Harness components?', progress=display):
+    if not ui.confirm('Uninstall these HarnEX components?', progress=display):
         display.line('\nUninstall cancelled. Nothing was removed.\n', style='muted')
         return 0
     cleanup_source = None
     if plan['runtime'] and os.name == 'nt':
         cleanup_source = Path(__file__).with_name('runtime_cleanup.ps1').read_bytes()
     from .jev_auth import forget, home as credential_home
-    with ui.Progress('Removing owned Harness files and settings', stream=sys.stdout, compact=True) as progress:
+    with ui.Progress('Removing owned HarnEX files and settings', stream=sys.stdout, compact=True) as progress:
         result = remove(plan)
         try:
             forget()
@@ -343,7 +343,7 @@ def run(data_root: Path, *, dry_run=False) -> int:
             except (OSError, ValueError, RuntimeError):
                 configured = os.environ.get('HARNESS_CREDENTIAL_HOME', '~/.local/share/harness-codex-credentials')
                 progress.line('Configured credential directory (not resolved): ' + configured, style='warning')
-            progress.line('Inspect the preserved location and its ownership/permissions. Reinstall Harness before using harness-codex jev logout for removal.', style='warning')
+            progress.line('Inspect the preserved location and its ownership/permissions. Reinstall HarnEX before using harnex jev logout for removal.', style='warning')
         if plan['runtime']:
             from . import footprint
             progress.phase('Cleaning the installer-owned runtime')

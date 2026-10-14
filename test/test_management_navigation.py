@@ -29,7 +29,7 @@ class ManagementNavigation(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(prompts[1].args[2].endswith('\nSettings'))
         self.assertTrue(prompts[3].args[2].endswith('\nSettings'))
         for name in management_relay.COMMANDS:
-            self.assertEqual(management_relay.parse(self.request('/harness/' + name)['params']), (name, []))
+            self.assertEqual(management_relay.parse(self.request('/harnex/' + name)['params']), (name, []))
         self.controls.cli.assert_awaited_once_with(self.root, ['status'], timeout=60)
 
     async def test_settings_keep_current_is_default_and_makes_no_write(self):
@@ -91,7 +91,7 @@ class ManagementNavigation(unittest.IsolatedAsyncioTestCase):
             result = await self.controls.execute('thread', 'turn', self.root, 'update', [])
         self.assertEqual(self.relay.after_exit, {'action': 'update'})
         self.assertIn('No new update', result)
-        self.assertIn('After exit: Update Harness', result)
+        self.assertIn('After exit: Update HarnEX', result)
 
     async def test_status_displays_the_current_queue_without_executing_it(self):
         self.relay.after_exit = {'action': 'jev', 'operation': 'login', 'root': str(self.root)}
@@ -170,7 +170,7 @@ class ManagementNavigation(unittest.IsolatedAsyncioTestCase):
     async def test_missing_submission_fails_before_configuration_changes(self):
         self.controls.execute = mock.AsyncMock(return_value={'configuration': (self.root, 'init', [])})
         self.controls.configuration = mock.AsyncMock()
-        await self.controls.handle(10, 'thread', 'turn', self.root, 'init', [], self.request('/harness/init')['params'])
+        await self.controls.handle(10, 'thread', 'turn', self.root, 'init', [], self.request('/harnex/init')['params'])
         self.assertEqual(self.sent[-1]['params']['turn']['status'], 'failed')
         self.controls.configuration.assert_not_called()
 

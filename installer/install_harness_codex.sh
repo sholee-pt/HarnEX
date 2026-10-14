@@ -2,17 +2,17 @@
 # Public, version-bound bootstrap. This entire file also works through `| sh`.
 set -eu
 VERSION=0.12.0-beta
-fail() { printf 'Harness for Codex installer: %s\n' "$*" >&2; exit 1; }
+fail() { printf 'HarnEX installer: %s\n' "$*" >&2; exit 1; }
 usage() {
   printf '%s\n' 'Usage: sh install_harness_codex.sh [OPTIONS]' \
-    'Installs harness-codex and its dedicated Python environment without sudo.' \
+    'Installs harnex and its dedicated Python environment without sudo.' \
     '  --bin-dir PATH          Command directory (default: ~/.local/bin)' \
     '  --data-dir PATH         Managed Codex tool storage' \
     '  --auto-update POLICY    compatible, check, or off' \
     '  --existing MODE         ask (default), reuse, or reset Harness settings' \
     '  --activate MODE         ask (default), shell, or skip opening a ready Bash' \
     '  --no-modify-path        Do not register PATH in ~/.bashrc' \
-    '  --no-codex-integration  Install only the Harness management tool' \
+    '  --no-codex-integration  Install only the HarnEX management tool' \
     '  --help                  Offline help' \
     'Linux x86_64/aarch64. Requires curl, Bash, tar and sha256sum.' \
     'Existing Conda is reused; otherwise a checksum-pinned Miniforge is installed.'
@@ -31,8 +31,8 @@ validate_options() {
           --existing) case "$value" in ask|reuse|reset) ;; *) fail 'Invalid existing-installation choice.' ;; esac ;;
           --activate) case "$value" in ask|shell|skip) ;; *) fail 'Invalid activation choice.' ;; esac ;;
           --repository) case "${value%.git}" in
-            https://github.com/sholee-pt/Harness|https://github.com/sholee-pt/Harness-Codex|git@github.com:sholee-pt/Harness|git@github.com:sholee-pt/Harness-Codex|ssh://git@github.com/sholee-pt/Harness|ssh://git@github.com/sholee-pt/Harness-Codex) ;;
-            *) fail 'Select the Harness-Codex repository.' ;; esac ;;
+            https://github.com/sholee-pt/Harness|https://github.com/sholee-pt/Harness-Codex|https://github.com/sholee-pt/HarnEX|git@github.com:sholee-pt/Harness|git@github.com:sholee-pt/Harness-Codex|git@github.com:sholee-pt/HarnEX|ssh://git@github.com/sholee-pt/Harness|ssh://git@github.com/sholee-pt/Harness-Codex|ssh://git@github.com/sholee-pt/HarnEX) ;;
+            *) fail 'Select the HarnEX repository.' ;; esac ;;
           --data-dir) data_directory=$value ;;
           --bin-dir) bin_directory=$value ;;
         esac ;;
@@ -81,9 +81,9 @@ main() {
   trap 'rm -rf -- "$temporary"' EXIT
   trap 'exit 130' INT
   trap 'exit 143' TERM
-  base="https://github.com/sholee-pt/Harness-Codex/releases/download/v$VERSION"
+  base="https://github.com/sholee-pt/HarnEX/releases/download/v$VERSION"
   archive="harness-codex-$VERSION-linux.tar.gz"
-  printf 'Downloading Harness for Codex %s...\n' "$VERSION"
+  printf 'Downloading HarnEX %s...\n' "$VERSION"
   for name in "$archive" SHA256SUMS; do
     curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
       --connect-timeout 15 --max-time 300 --retry 2 "$base/$name" -o "$temporary/$name" </dev/null \

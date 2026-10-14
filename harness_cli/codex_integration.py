@@ -29,12 +29,12 @@ def read(data_root):
     directory = dist._storage_path(value['directory'])
     expected = root / 'native-ui' / ('v' + value['version'])
     if value['schema'] == 2 and directory != root / 'codex-bin':
-        raise ValueError('Official Codex entry points outside Harness storage')
+        raise ValueError('Official Codex entry points outside HarnEX storage')
     if value['schema'] == 1 and (directory.parent.parent != expected or directory.name != 'bin' or directory.parent.name not in native_package.TARGETS):
         raise ValueError('Native Codex receipt points outside its owned package')
     if value['original'] is not None and (not isinstance(value['original'], str) or not Path(value['original']).is_absolute()
                                           or Path(value['original']).is_relative_to(root)):
-        raise ValueError('Original Codex must remain outside Harness storage')
+        raise ValueError('Original Codex must remain outside HarnEX storage')
     for relative, digest in value['files'].items():
         if not isinstance(digest, str) or not re.fullmatch('[0-9a-f]{64}', digest):
             raise ValueError('Invalid native routing settings fingerprint')
@@ -83,7 +83,7 @@ def install(data_root, source_root, *, archive=None, mode=None, profiles=None, h
     root, source_root = dist._storage_path(data_root), dist._storage_path(source_root)
     state = dist.installed_status(root)
     if state['version'] != version(source_root):
-        raise ValueError('Install or update the managed Harness tool before configuring native integration')
+        raise ValueError('Install or update the managed HarnEX tool before configuring native integration')
     source_root = Path(state['sourceRoot'])
     previous = read(root)
     selected_mode = mode or (previous['mode'] if previous else 'manual')
@@ -95,7 +95,7 @@ def install(data_root, source_root, *, archive=None, mode=None, profiles=None, h
     directory = binary.parent
     package_receipt = native_package.verify(directory.parent, version(source_root), directory.parent.name)
     if package_receipt.get('directIntegrationVersion') != 1:
-        raise ValueError('This native package requires the retired Harness launcher; install the direct-integration package')
+        raise ValueError('This native package requires the retired HarnEX launcher; install the direct-integration package')
     script = source_root / 'harness_cli/native_router.py'
     sidecar = directory.parent.with_name(directory.parent.name + '.routing.json')
     settings = {'schema': 1, 'python': state['python'], 'script': str(script),

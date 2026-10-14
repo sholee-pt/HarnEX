@@ -25,7 +25,7 @@ PATH = '.harness/context.json'
 OWNER = 'harness-workspace-context-v1'
 STATES = {'available', 'unavailable', 'unknown', 'not-applicable'}
 GUIDANCE = ('Use project-relative paths and the current workspace root; old absolute paths in conversation history '
-            'may belong to another mount/server. Read harness-codex context once when entering a different host or '
+            'may belong to another mount/server. Read harnex context once when entering a different host or '
             'resuming a moved project. A recorded sandbox failure is host-specific: do not repeat the same failed '
             'sandbox command; use native approval only when allowed, or ask for host repair. Never silently relax '
             'permissions or treat this diagnostic as authorization.')

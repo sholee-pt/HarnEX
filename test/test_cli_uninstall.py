@@ -104,7 +104,7 @@ class UninstallTests(unittest.TestCase):
         self.assertEqual(files(home), before)
         self.assertIn('tool removal step completed', output)
         self.assertIn(str(home / 'typesafe.json'), output)
-        self.assertIn('Reinstall Harness before using harness-codex jev logout', output)
+        self.assertIn('Reinstall Harness before using harnex jev logout', output)
         self.assertNotIn('before uninstalling', output)
         self.assertNotIn(key, output)
 
@@ -268,7 +268,7 @@ class UninstallTests(unittest.TestCase):
                                    input='\n', capture_output=True, text=True, timeout=60)
         self.assertEqual(confirmed.returncode, 0, confirmed.stdout + confirmed.stderr)
         self.assertIn('[Y/n]', confirmed.stdout)
-        self.assertIn('Uninstalled harness-codex', confirmed.stdout)
+        self.assertIn('Uninstalled harnex', confirmed.stdout)
         self.assertNotIn('could not be cleaned', confirmed.stdout)
         self.assertFalse(data.exists())
         self.assertEqual([path.name for path in binary.iterdir()], ['another-command'])
@@ -285,11 +285,11 @@ class UninstallTests(unittest.TestCase):
         entry.write_text(text.replace(marker, 'sys.stdin.isatty = lambda: True\nsys.stdout.isatty = lambda: True\n' + marker))
         data, binary = self.base / 'batch-data', self.base / 'batch-bin'
         dist.install_tool(complete, data, binary, sys.executable)
-        command = binary / 'harness-codex.cmd'
+        command = binary / 'harnex.cmd'
         result = subprocess.run([str(command), 'uninstall'], input='yes\n', capture_output=True, text=True, timeout=60)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(result.stderr, '')
-        self.assertIn('Uninstalled harness-codex', result.stdout)
+        self.assertIn('Uninstalled harnex', result.stdout)
         self.assertFalse(data.exists())
         self.assertEqual(list(binary.iterdir()), [])
 

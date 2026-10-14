@@ -739,7 +739,7 @@ class Maintenance:
             if history.summary(state['changes'])['automaticChangesPaused']:
                 if state['notified'] != '0' * 64:
                     messages.append('Harness automatic changes paused: a prior change needs review or recovery. '
-                        'Continue project work; use harness-codex maintenance to inspect and resolve it.')
+                        'Continue project work; use harnex maintenance to inspect and resolve it.')
                     state['notified'] = '0' * 64
                 return '\n'.join(messages)
             eligible = self._eligible(state, session_id)
@@ -753,7 +753,7 @@ class Maintenance:
                             'keep the harness unchanged unless an existing skill needs a justified correction. '
                             f'Review lease {lease["id"]}; deadline {int(lease["deadline"])} UTC Unix seconds. '
                             'Finish or defer before the user task; do not start a separate model, remove verification, '
-                            'add agents, change permissions or run GPU training. Resolve using harness-codex maintenance finish. '
+                            'add agents, change permissions or run GPU training. Resolve using harnex maintenance finish. '
                             'This does not authorize commit/push. If relevant evidence or review time is insufficient, choose deferred. '
                             'Choose unchanged only after reviewing the concern and finding no justified correction.')
                 else:
@@ -883,7 +883,7 @@ def main():
                         'timeout' if isinstance(exc, (TimeoutError, subprocess.TimeoutExpired)) else
                         'filesystem' if isinstance(exc, OSError) else 'internal')
             print(json.dumps({'systemMessage': 'Harness maintenance unavailable (' + category + '). Existing project configuration preserved. '
-                              'Run harness-codex maintenance --project CURRENT_PATH for details; a moved session may need its current working directory corrected.'}))
+                              'Run harnex maintenance --project CURRENT_PATH for details; a moved session may need its current working directory corrected.'}))
             return 0
         print('harness maintenance: ' + str(exc), file=sys.stderr)
         return 1

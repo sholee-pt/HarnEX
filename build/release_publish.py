@@ -115,7 +115,7 @@ def verified_assets(dist, commit, tag, notes):
 
 
 def publish(dist, commit, tag, notes, repository):
-    if (repository != 'sholee-pt/Harness-Codex' or not re.fullmatch(r'[0-9a-f]{40}', commit)
+    if (repository != 'sholee-pt/HarnEX' or not re.fullmatch(r'[0-9a-f]{40}', commit)
             or not re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+-beta', tag)):
         raise ValueError('Select this repository, a beta version tag and an exact source commit')
     assets, note_bytes = verified_assets(dist, commit, tag, notes)
@@ -141,7 +141,7 @@ def publish_verified(assets, commit, tag, notes, repository):
     if tag_commit(gh, endpoint, existing) != commit:
         raise ValueError('Release tag identifies another source commit; immutable tag preserved')
     gh('release', 'create', tag, *assets, '--repo', repository, '--verify-tag',
-       '--title', 'Harness for Codex ' + tag, '--notes-file', notes, '--prerelease')
+       '--title', 'HarnEX ' + tag, '--notes-file', notes, '--prerelease')
     print(json.dumps({'release': tag, 'sourceCommit': commit, 'tagVerified': True}))
 
 

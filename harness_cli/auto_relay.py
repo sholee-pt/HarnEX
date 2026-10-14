@@ -43,7 +43,7 @@ def dependency(*, install=False):
         return serve
     except ImportError:
         if not install:
-            raise ValueError('Auto transport is unavailable; run harness-codex config to prepare it')
+            raise ValueError('Auto transport is unavailable; run harnex config to prepare it')
         subprocess.run([sys.executable, '-m', 'pip', 'install', '--disable-pip-version-check',
                         'websockets==15.0.1'], check=True, timeout=120, stdout=subprocess.DEVNULL)
         for name in list(sys.modules):
@@ -103,7 +103,7 @@ class Policy:
             return result
         first = copy.deepcopy(self.catalog[0])
         first.update(id=ALIAS, model=ALIAS, displayName='Auto', hidden=False, isDefault=False,
-            description='Harness selects model and reasoning for each request.', defaultReasoningEffort='medium',
+            description='HarnEX selects model and reasoning for each request.', defaultReasoningEffort='medium',
             supportedReasoningEfforts=[{'reasoningEffort': 'medium', 'description': 'Selected automatically per request'}])
         aliases = []
         for index, entry in enumerate(self.catalog):
@@ -181,7 +181,7 @@ class Policy:
         else:
             set_model(result, replacement['model'], default)
         self.contexts[thread] = Context(tier=context.tier, model=replacement['model'], effort=default, active_task=context.active_task)
-        self.warn(thread, 'Harness Auto replaced an unavailable model/reasoning selection with ' + replacement['model'] + ' / ' + default + '.')
+        self.warn(thread, 'HarnEX Auto replaced an unavailable model/reasoning selection with ' + replacement['model'] + ' / ' + default + '.')
 
     def enabled(self, thread):
         return self.auto.get(thread, self.mode == 'auto')
@@ -266,7 +266,7 @@ class Policy:
         if inference_error(message):
             self.refresh_needed = True
             self.warn(params.get('threadId') or (message.get('params') or {}).get('threadId'),
-                'Harness will refresh model availability before the next request. No failed task was replayed. Review its outcome before retrying.')
+                'HarnEX will refresh model availability before the next request. No failed task was replayed. Review its outcome before retrying.')
         result = message.get('result')
         if method == 'config/read' and isinstance(result, dict):
             config = result.get('config') or {}
@@ -615,7 +615,7 @@ async def run(binary, args, env, policy):
         if selected['action'] == 'configure':
             import shlex
             arguments = selected['arguments'] or ['--goal', 'Inspect the project evidence and ask about any unclear purpose before generating a harness.']
-            args += ['--', '/harness/' + selected['command'] + ' ' + shlex.join(['--project', str(root), *arguments])]
+            args += ['--', '/harnex/' + selected['command'] + ' ' + shlex.join(['--project', str(root), *arguments])]
         elif selected['resume']:
             args += ['resume']
         if policy.observer is not None:

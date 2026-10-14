@@ -56,7 +56,7 @@ def verify():
         after = distribution.installed_status(data)
         assert after['python'] == before['python'] == str(Path(sys.executable).resolve()), after
         assert after['treeHash'] == before['treeHash'], 'Reuse installation changed the release tree'
-        assert 'Harness for Codex ' + after['version'] in run([sys.executable, '-B', data / 'launcher.py', '--version'])
+        assert 'HarnEX ' + after['version'] in run([sys.executable, '-B', data / 'launcher.py', '--version'])
     return {'status': 'passed', 'legacyPythonMismatchReproduced': True, 'absolutePythonPrefixVerified': True,
             'realSourceInstallerReusePassed': True, 'existingEnvironmentPreserved': True,
             'platform': sys.platform, 'newEnvironmentCreated': False, 'liveCodexInvoked': False}

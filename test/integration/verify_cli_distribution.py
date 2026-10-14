@@ -58,7 +58,7 @@ def terminal_uninstall(executable: Path, answer: str, env: dict) -> str:
                 if not part:
                     break
                 transcript += part
-                if b'Uninstall these Harness components? [Y/n]' in transcript and not sent:
+                if b'Uninstall these HarnEX components? [Y/n]' in transcript and not sent:
                     os.write(master, (answer + '\n').encode())
                     sent = True
             if child.poll() is not None:
@@ -105,9 +105,9 @@ def verify(artifact: Path) -> dict:
         env["HOME"] = str(home)
         run(["bash", source / "install.sh", "--agent", "codex", "--data-dir", data,
              "--bin-dir", binary, "--auto-update", "off"], env=env, timeout=900)
-        executable = binary / "harness-codex"
+        executable = binary / "harnex"
         version = run([executable, "--agent", "codex", "--version"], env=env).strip()
-        assert "Harness for Codex" in version
+        assert "HarnEX" in version
         assert run([executable, "--runtime", "codex", "--version"], env=env).strip() == version
         help_text = run([executable, "--help"], env=env)
         assert "init" in help_text and "--agent" not in help_text and "--runtime" not in help_text
@@ -182,7 +182,7 @@ def verify(artifact: Path) -> dict:
         reject([executable, 'uninstall'], 'interactive terminal', input='yes\n', env=env)
         assert 'cancelled' in terminal_uninstall(executable, 'n', env)
         assert snapshot(data) == tool_before
-        assert 'Uninstalled harness-codex' in terminal_uninstall(executable, '', env)
+        assert 'Uninstalled harnex' in terminal_uninstall(executable, '', env)
         assert not data.exists() and not executable.exists()
         assert snapshot(project) == project_before
         assert '# >>> harness-codex PATH >>>' not in (home / '.bashrc').read_text()

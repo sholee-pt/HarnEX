@@ -71,10 +71,10 @@ def archive_configuration(command, root, session_id):
 def execution_diagnostic(message):
     text = str(message).casefold()
     if any(term in text for term in ('bwrap', 'rtm_newaddr', 'unprivileged_userns', 'creating new namespace failed')):
-        return ('Sandbox setup failed. Harness does not configure bubblewrap or automatically relax native permissions. '
+        return ('Sandbox setup failed. HarnEX does not configure bubblewrap or automatically relax native permissions. '
                 'Check the same project with native Codex and inspect the host/container namespace restrictions. '
                 'Use Codex permission controls for an allowed retry; do not regenerate the harness to repair the sandbox.')
     if ('approv' in text and any(term in text for term in ('limit', 'quota', 'budget', '한도'))):
         return ('The native approval reviewer reported a limit. Resume after the limit resets, or choose an available '
-                'user-review mode through Codex permissions. Harness will not silently switch reviewers or broaden access.')
+                'user-review mode through Codex permissions. HarnEX will not silently switch reviewers or broaden access.')
     return None

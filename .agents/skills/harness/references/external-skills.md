@@ -13,7 +13,7 @@ Read only when reusing an installed specialist procedure or assessing a concrete
 
 ## Import and lifetime
 
-Use `harness-codex skills add --source /local/upstream/skills/NAME --project PATH --dry-run` to preview a reviewed local bundle. Explicit import is a separate user action, never part of generation/apply. Supply `--upstream https://github.com/OWNER/REPO --revision FULL_SHA` to retain declared provenance and `--license-file /local/upstream/LICENSE` when its license is outside the skill. Import copies bytes without executing helpers. It neither fetches a repository nor verifies the declared commit against GitHub.
+Use `harnex skills add --source /local/upstream/skills/NAME --project PATH --dry-run` to preview a reviewed local bundle. Explicit import is a separate user action, never part of generation/apply. Supply `--upstream https://github.com/OWNER/REPO --revision FULL_SHA` to retain declared provenance and `--license-file /local/upstream/LICENSE` when its license is outside the skill. Import copies bytes without executing helpers. It neither fetches a repository nor verifies the declared commit against GitHub.
 
 An existing destination is always preserved, including an earlier imported version. Tool update, project config, reset and removal do not update or delete external skills. Review external updates separately. `skills verify --name NAME` compares the selected bundle to its local import receipt only; it does not establish authenticity, safety or native compatibility. Never turn this hash comparison into a prerequisite for ordinary Codex conversations.
 

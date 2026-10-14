@@ -20,7 +20,7 @@ def configure(args, source_root, root, *, emit=True):
         if mode is not None or adaptive is not None:
             raise ValueError('Project preferences could not be read; existing settings were preserved. ' + str(exc)) from exc
         ui.report({'state': 'unavailable', 'warnings': [str(exc)],
-                   'guidance': 'Inspect harness-codex maintenance and harness-codex routing --adaptive status; existing preferences were preserved.'},
+                   'guidance': 'Inspect harnex maintenance and harnex routing --adaptive status; existing preferences were preserved.'},
                   title='Project preferences', error=True)
         return
     interactive = (getattr(args, 'command', None) == 'init' and not getattr(args, 'json', False)
@@ -42,7 +42,7 @@ def configure(args, source_root, root, *, emit=True):
             if select_mode:
                 labels = {'off': 'Off - no automatic review', 'suggest': 'Suggest - notify when review is warranted',
                           'auto': 'Auto - review and make bounded skill corrections'}
-                mode_index = choose(progress, 'Harness maintenance', [labels[value] + (' (current)' if index == 0 else '')
+                mode_index = choose(progress, 'HarnEX maintenance', [labels[value] + (' (current)' if index == 0 else '')
                                                                       for index, value in enumerate(modes)], initial=mode_index)
                 mode = modes[mode_index]
             if select_adaptive:
@@ -64,8 +64,8 @@ def configure(args, source_root, root, *, emit=True):
     if getattr(args, 'command', None) == 'init':
         trust = hook_trust.prepare(source_root, root, binary=getattr(args, 'codex_binary', 'codex'),
                                    mode=getattr(args, 'hook_trust', 'auto'))
-    commands = ['harness-codex maintenance --mode suggest', 'harness-codex routing --adaptive on',
-                'harness-codex maintenance', 'harness-codex routing --adaptive status']
+    commands = ['harnex maintenance --mode suggest', 'harnex routing --adaptive on',
+                'harnex maintenance', 'harnex routing --adaptive status']
     if not emit:
         return
     if getattr(args, 'json', False) or ui.JSON_MODE.get():
@@ -77,16 +77,16 @@ def configure(args, source_root, root, *, emit=True):
     progress.line('Project preferences: maintenance ' + current['mode'] + '; adaptive Auto ' + ('on' if observed['enabled'] else 'off') + '.')
     if trust:
         if trust['status'] == 'trusted':
-            progress.line('Harness hook trust: ready. Project modes are independent; off remains off.')
+            progress.line('HarnEX hook trust: ready. Project modes are independent; off remains off.')
         else:
-            progress.line('Harness hook trust: manual review required.')
+            progress.line('HarnEX hook trust: manual review required.')
             if trust.get('warning'):
                 progress.line(trust['warning'])
             progress.line(trust['guidance'])
     elif current['mode'] != 'off':
-        progress.line('Hook trust is unchanged. If native hooks are blocked, run init to prepare Harness trust or inspect /hooks.')
+        progress.line('Hook trust is unchanged. If native hooks are blocked, run init to prepare HarnEX trust or inspect /hooks.')
     if observed['enabled']:
-        progress.line('Auto advice needs the Harness Codex integration and Auto selected in /model; quality feedback must be recorded.')
+        progress.line('Auto advice needs the HarnEX Codex integration and Auto selected in /model; quality feedback must be recorded.')
     progress.line('Change anytime from this project (or add --project PATH):')
     progress.line('  ' + commands[0] + '  (off / suggest / auto)')
     progress.line('  ' + commands[1] + '  (on / off)')

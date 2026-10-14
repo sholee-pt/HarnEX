@@ -178,7 +178,7 @@ case "$1" in
     if [[ " $* " == *" /bin/sh "* ]]; then printf '%s\\n' "$HARNESS_TEST_PREFIX"; exit 0; fi
     printf '{"treeHash":"internal-receipt","branch":null}\\n'
     printf '{"state":"unchanged","writes":0}\\n'
-    printf 'Installed harness-codex in /fixture/bin. PATH registration skipped; invoke the command by its full path.\\n'
+    printf 'Installed harnex in /fixture/bin. PATH registration skipped; invoke the command by its full path.\\n'
     printf '%s\\n' "$@" > "$HARNESS_TEST_ARGUMENTS" ;;
 esac
 ''', encoding="utf-8")
@@ -219,7 +219,7 @@ esac
                     for index in range(1, 4):
                         self.assertEqual(result.stdout.count(f'[{index}/3]'), 1, result.stdout)
                     self.assertNotIn('\x1b', result.stdout)
-                    self.assertIn("Installed harness-codex in /fixture/bin", result.stdout)
+                    self.assertIn("Installed harnex in /fixture/bin", result.stdout)
                     self.assertIn("PATH registration skipped", result.stdout)
                     self.assertIn('"treeHash":"internal-receipt"', log)
                     self.assertIn('"writes":0', log)
@@ -323,7 +323,7 @@ class InstallerTerminalTests(unittest.TestCase):
 case "$1" in
  env) printf '{"envs":[]}\\n' ;;
  create) mkdir -p "$3/conda-meta" "$3/bin"; touch "$3/conda-meta/history"; printf '#!/bin/sh\\nexit 0\\n' > "$3/bin/python"; chmod +x "$3/bin/python"; sleep 1.4 ;;
- run) printf 'Installed harness-codex in fixture.\\n' ;;
+ run) printf 'Installed harnex in fixture.\\n' ;;
 esac
 """)
             fake.chmod(0o755)
@@ -380,5 +380,5 @@ esac
             self.assertEqual(rendered.count(': done ('), 3, rendered)
             self.assertTrue(answered, text)
             self.assertEqual(marker.read_text(), 'loaded')
-            self.assertIn('Harness remains installed', text)
+            self.assertIn('HarnEX remains installed', text)
             self.assertEqual(list(base.glob('harness-codex-progress-*')), [])

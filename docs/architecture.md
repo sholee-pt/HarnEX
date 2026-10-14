@@ -14,7 +14,7 @@ target-project/
 └── <active root instruction>      # Optional pointer: AGENTS.md, AGENTS.override.md, or configured fallback
 ```
 
-Simple projects may receive only `project-harness`. Harness does not create a fixed team or assume a frontend/backend architecture. It classifies persistent project topology independently from the execution complexity of any one task.
+Simple projects may receive only `project-harness`. HarnEX does not create a fixed team or assume a frontend/backend architecture. It classifies persistent project topology independently from the execution complexity of any one task.
 
 
 ## Original generator-only installation
@@ -22,13 +22,13 @@ Simple projects may receive only `project-harness`. Harness does not create a fi
 Install the generator in the folder you selected for the project. GitHub membership, Git-root alignment, nested repositories, and registered worktree count do not determine whether that folder can host a harness. The target folder must already exist. Anaconda or Miniconda provides the dedicated Python environment. Generator helpers use the standard library; the optional Auto transport dependency is prepared during integration setup.
 
 ```shell
-git clone --branch v0.35.3-beta --single-branch https://github.com/sholee-pt/Harness-Codex.git Harness
-conda env create --file Harness/environment.yml
-conda run -n harness python Harness/install.py --root "TARGET_PROJECT" --dry-run
-conda run -n harness python Harness/install.py --root "TARGET_PROJECT"
+git clone --branch v0.36.0-beta --single-branch https://github.com/sholee-pt/HarnEX.git HarnEX
+conda env create --file HarnEX/environment.yml
+conda run -n harness python HarnEX/install.py --root "TARGET_PROJECT" --dry-run
+conda run -n harness python HarnEX/install.py --root "TARGET_PROJECT"
 ```
 
-Replace `TARGET_PROJECT` with the project folder's path. The same commands work in PowerShell, macOS, and Linux shells. If the environment already exists, use `conda env update --name harness --file Harness/environment.yml` instead of creating it again. A downloaded source archive also works; Git is only needed for the clone command.
+Replace `TARGET_PROJECT` with the project folder's path. The same commands work in PowerShell, macOS, and Linux shells. If the environment already exists, use `conda env update --name harness --file HarnEX/environment.yml` instead of creating it again. A downloaded source archive also works; Git is only needed for the clone command.
 
 The installer copies `SKILL.md`, scripts, references, and assets into `TARGET_PROJECT/.agents/skills/harness`. It records its file hashes in that generator folder's `.harness-install.json`, separately from the generated project's `.harness/manifest.json`. It does not install Codex CLI or project dependencies. Keep the source checkout to run later installer updates.
 
@@ -51,9 +51,9 @@ $harness configure a project harness inside this selected workspace.
 
 The skill also recognizes direct requests such as “configure the harness” and “하네스를 구성해줘”. Run the same command later to audit or update an existing generated harness.
 
-Harness first creates a structured proposal and runs a no-write dry-run. It applies files only when all ownership, selected-folder path safety, and instruction-precedence checks pass. Changed outputs are staged with backups before a journaled apply, and the manifest is written last. Codex detects skill changes automatically. A newly created `AGENTS.md` pointer applies on a fresh run; if a new custom agent or skill is not visible, start one new task in the same directory. No task deletion or per-request restart is required.
+HarnEX first creates a structured proposal and runs a no-write dry-run. It applies files only when all ownership, selected-folder path safety, and instruction-precedence checks pass. Changed outputs are staged with backups before a journaled apply, and the manifest is written last. Codex detects skill changes automatically. A newly created `AGENTS.md` pointer applies on a fresh run; if a new custom agent or skill is not visible, start one new task in the same directory. No task deletion or per-request restart is required.
 
-Harness for Codex v0.35.3-beta retains a strict shared skill-frontmatter parser and binds every generated agent's instruction contract to its structured topology. It does not ask the model to reproduce fixed change-discipline or runtime-teamplay contracts. Authoring Contract 3 drafts use path-specific placeholders, and `harness_plan_builder.py` deterministically materializes a normal Schema 3 plan before the existing apply validator runs. Every project router and generated agent receives its required canonical block exactly once; an old draft revision, unsafe output path, or missing, duplicate, or misplaced placeholder fails before any workspace write.
+HarnEX v0.36.0-beta retains a strict shared skill-frontmatter parser and binds every generated agent's instruction contract to its structured topology. It does not ask the model to reproduce fixed change-discipline or runtime-teamplay contracts. Authoring Contract 3 drafts use path-specific placeholders, and `harness_plan_builder.py` deterministically materializes a normal Schema 3 plan before the existing apply validator runs. Every project router and generated agent receives its required canonical block exactly once; an old draft revision, unsafe output path, or missing, duplicate, or misplaced placeholder fails before any workspace write.
 
 The installed skill includes `references/minimal-draft-plan.json`, so plan authoring does not depend on repository-only test fixtures.
 
@@ -63,7 +63,7 @@ The installed skill includes `references/minimal-draft-plan.json`, so plan autho
 After generation, run the read-only diagnostic when installation or activation is unclear:
 
 ```shell
-harness-codex helper harness_doctor --root TARGET_WORKSPACE
+harnex helper harness_doctor --root TARGET_WORKSPACE
 ```
 
 The report checks the dedicated environment and installed-state validation, then distinguishes `managed-pointer` from `explicit-skill` activation. `configured` means the files and activation contract validate; `runtimeLoaded: not-tested` means live loading has not been observed. A missing Codex CLI does not invalidate a desktop installation. The diagnostic never launches Codex, installs hooks, or repairs files. Use the mode-aware [live smoke test](../.agents/skills/harness/references/codex-smoke-test.md) when actual discovery or delegation must be observed.
@@ -73,40 +73,40 @@ For a small direct task, the generated router keeps scope, expected output, and 
 
 ## Selected Project Folders
 
-Harness accepts plain folders, Git roots, Git-contained subfolders, linked worktrees, and folders containing multiple repositories. Git boundaries are context for analyzing responsibilities; they do not replace the user's selected project root or automatically prohibit a scoped writer inside a nested repository. Write scopes and evidence must remain inside the selected folder, and symlink or junction escapes remain rejected.
+HarnEX accepts plain folders, Git roots, Git-contained subfolders, linked worktrees, and folders containing multiple repositories. Git boundaries are context for analyzing responsibilities; they do not replace the user's selected project root or automatically prohibit a scoped writer inside a nested repository. Write scopes and evidence must remain inside the selected folder, and symlink or junction escapes remain rejected.
 
-Generation does not query GitHub or remotes and does not modify Git metadata, exclusions, the index, commits, branches, or deployment settings. Generated files may appear in Git status and may be tracked if the user chooses. Harness neither guarantees that they remain ignored nor changes existing user or legacy exclusion rules. File ownership and recorded hashes govern safe updates independently of Git tracking.
+Generation does not query GitHub or remotes and does not modify Git metadata, exclusions, the index, commits, branches, or deployment settings. Generated files may appear in Git status and may be tracked if the user chooses. HarnEX neither guarantees that they remain ignored nor changes existing user or legacy exclusion rules. File ownership and recorded hashes govern safe updates independently of Git tracking.
 
-For later project work, requested source edits and tests remain allowed within scope. Commit and push each need authorization covering that operation; commit approval alone does not authorize push. Force push, history rewriting, branch deletion, and discarding work need approval covering that destructive action. Existing approval remains usable only for its authorized repository, work, and destination. New routers and agents receive this advice without a new required artifact block. Harness does not intercept shell commands or API calls: strict enforcement depends on the actual executor's permission controls. See [Git authorization policy](../.agents/skills/harness/references/git-authorization.md).
+For later project work, requested source edits and tests remain allowed within scope. Commit and push each need authorization covering that operation; commit approval alone does not authorize push. Force push, history rewriting, branch deletion, and discarding work need approval covering that destructive action. Existing approval remains usable only for its authorized repository, work, and destination. New routers and agents receive this advice without a new required artifact block. HarnEX does not intercept shell commands or API calls: strict enforcement depends on the actual executor's permission controls. See [Git authorization policy](../.agents/skills/harness/references/git-authorization.md).
 
-Inventory Schema 5 and Root Context Schema 3 report known Git boundaries and bounded scan coverage. Truncated or unreadable coverage is an uncertainty to report, not proof of absent boundaries or a demand to move the selected root. Reviewed configuration appends an owned activation block to the active root instruction file while preserving all pre-existing user bytes. Legacy `explicit-skill` installations remain readable and migrate during `config`. Harness never creates an override merely to bypass existing project guidance.
+Inventory Schema 5 and Root Context Schema 3 report known Git boundaries and bounded scan coverage. Truncated or unreadable coverage is an uncertainty to report, not proof of absent boundaries or a demand to move the selected root. Reviewed configuration appends an owned activation block to the active root instruction file while preserving all pre-existing user bytes. Legacy `explicit-skill` installations remain readable and migrate during `config`. HarnEX never creates an override merely to bypass existing project guidance.
 
 On-disk fallback discovery reads the Unix system config, user `CODEX_HOME/config.toml` (default `~/.codex/config.toml`), then project configs from the nearest Git root to the selected folder. Without a Git root, only the selected folder supplies project config. A nearer fallback array replaces earlier values, including an explicit empty array. Invalid, linked or unreadable config blocks selection, and apply rechecks the active instruction before writing. This offline inspection does not resolve native trust, cloud defaults, custom project-root markers or session profile/CLI overrides; compare native instruction sources when those affect discovery. Static validation still reports live loading as untested.
 
 
 ## Runtime Teamplay
 
-Harness for Codex v0.35.3-beta keeps persistent workspace topology separate from current-task execution. It creates no permanent team merely because multiple agents exist. A temporary runtime plan selects `direct`, `delegated`, or `coordinated` execution from interaction value: independent work delegates, one review pass uses delegated producer-reviewer, and only repeated feedback, conflicting expert judgment, cross-boundary agreement, or dynamic reassignment justifies coordination.
+HarnEX v0.36.0-beta keeps persistent workspace topology separate from current-task execution. It creates no permanent team merely because multiple agents exist. A temporary runtime plan selects `direct`, `delegated`, or `coordinated` execution from interaction value: independent work delegates, one review pass uses delegated producer-reviewer, and only repeated feedback, conflicting expert judgment, cross-boundary agreement, or dynamic reassignment justifies coordination.
 
 Runtime plans are bound to the exact manifest and canonical topology, validated before execution, and ephemeral by default. Their `participants` name selected persistent agents or validated provisional temporary roles. For delegated or coordinated work, Codex reads the detailed relay procedure, confirms the first real participant's handle and dispatches other ready independent tasks before collecting terminal results. It collects parent-facing coordination packets, relays material evidence to affected agents, and keeps integration and task state under parent control. Five-minute progress checkpoints permit evidence-backed extensions up to a thirty-minute total task budget; poll counts never substitute for a native failure. Parallel delegation uses `codex-subagent-relay`; unavailable delegation falls back to sequential relay or direct execution while preserving input, output, and verification contracts. Runtime roles and task state are never inserted into the persistent manifest.
 
 ```shell
-harness-codex helper validate_runtime_plan \
+harnex helper validate_runtime_plan \
   --root TARGET_REPOSITORY \
   --plan RUNTIME_PLAN.json
 
-harness-codex helper validate_coordination_packet \
+harnex helper validate_coordination_packet \
   --root TARGET_REPOSITORY \
   --plan RUNTIME_PLAN.json \
   --packet COORDINATION_PACKET.json
 
-harness-codex helper harness_relay_receipt \
+harnex helper harness_relay_receipt \
   --root TARGET_REPOSITORY \
   --plan RUNTIME_PLAN.json \
   --receipt RELAY_RECEIPT.json
 ```
 
-See [teamplay-contract.md](../.agents/skills/harness/references/teamplay-contract.md), [runtime-plan.md](../.agents/skills/harness/references/runtime-plan.md), [native-subagent-relay.md](../.agents/skills/harness/references/native-subagent-relay.md), [runtime-observation.md](../.agents/skills/harness/references/runtime-observation.md), [relay-receipt.md](../.agents/skills/harness/references/relay-receipt.md), and [team-recipes.md](../.agents/skills/harness/references/team-recipes.md). v0.35.3-beta keeps Codex as the execution engine while using canonical receiver handles for bounded control, optional versioned public/local observation profiles for evidence, required-task accounting, and hash-bound offline review lineage. Capability policies use a small canonical registry so validated names cannot silently select a different fallback path. Missing observation evidence lowers confidence without cancelling a valid handle execution; verified binding or terminal-outcome contradictions fail closed.
+See [teamplay-contract.md](../.agents/skills/harness/references/teamplay-contract.md), [runtime-plan.md](../.agents/skills/harness/references/runtime-plan.md), [native-subagent-relay.md](../.agents/skills/harness/references/native-subagent-relay.md), [runtime-observation.md](../.agents/skills/harness/references/runtime-observation.md), [relay-receipt.md](../.agents/skills/harness/references/relay-receipt.md), and [team-recipes.md](../.agents/skills/harness/references/team-recipes.md). v0.36.0-beta keeps Codex as the execution engine while using canonical receiver handles for bounded control, optional versioned public/local observation profiles for evidence, required-task accounting, and hash-bound offline review lineage. Capability policies use a small canonical registry so validated names cannot silently select a different fallback path. Missing observation evidence lowers confidence without cancelling a valid handle execution; verified binding or terminal-outcome contradictions fail closed.
 
 
 ## Design Rules
@@ -136,4 +136,4 @@ See [teamplay-contract.md](../.agents/skills/harness/references/teamplay-contrac
 
 ## Optional task checkpoints
 
-`harness-codex checkpoint` provides bounded, opt-in result reuse for multi-stage work. It does not launch agents, intercept conversation turns, or regenerate project roles. See [the checkpoint contract](../.agents/skills/harness/references/task-checkpoints.md). Runtime compatibility follows observed capabilities and event shapes. The Linux integration uses independently updated official packages and an external Auto adapter; `build/native_ui/upstream.json` is legacy build metadata, not a runtime CLI-version allowlist.
+`harnex checkpoint` provides bounded, opt-in result reuse for multi-stage work. It does not launch agents, intercept conversation turns, or regenerate project roles. See [the checkpoint contract](../.agents/skills/harness/references/task-checkpoints.md). Runtime compatibility follows observed capabilities and event shapes. The Linux integration uses independently updated official packages and an external Auto adapter; `build/native_ui/upstream.json` is legacy build metadata, not a runtime CLI-version allowlist.

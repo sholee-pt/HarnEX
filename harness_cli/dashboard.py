@@ -1,4 +1,4 @@
-"""Offline Harness status, shared by the CLI and management interfaces."""
+"""Offline HarnEX status, shared by the CLI and management interfaces."""
 from __future__ import annotations
 
 import json
@@ -95,11 +95,11 @@ def maintenance_availability(manager, hooks):
     if schedule.get('intervalRemainingSeconds', 0) > 0:
         waiting.append('The review interval has not elapsed.')
     if hooks.get('state') == 'not-installed':
-        reasons.append('Harness hook registration is missing.')
+        reasons.append('HarnEX hook registration is missing.')
     elif hooks.get('state') == 'incomplete':
-        reasons.append('Harness hook definitions are missing, modified or duplicated.')
+        reasons.append('HarnEX hook definitions are missing, modified or duplicated.')
     elif hooks.get('state') != 'registered':
-        waiting.append('Harness hook registration could not be checked.')
+        waiting.append('HarnEX hook registration could not be checked.')
     if hooks.get('localPolicy') == 'user-hooks-disabled':
         reasons.append('Local native settings disable user hooks.')
     if hooks.get('trust') != 'recorded-matches':
@@ -161,15 +161,15 @@ def display(report, root, version):
              'Hook trust: ' + str(hooks.get('trust', 'unconfirmed')) + ' | recorded matches: ' + str(hooks.get('recordedTrustMatches', 'unknown')),
              'Native hook policy/trust and live execution: not tested here.', '',
              'Runtime loading: not-tested', 'Task quality: not-measured',
-             'Recorded counters alone do not establish Harness benefit.']
+             'Recorded counters alone do not establish HarnEX benefit.']
     schedule = manager.get('scheduling', {})
     if manager.get('mode') in {'suggest', 'auto'} and (schedule.get('reviewLimitReached') or schedule.get('intervalRemainingSeconds', 0) > 0):
         rows += ['Review starts in last 24h: ' + str(schedule.get('reviewsLastDay', 'unknown')) + '/' + str(schedule.get('reviewsPerDay', 'unknown')),
                  'Current candidate interval remaining: ' + str(round(schedule.get('intervalRemainingSeconds', 0))) + 's.']
     if availability['reasons'] or availability.get('notes'):
-        rows.append('Maintenance details: ' + ui.command(['harness-codex', 'maintenance', '--project', root]))
+        rows.append('Maintenance details: ' + ui.command(['harnex', 'maintenance', '--project', root]))
     if any(hooks.get(name) for name in ('missingDefinitions', 'modifiedDefinitions', 'duplicateDefinitions')):
-        rows.append('Hook definition details: ' + ui.command(['harness-codex', 'status', '--project', root, '--json']))
+        rows.append('Hook definition details: ' + ui.command(['harnex', 'status', '--project', root, '--json']))
     for name, value in features.items():
         if value.get('error'):
             rows.append(name + ': ' + value['error'])
@@ -182,4 +182,4 @@ def display(report, root, version):
         preparation = report['hookPreparation']
         rows += ['Hook preparation: ' + preparation.get('status', 'unknown')]
         rows += [preparation[key] for key in ('warning', 'guidance') if preparation.get(key)]
-    ui.box(rows, title=f'Harness for Codex ({version})', subtitle='by sholee-pt')
+    ui.box(rows, title=f'HarnEX ({version})', subtitle='by sholee-pt')

@@ -2,6 +2,7 @@
 
 | Version | Plan | Manifest | Transaction | Main change or patch |
 | :---: | :---: | :---: | :---: | --- |
+| [`v0.36.0‑beta`](#harnex-v0360-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Introduce HarnEX and the harnex command with compatible installation migration |
 | [`v0.35.3‑beta`](#harness-for-codex-v0353-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve Windows managed-path identity during concurrent parent creation |
 | [`v0.35.2‑beta`](#harness-for-codex-v0352-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve configured instructions, refresh locked checkpoints and report external snapshot cleanup failures |
 | [`v0.35.1‑beta`](#harness-for-codex-v0351-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve transaction boundaries, explicit model choices, maintenance timing and evaluation integrity |
@@ -103,6 +104,14 @@
 | [`v0.2.1‑beta`](#harness-for-codex-v021-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | True no-op updates, complete action-map checks, CI and fixture dry-run corrections |
 | [`v0.2.0‑beta`](#harness-for-codex-v020-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | JSON proposal, no-write dry-run, guarded deterministic apply, instruction precedence |
 | [`v0.1.0‑beta`](#harness-for-codex-v010-beta) | Direct&nbsp;generation | Schema&nbsp;1 | None | Project-adaptive agents and skills, native Codex paths, initial ownership manifest |
+
+## HarnEX v0.36.0-beta
+
+- Rename the project and repository to HarnEX, with `harnex` as the primary management command and `/harnex/` as the in-conversation namespace.
+- Replace owned `harness-codex` and earlier `harness` launchers with `harnex`, without retaining command aliases. Use ownership checks and a recoverable replacement record; conflicting or modified user commands are preserved. Older `/harness/` in-conversation inputs remain readable.
+- Retain installation storage, credentials, project artifacts, environment names and release asset filenames so the name change does not create a second installation or invalidate existing ownership records.
+- Update installation, migration and project guidance to distinguish the current source from the previously published v0.35.3-beta assets. Older API updaters require a current installer across the repository rename.
+- Present the Codex management experience alongside HarnEX's project-analysis, orchestration and validated-update logic. Preserve platform distinctions and the Apache-2.0 license.
 
 ## Harness for Codex v0.35.3-beta
 
@@ -564,7 +573,7 @@ retain their previous behavior.
 
 ## Harness for Codex v0.11.0-beta
 
-Development prerelease. The repository is now **sholee-pt/Harness-Codex**, with branch and tag `v0.11.0-beta`. Existing project contracts remain Manifest Schema 7 / Artifact Contract 2; 0.10.0-beta project harnesses do not require reset.
+Development prerelease. The repository is now **sholee-pt/HarnEX**, with branch and tag `v0.11.0-beta`. Existing project contracts remain Manifest Schema 7 / Artifact Contract 2; 0.10.0-beta project harnesses do not require reset.
 
 - Migrates legacy repository addresses and retires obsolete `codex/` branch pins while preserving transport, automatic-update preferences and project files. The v0.10.0-beta updater cannot discover unprefixed branches; migration uses the installer reuse path.
 - Resume sends no repeated bootstrap turn by default. `--reload-harness` sends a short explicit re-read. An explicit UUID without `--project` locates its saved project through metadata only; project aliases include `--project-dir` and `--project_dir`.

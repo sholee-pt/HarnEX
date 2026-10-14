@@ -34,17 +34,17 @@ Keep a reviewed contract in a temporary file. For delegated work, derive its tas
 ## Commands and lifecycle
 
 ```bash
-harness-codex checkpoint init --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run first --keep-days 7
-harness-codex checkpoint start --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run first --task evaluate
+harnex checkpoint init --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run first --keep-days 7
+harnex checkpoint start --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run first --task evaluate
 # Retain attemptId from start as ATTEMPT_ID; each retry returns a different token.
 # Perform the approved work through native Codex and wait for its actual result.
-harness-codex checkpoint record --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run first --task evaluate --attempt ATTEMPT_ID
+harnex checkpoint record --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run first --task evaluate --attempt ATTEMPT_ID
 # Only after observing the native child turn is idle:
-harness-codex checkpoint quiesce --project /project --store ~/.local/state/harness-checkpoints/example --run first --task evaluate --observed idle --attempt ATTEMPT_ID
-harness-codex checkpoint status --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run first
+harnex checkpoint quiesce --project /project --store ~/.local/state/harness-checkpoints/example --run first --task evaluate --observed idle --attempt ATTEMPT_ID
+harnex checkpoint status --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run first
 # After a blocker or input change, supply the updated reviewed contract:
-harness-codex checkpoint resume --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run second --previous first --keep-days 7
-harness-codex checkpoint remove --project /project --store ~/.local/state/harness-checkpoints/example --run first
+harnex checkpoint resume --project /project --store ~/.local/state/harness-checkpoints/example --plan /tmp/tasks.json --run second --previous first --keep-days 7
+harnex checkpoint remove --project /project --store ~/.local/state/harness-checkpoints/example --run first
 ```
 
 `resume` preserves the previous run record and copies only valid accepted results. An input, contract, context or output change invalidates that task and dependent consumers. A newly added task does not invalidate independent work. `status` recomputes validity without rewriting state. Source evidence changes do not automatically block ordinary native conversation resume.

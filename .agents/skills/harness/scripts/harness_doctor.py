@@ -24,7 +24,7 @@ def diagnose(root: Path) -> dict:
     python_supported = sys.version_info >= (3, 11)
     errors = list(validation["errors"])
     if not harness_environment:
-        errors.append("Run harness-codex helper harness_doctor with the installed dedicated Python interpreter.")
+        errors.append("Run harnex helper harness_doctor with the installed dedicated Python interpreter.")
     if not python_supported:
         errors.append("Harness requires Python 3.11 or later.")
     return {

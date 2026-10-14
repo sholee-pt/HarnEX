@@ -108,7 +108,7 @@ class WindowsReleaseTests(unittest.TestCase):
                      json.dumps({'object': {'type': 'commit', 'sha': 'f' * 40}})]
         with mock.patch.object(release.subprocess, 'check_output', side_effect=responses) as gh:
             with self.assertRaisesRegex(ValueError, 'Release tag'):
-                release.publish(self.dist, self.commit, 'sholee-pt/Harness-Codex')
+                release.publish(self.dist, self.commit, 'sholee-pt/HarnEX')
         self.assertEqual(gh.call_count, 2)
         self.assertIn('/git/ref/tags/v' + VERSION, gh.call_args_list[1].args[0][-1])
         self.assertFalse(any('upload' in call.args[0] for call in gh.call_args_list))

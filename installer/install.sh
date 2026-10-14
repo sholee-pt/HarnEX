@@ -7,7 +7,7 @@ if [[ ! -f "$source_dir/harness.py" ]]; then
 fi
 for argument in "$@"; do
 if [[ "$argument" == "--help" || "$argument" == "-h" ]]; then
-  printf '%s\n' 'Usage: bash install.sh [--bin-dir PATH] [--data-dir PATH] [--branch vX.Y.Z-beta] [--repository URL] [--auto-update compatible|check|off] [--existing ask|reuse|reset] [--no-modify-path] [--no-codex-integration] [--activate ask|shell|skip]' 'Reuses Conda or installs checksum-pinned Miniforge on Linux. Prepares the dedicated harness environment.' 'Installs harness-codex and official Codex integration without sudo; registers PATH in ~/.bashrc unless --no-modify-path is supplied.'
+  printf '%s\n' 'Usage: bash install.sh [--bin-dir PATH] [--data-dir PATH] [--branch vX.Y.Z-beta] [--repository URL] [--auto-update compatible|check|off] [--existing ask|reuse|reset] [--no-modify-path] [--no-codex-integration] [--activate ask|shell|skip]' 'Reuses Conda or installs checksum-pinned Miniforge on Linux. Prepares the dedicated harness environment.' 'Installs harnex and official Codex integration without sudo; registers PATH in ~/.bashrc unless --no-modify-path is supplied.'
   exit 0
 fi
 done
@@ -35,8 +35,8 @@ while [[ $# -gt 0 ]]; do
     --existing) case "$value" in ask|reuse|reset) ;; *) printf 'Invalid existing-installation choice\n' >&2; exit 1 ;; esac ;;
     --branch) [[ "$value" =~ ^(codex/)?v(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*)(-beta)?)?)?$ ]] || { printf 'Invalid version branch\n' >&2; exit 1; }; selected_branch=$value ;;
     --repository) case "${value%.git}" in
-      https://github.com/sholee-pt/Harness|https://github.com/sholee-pt/Harness-Codex|git@github.com:sholee-pt/Harness|git@github.com:sholee-pt/Harness-Codex|ssh://git@github.com/sholee-pt/Harness|ssh://git@github.com/sholee-pt/Harness-Codex) ;;
-      *) printf 'Select the Harness-Codex repository\n' >&2; exit 1 ;; esac ;;
+      https://github.com/sholee-pt/Harness|https://github.com/sholee-pt/Harness-Codex|https://github.com/sholee-pt/HarnEX|git@github.com:sholee-pt/Harness|git@github.com:sholee-pt/Harness-Codex|git@github.com:sholee-pt/HarnEX|ssh://git@github.com/sholee-pt/Harness|ssh://git@github.com/sholee-pt/Harness-Codex|ssh://git@github.com/sholee-pt/HarnEX) ;;
+      *) printf 'Select the HarnEX repository\n' >&2; exit 1 ;; esac ;;
   esac
   arguments+=("$key" "$value")
 done
@@ -71,7 +71,7 @@ if [[ "$runtime_value_pending" == true || "$runtime" != codex ]]; then
   printf '%s\n' 'Only --agent codex is supported. Claude integration is not implemented; no environment was prepared.' >&2
   exit 1
 fi
-[[ -f "$source_dir/harness.py" ]] || { printf '%s\n' 'Run install.sh from a complete Harness source archive.' >&2; exit 1; }
+[[ -f "$source_dir/harness.py" ]] || { printf '%s\n' 'Run install.sh from a complete HarnEX source archive.' >&2; exit 1; }
 if [[ -n "$selected_branch" ]]; then
   metadata=$source_dir/.agents/skills/harness/scripts/harness_metadata.py
   [[ -f "$metadata" ]] || { printf 'Source version metadata is missing\n' >&2; exit 1; }
@@ -176,8 +176,8 @@ finish_install() {
   if [[ "$result" -ne 0 ]]; then
     printf '\n%s: failed (exit %s). Last log lines:\n' "$step" "$result" >&2
     sed -n '/^harness:/p' "$install_log" >&2
-    sed -n '/^Preserved incomplete Harness runtime:/p' "$install_log" >&2
-    tail -n 15 -- "$install_log" | sed '/^harness:/d; /^Preserved incomplete Harness runtime:/d' >&2
+    sed -n '/^Preserved incomplete HarnEX runtime:/p' "$install_log" >&2
+    tail -n 15 -- "$install_log" | sed '/^harnex:/d; /^Preserved incomplete HarnEX runtime:/d' >&2
     printf 'Detailed log: %s\n' "$install_log" >&2
   fi
   exit "$result"
@@ -185,7 +185,7 @@ finish_install() {
 trap finish_install EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
-printf '\n%sHarness for Codex installer%s\n================================\nDetailed log: %s\n' "$accent" "$plain" "$install_log"
+printf '\n%sHarnEX installer%s\n================================\nDetailed log: %s\n' "$accent" "$plain" "$install_log"
 start_step '[1/3] Checking installation tools'
 source "$source_dir/harness_cli/prepare_conda.sh" 2>> "$install_log"
 start_step '[3/3] Installing command and applying PATH preferences'
@@ -202,7 +202,7 @@ HARNESS_INSTALL_EXPECTED_PREFIX="$selected_prefix" "${installer_runner[@]}" "$se
 finish_step
 release_runtime_lock
 # Keep the CLI receipt contract intact; replay only its existing human summary.
-sed -n '/^Preserved incomplete Harness runtime:/p' "$install_log"
+sed -n '/^Preserved incomplete HarnEX runtime:/p' "$install_log"
 sed -n '/^Installed /p' "$install_log"
 sed -n '/^Ready: /p' "$install_log"
 printf 'Installation complete. Detailed log: %s\n' "$install_log"
@@ -227,10 +227,10 @@ if [[ "$activate" != skip && "$modify_path" == true && -t 1 && -r /dev/tty && -w
     done
   fi
   if [[ "$open_shell" == true ]]; then
-    printf 'Opening Bash with ~/.bashrc applied. Try: harness-codex --version\n'
+    printf 'Opening Bash with ~/.bashrc applied. Try: harnex --version\n'
     # Do not leak installer control state into the new project shell.
     if ! env -u HARNESS_INSTALL_PAUSE_FILE bash --rcfile "$HOME/.bashrc" -i < /dev/tty > /dev/tty 2>&1; then
-      printf 'The child Bash exited with an error. Harness remains installed.\n'
+      printf 'The child Bash exited with an error. HarnEX remains installed.\n'
     fi
   fi
 fi

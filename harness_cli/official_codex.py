@@ -63,7 +63,7 @@ def verify(folder):
 def binary(root):
     state = read(root)
     if state is None:
-        raise ValueError('Official Codex has not been installed; run harness-codex config')
+        raise ValueError('Official Codex has not been installed; run harnex config')
     folder = directory(root, state)
     verify(folder)
     return folder / 'bin/codex'

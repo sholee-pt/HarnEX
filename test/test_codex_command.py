@@ -31,7 +31,7 @@ class CodexCommandTests(unittest.TestCase):
             args = parser.parse_args([name, '--project', 'selected', '--goal', 'purpose'])
             self.assertEqual(args.command, 'configure')
             self.assertEqual(args.goal, 'purpose')
-        self.assertEqual(parser.prog, 'harness-codex')
+        self.assertEqual(parser.prog, 'harnex')
 
     def test_existing_legacy_command_is_preserved_on_reinstall(self):
         with tempfile.TemporaryDirectory() as directory:

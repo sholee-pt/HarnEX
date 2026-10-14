@@ -48,7 +48,7 @@ async def menu(controls, thread, turn, root):
     group = None
     while True:
         if group is None:
-            group = await controls.choose(thread, turn, context(controls, root) + '\nHarness management. Selection and local queries do not call a model.',
+            group = await controls.choose(thread, turn, context(controls, root) + '\nHarnEX management. Selection and local queries do not call a model.',
                 [('Project', 'Init, config, switch, remove and reset'), ('Settings', 'Preferences, Jev and Graft'),
                  ('Diagnostics', 'Status, doctor, maintenance and routing'), ('Tools', 'Updates, uninstall and queued action'),
                  ('Help', 'Qualified command names'), ('Back', 'Return to the conversation')])
@@ -56,7 +56,7 @@ async def menu(controls, thread, turn, root):
                 return 'Returned to the conversation.\n' + controls.queued_action()
             if group == 'Help':
                 from .management_relay import COMMANDS
-                return '\n'.join('/harness/' + name for name in COMMANDS) + '\nUse init/config --goal "DESCRIPTION" or --goal-file "PATH".\nMaintenance review uses the current model; status commands are local.\nSettings change preferences; config reviews generated artifacts.'
+                return '\n'.join('/harnex/' + name for name in COMMANDS) + '\nUse init/config --goal "DESCRIPTION" or --goal-file "PATH".\nMaintenance review uses the current model; status commands are local.\nSettings change preferences; config reviews generated artifacts.'
         if group == 'Tools':
             result = await tools(controls, thread, turn, root, 'tool')
             if result is not None:
@@ -90,13 +90,13 @@ async def settings(controls, thread, turn, root):
     while True:
         selected = await controls.choose(thread, turn, summary,
             [('Keep current', 'Close without changing preferences'), ('Maintenance', 'Off, suggest, or bounded automatic changes'),
-             ('Adaptive Auto', 'Use recorded quality/cost observations'), ('Hook trust', 'Prepare exact Harness hooks through native policy'), ('Back', 'Return to the parent menu')])
+             ('Adaptive Auto', 'Use recorded quality/cost observations'), ('Hook trust', 'Prepare exact HarnEX hooks through native policy'), ('Back', 'Return to the parent menu')])
         if selected == 'Back':
             return None
         if selected == 'Keep current':
             return 'Current preferences retained.\n' + summary
         if selected == 'Hook trust':
-            choice = await controls.choose(thread, turn, summary + '\nPrepare native trust for only the exact Harness hook definitions?',
+            choice = await controls.choose(thread, turn, summary + '\nPrepare native trust for only the exact HarnEX hook definitions?',
                 [('Keep current', 'Leave hook trust unchanged'), ('Prepare hooks', 'Use native policy checks for the owned definitions'), ('Back', 'Return to preferences')])
             if choice == 'Back':
                 continue
@@ -143,7 +143,7 @@ async def configure(controls, thread, turn, root, command):
     while True:
         if stage == 'project':
             options = ([('Keep selected project', ui.clean(target))] if selected else [])
-            choice = await controls.choose(thread, turn, context(controls, root) + '\nSelect the project for Harness ' + command + '.',
+            choice = await controls.choose(thread, turn, context(controls, root) + '\nSelect the project for HarnEX ' + command + '.',
                 options + [('Current project', ui.clean(root)), ('Another directory', 'Enter a path; missing folders require confirmation'), ('Back', 'Return to the parent menu')])
             if choice == 'Back':
                 return None
@@ -247,7 +247,7 @@ async def tools(controls, thread, turn, root, command):
             if choice in {'Login', 'Logout'}:
                 if not await controls.queue(thread, turn, {'action': 'jev', 'operation': choice.lower(), 'root': str(root)}):
                     return 'Existing reservation retained.\n' + controls.queued_action()
-                return 'Private Jev ' + choice.lower() + ' queued. Use /quit when ready; Harness will open its terminal flow automatically. Never paste credentials in chat.'
+                return 'Private Jev ' + choice.lower() + ' queued. Use /quit when ready; HarnEX will open its terminal flow automatically. Never paste credentials in chat.'
             return await controls.cli(root, ['jev', {'Status': 'status', 'Enable shadow advice': 'enable', 'Disable': 'disable'}[choice]])
         if command == 'graft':
             if stage == 'menu':
@@ -297,7 +297,7 @@ async def tools(controls, thread, turn, root, command):
 
 async def switch(controls, thread, turn, root, arguments):
     if len(arguments) > 1:
-        raise ValueError('Use /harness/switch "PROJECT_PATH", or omit the path to choose a recent project.')
+        raise ValueError('Use /harnex/switch "PROJECT_PATH", or omit the path to choose a recent project.')
     path, stage = None, 'confirm' if arguments else 'project'
     if arguments:
         target = project_root(root / Path(arguments[0]).expanduser())
@@ -349,4 +349,4 @@ async def switch(controls, thread, turn, root, arguments):
                 'Codex will open the selected project in this terminal; this conversation remains saved. '
                 'No transcript or permission overrides are copied.\n' +
                 ('The target harness will be loaded by its native conversation.' if configured else
-                 'No target harness is confirmed. In the new conversation, use /harness/init to generate one, or continue with ordinary Codex.'))
+                 'No target harness is confirmed. In the new conversation, use /harnex/init to generate one, or continue with ordinary Codex.'))

@@ -25,10 +25,10 @@ def render_bootstraps(templates: dict[str, bytes], version: str) -> dict[str, by
             raise ValueError(f'Expected exactly one version declaration in {name}')
         text = re.sub(pattern, lambda _: assignment, text, flags=re.M)
         if name.endswith('.ps1'):
-            help_version = 'Harness for Codex ' + previous[0] + ' Windows installer.'
+            help_version = 'HarnEX ' + previous[0] + ' Windows installer.'
             if text.count(help_version) != 1:
                 raise ValueError('Windows installer help must match its version declaration')
-            text = text.replace(help_version, 'Harness for Codex ' + version + ' Windows installer.')
+            text = text.replace(help_version, 'HarnEX ' + version + ' Windows installer.')
         rendered[name] = text.encode('utf-8')
     return rendered
 

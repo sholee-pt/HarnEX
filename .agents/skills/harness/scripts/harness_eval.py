@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Opt-in local evaluation and observability CLI for Harness for Codex."""
+"""Opt-in local evaluation and observability CLI for HarnEX."""
 
 from __future__ import annotations
 

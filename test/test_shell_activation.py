@@ -63,7 +63,7 @@ class ShellActivationTests(unittest.TestCase):
         self.launch.return_value.returncode = 4
         with mock.patch('builtins.input', side_effect=AssertionError('Unexpected prompt')):
             self.assertIsNone(shell.offer_activation(mode='shell'))
-        self.assertIn('Harness remains configured', shell.sys.stderr.getvalue())
+        self.assertIn('HarnEX remains configured', shell.sys.stderr.getvalue())
 
     def test_init_offer_follows_successful_integration_and_failure_never_opens_shell(self):
         from harness_cli import project

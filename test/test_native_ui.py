@@ -52,7 +52,7 @@ class NativeUiTests(unittest.TestCase):
                     mock.patch.object(native_ui.platform, 'machine', return_value=machine):
                 with self.assertRaisesRegex(ValueError, 'init --no-codex-integration') as caught:
                     native_ui.platform_key()
-            command = str(caught.exception).split('Use harness-codex ', 1)[1].split(' with ', 1)[0]
+            command = str(caught.exception).split('Use harnex ', 1)[1].split(' with ', 1)[0]
             args = build_parser(Path(__file__).resolve().parents[1]).parse_args(command.split())
             self.assertEqual(args.command, 'init')
             self.assertTrue(args.no_codex_integration)

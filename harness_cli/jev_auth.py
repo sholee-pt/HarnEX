@@ -161,7 +161,7 @@ def login(model, *, interactive=True, replace=False):
         if existing and not replace:
             return {'state': 'stored', 'guidance': 'Saved TypeSafe credential reused; no authentication request.'}
         if not interactive or not sys.stdin.isatty() or not sys.stdout.isatty():
-            return {'state': 'missing', 'guidance': 'Run harness-codex jev login in a terminal, or set TYPESAFE_API_KEY.'}
+            return {'state': 'missing', 'guidance': 'Run harnex jev login in a terminal, or set TYPESAFE_API_KEY.'}
         if not _supported():
             return {'state': 'unavailable', 'guidance': 'Persistent Jev login currently supports Linux; use TYPESAFE_API_KEY.'}
         print('Jev uses a separate TypeSafe account: ' + KEY_URL)

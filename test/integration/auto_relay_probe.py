@@ -401,10 +401,10 @@ def drive(binary, env, project, output, port, relay, provider):
         terminal.snapshot('01-startup')
         if getattr(relay, 'management_controls', False):
             before = len(provider.records)
-            terminal.command('/harness/status')
+            terminal.command('/harnex/status')
             terminal.wait(lambda text: 'by sholee-pt' in text and 'Project harness:' in text, 60)
             terminal.snapshot('01-harness-status')
-            terminal.command('/harness/settings')
+            terminal.command('/harnex/settings')
             terminal.wait(settings_picker_ready, 30)
             terminal.select('Back')
             terminal.wait(lambda text: 'No settings changed.' in text, 30)
@@ -455,7 +455,7 @@ def drive(binary, env, project, output, port, relay, provider):
         if getattr(relay, 'management_controls', False):
             from harness_cli.project import _configuration_prompt
             before = len(provider.records)
-            terminal.command('/harness/init')
+            terminal.command('/harnex/init')
             terminal.wait(lambda text: 'Select the project' in text)
             terminal.select('Current project')
             terminal.wait(lambda text: 'How should the project be described?' in text)

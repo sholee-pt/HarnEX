@@ -47,15 +47,15 @@ def update_report(value: dict) -> None:
     updated = value.get('updated') is True
     available = value.get('updateAvailable') is True
     refused = value.get('status') == 'downgrade-refused'
-    title = ('Harness updated' if updated else 'Older version; downgrade refused' if refused else
-             'Harness update available' if available else 'Harness is already up to date')
+    title = ('HarnEX updated' if updated else 'Older version; downgrade refused' if refused else
+             'HarnEX update available' if available else 'HarnEX is already up to date')
     display.line('\n' + title, style='warning' if refused else 'success' if updated or not available else 'heading')
     display.line('  Current version: ' + clean(value.get('installation', {}).get('version', value.get('currentVersion', 'unknown'))), style='value')
     display.line('  Latest version:  ' + clean(value.get('availableVersion', 'unknown')), style='value')
     if updated:
         display.line('  Previous version: ' + clean(value.get('currentVersion', 'unknown')), style='muted')
     elif available:
-        display.line('  Run harness-codex update to install it.')
+        display.line('  Run harnex update to install it.')
     else:
         display.line('  No files were changed.', style='muted')
     display.line('')
@@ -100,7 +100,7 @@ def box(rows, *, title, subtitle='', stream=None):
     print(bottom[0] + bar * (width - 2) + bottom[1], file=stream, flush=True)
 
 
-def report(value: dict, *, title='Harness', error=False) -> None:
+def report(value: dict, *, title='HarnEX', error=False) -> None:
     stream = sys.stderr if error else sys.stdout
     if JSON_MODE.get():
         print(json.dumps(value, indent=2, ensure_ascii=False), file=stream, flush=True)

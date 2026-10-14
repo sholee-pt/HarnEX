@@ -40,7 +40,7 @@ def update_choices(root, *, project=None):
     findings = {}
     channels = [('Codex', official_codex.check)]
     if not state.get('branch'):
-        channels.append(('Harness', release_updates.check))
+        channels.append(('HarnEX', release_updates.check))
     label = 'Checking ' + ' and '.join(name for name, _ in channels) + ' updates'
     with Progress(label, compact=True) as progress, ThreadPoolExecutor(max_workers=2) as executor:
         pending = {name: executor.submit(check, root, timeout=5) for name, check in channels}
@@ -59,7 +59,7 @@ def update_choices(root, *, project=None):
         progress.line(f"{name}: {result['currentVersion']} -> {result['availableVersion']}")
     options = [('Skip this time', ())]
     if len(findings) == 2:
-        options.append(('Update both', ('Harness', 'Codex')))
+        options.append(('Update both', ('HarnEX', 'Codex')))
     options.extend(('Update ' + name + ' only', (name,)) for name in findings)
     selected = options[choose(progress, 'Update before starting Codex?', [item[0] for item in options])][1]
     changed = False
@@ -79,17 +79,17 @@ def update_choices(root, *, project=None):
 
 def native_guidance(*, progress=None, project=None):
     progress = progress or Progress('Native Codex')
-    progress.line('Harness Auto and /harness/ management are unavailable in this native Codex session.')
+    progress.line('HarnEX Auto and /harnex/ management are unavailable in this native Codex session.')
     root = Path(project if project is not None else Path.cwd()).expanduser().resolve()
     progress.line('After exiting Codex, use status to inspect, init to initialize, or config to review this project:')
     for action in ('status', 'init', 'config'):
-        progress.line('  ' + command(['harness-codex', action, '--project', str(root)]))
+        progress.line('  ' + command(['harnex', action, '--project', str(root)]))
 
 
 def choose_native_install(version, error, *, progress=None, project=None):
     if not sys.stdin.isatty() or not sys.stdout.isatty():
         return False
-    progress = progress or Progress('Official Codex is available without the Harness adapter')
+    progress = progress or Progress('Official Codex is available without the HarnEX adapter')
     progress.line('Auto compatibility check failed: ' + clean(error))
     progress.line('Native mode preserves Codex permissions and history. Run codex update --auto later to check adapter compatibility again.')
     native_guidance(progress=progress, project=project)
@@ -152,7 +152,7 @@ def main(args):
     root = default_data_root()
     integration = codex_integration.read(root)
     if not integration or integration['schema'] != 2:
-        raise ValueError('Run harness-codex config to register the official Codex entry point')
+        raise ValueError('Run harnex config to register the official Codex entry point')
     if args in (['update'], ['update', '--auto']):
         with Progress('Updating official Codex') as progress:
             official_codex.install(root, prefer_auto='--auto' in args,
@@ -179,14 +179,14 @@ def main(args):
         native_guidance(project=working_directory(args))
         os.execve(str(binary), [str(binary), *args], env)
     if profile_requested(args):
-        print('Using native Codex to preserve the selected profile. Harness Auto is unavailable for this launch.', file=sys.stderr)
+        print('Using native Codex to preserve the selected profile. HarnEX Auto is unavailable for this launch.', file=sys.stderr)
         native_guidance(project=working_directory(args))
         os.execve(str(binary), [str(binary), *args], env)
     if (official_codex.read(root) or {}).get('mode') == 'native':
-        print('Using the selected native Codex mode. Run codex update --auto to check and re-enable the Harness adapter.', file=sys.stderr)
+        print('Using the selected native Codex mode. Run codex update --auto to check and re-enable the HarnEX adapter.', file=sys.stderr)
         native_guidance(project=working_directory(args))
         os.execve(str(binary), [str(binary), *args], env)
-    # Harness owns this package's update transaction; avoid a second native prompt.
+    # HarnEX owns this package's update transaction; avoid a second native prompt.
     args = ['-c', 'check_for_update_on_startup=false', *args]
     try:
         with Progress('Checking Auto compatibility', compact=True) as progress:

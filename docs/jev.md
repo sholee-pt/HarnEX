@@ -10,9 +10,9 @@ Initialize normally; no separate `jev enable` command is needed:
 
 ```bash
 # Follow the key setup prompt, or skip it and continue without Jev calls.
-harness-codex init --project /path/to/project
-harness-codex graft query "Where is request validation implemented?" --project /path/to/project --json
-harness-codex jev status --project /path/to/project --json
+harnex init --project /path/to/project
+harnex graft query "Where is request validation implemented?" --project /path/to/project --json
+harnex jev status --project /path/to/project --json
 ```
 
 This requires a TypeSafe account/key independently of Codex authentication.
@@ -61,20 +61,20 @@ timeout, budget and fallback. Authentication checks are separate from project
 retrieval counters and limits. Existing credentials are reused without probing.
 
 ```bash
-harness-codex jev login                    # Also works before project init
-harness-codex jev login --replace-key      # Replace a saved key explicitly
-harness-codex jev logout                   # Confirm removal with yes
+harnex jev login                    # Also works before project init
+harnex jev login --replace-key      # Replace a saved key explicitly
+harnex jev logout                   # Confirm removal with yes
 ```
 
 `TYPESAFE_API_KEY` takes precedence and is never copied into storage. Otherwise,
-Harness reads `~/.local/share/harness-codex-credentials/typesafe.json` directly.
+HarnEX reads `~/.local/share/harness-codex-credentials/typesafe.json` directly.
 `HARNESS_CREDENTIAL_HOME` can select a different absolute, user-owned storage directory.
-Choose a dedicated location outside project folders; Harness does not enforce
+Choose a dedicated location outside project folders; HarnEX does not enforce
 that separation for an override. New directories and files use 0700 and 0600.
 Linux accepts more restrictive owner-only permissions and checks current-user
 ownership, a bounded regular file, no group/other access and no symbolic/hard
 links. Foreign, malformed or overly accessible files are preserved and not used.
-The file is plaintext with restricted access, not an encrypted keyring. Harness
+The file is plaintext with restricted access, not an encrypted keyring. HarnEX
 does not copy keys into `.bashrc`, project settings, manifests, observations,
 logs or command arguments. No `source` or terminal restart is needed;
 projects on the same machine and OS account reuse the key. Project opt-outs remain
@@ -117,7 +117,7 @@ After comparing suggestions with source inspection, optionally expose a reading
 order hint to the agent:
 
 ```bash
-harness-codex jev enable --project /path/to/project --mode suggest --daily-calls 20
+harnex jev enable --project /path/to/project --mode suggest --daily-calls 20
 ```
 
 Suggest mode adds one compact hint when it fits the existing output limit. All
@@ -139,9 +139,9 @@ relevant IDs. Feedback is optional and must reflect external review, not Jev's
 own answer being treated as ground truth:
 
 ```bash
-harness-codex jev feedback --project /path/to/project --query-id QUERY_ID --relevant c2,c4
+harnex jev feedback --project /path/to/project --query-id QUERY_ID --relevant c2,c4
 # Or --relevant none when no returned candidate was useful.
-harness-codex jev status --project /path/to/project --json
+harnex jev status --project /path/to/project --json
 ```
 
 Status compares baseline and suggested mean reciprocal rank: the average inverse
@@ -152,13 +152,13 @@ benchmark. Expiration/replacement, eviction, model changes and clearing can remo
 labels. The report therefore retains `benefit: not-measured` for overall task
 benefit and `automaticImprovement: false` even when ranking improves.
 
-Harness, Graft and Jev do not jointly evaluate every conversation and rewrite
+HarnEX, Graft and Jev do not jointly evaluate every conversation and rewrite
 themselves in real time. [Existing maintenance](maintenance.md) allows separately
 enabled, bounded corrections to existing project skills. It does not establish
 causal performance benefit or automatically tune Jev/Graft. [Task evaluation](evaluation.md)
 requires controlled comparisons. Compare ordinary search, Graft alone and
-Graft plus Jev on equivalent tasks, keeping the Harness/model setup fixed; compare
-Harness itself separately. Include failures, source correctness, total wall time,
+Graft plus Jev on equivalent tasks, keeping the HarnEX/model setup fixed; compare
+HarnEX itself separately. Include failures, source correctness, total wall time,
 all model usage, indexing and review costs. The shadow phase necessarily adds
 observation cost and cannot demonstrate production savings by itself.
 The existing paired evaluator does not automatically configure isolated Graft/Jev
@@ -175,8 +175,8 @@ observations. Saved authentication lives separately in the credential directory.
 Existing caches survive tool uninstall, matching Graft's documented behavior.
 
 ```bash
-harness-codex jev disable --project /path/to/project
-harness-codex jev clear --project /path/to/project --yes
+harnex jev disable --project /path/to/project
+harnex jev clear --project /path/to/project --yes
 ```
 
 Disable preserves observations. Clear disables Jev and removes cached advice,

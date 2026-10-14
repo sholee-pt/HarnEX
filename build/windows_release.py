@@ -101,9 +101,9 @@ def notes(body, version):
 ### Windows installation (one-off verified supplement)
 
 ```powershell
-Invoke-WebRequest 'https://github.com/sholee-pt/Harness-Codex/releases/download/v{version}/install_harness_codex.ps1' -OutFile ./install_harness_codex.ps1
+Invoke-WebRequest 'https://github.com/sholee-pt/HarnEX/releases/download/v{version}/install_harness_codex.ps1' -OutFile ./install_harness_codex.ps1
 & ./install_harness_codex.ps1
-harness-codex --version
+harnex --version
 ```
 
 Run under your normal PowerShell script policy. The installer prepares the isolated
@@ -118,7 +118,7 @@ Future releases default to Linux unless Windows is explicitly requested again.
 
 
 def publish(dist, commit, repository):
-    if repository != 'sholee-pt/Harness-Codex' or not re.fullmatch(r'[0-9a-f]{40}', commit):
+    if repository != 'sholee-pt/HarnEX' or not re.fullmatch(r'[0-9a-f]{40}', commit):
         raise ValueError('Select this repository and an exact source commit')
     version = json.loads((dist / 'build.json').read_text(encoding='utf-8')).get('version')
     if not isinstance(version, str) or not VERSION_RE.fullmatch(version):

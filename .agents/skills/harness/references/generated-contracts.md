@@ -1,6 +1,6 @@
 # Generated artifact contracts
 
-The current Harness for Codex preserves Authoring Contract 3 drafts, Artifact Contract 2 plans, and Manifest Schema 7 installations from v9.0. The project-local workspace contract remains unchanged. Plan Schema 3, Transaction Schema 2, runtime-plan Schema 1, and Evaluation Schema 2 also remain unchanged.
+The current HarnEX preserves Authoring Contract 3 drafts, Artifact Contract 2 plans, and Manifest Schema 7 installations from v9.0. The project-local workspace contract remains unchanged. Plan Schema 3, Transaction Schema 2, runtime-plan Schema 1, and Evaluation Schema 2 also remain unchanged.
 
 Apply validates the incoming plan and independently classifies the existing installation. Releases explicitly listed in `harness_metadata.ARTIFACT_COMPATIBLE_GENERATOR_VERSIONS` are compatible with Schema 7, `project-local` scope, Artifact Contract 2, and `not-managed` Git protection with no patterns. Recognized v7/v8 installs require a reviewed workspace upgrade; future version compatibility is never inferred from ordering or prefixes.
 

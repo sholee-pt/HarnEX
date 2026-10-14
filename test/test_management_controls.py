@@ -37,8 +37,8 @@ class LocalControls(unittest.IsolatedAsyncioTestCase):
         return {'id': 10, 'method': 'turn/start', 'params': {'threadId': 'thread', 'input': [{'type': 'text', 'text': text}]}}
 
     async def test_status_finishes_locally_without_forwarding_task_or_model_request(self):
-        self.controls.cli = mock.AsyncMock(return_value='Harness for Codex\nby sholee-pt')
-        self.assertTrue(await self.controls.intercept(self.request('/harness/status')))
+        self.controls.cli = mock.AsyncMock(return_value='HarnEX\nby sholee-pt')
+        self.assertTrue(await self.controls.intercept(self.request('/harnex/status')))
         await asyncio.gather(*list(self.controls.tasks.values()))
         self.assertEqual([entry.args[0] for entry in self.call.call_args_list], ['thread/read'])
         self.assertEqual(self.sent[0]['id'], 10)
@@ -53,7 +53,7 @@ class LocalControls(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(json.dumps(value), before)
         self.controls.busy.add('thread')
         with self.assertRaisesRegex(ValueError, 'finish'):
-            await self.controls.intercept(self.request('/harness/remove'))
+            await self.controls.intercept(self.request('/harnex/remove'))
         self.call.assert_not_called()
 
     async def test_native_choice_only_accepts_a_listed_answer(self):
@@ -66,7 +66,7 @@ class LocalControls(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(self.controls.answers)
 
     async def test_interrupt_cancels_menu_and_completes_turn(self):
-        self.assertTrue(await self.controls.intercept(self.request('/harness/settings')))
+        self.assertTrue(await self.controls.intercept(self.request('/harnex/settings')))
         await asyncio.sleep(0)
         turn = next(iter(self.controls.tasks))
         self.assertTrue(await self.controls.intercept({'id': 11, 'method': 'turn/interrupt', 'params': {'threadId': 'thread', 'turnId': turn}}))
@@ -75,7 +75,7 @@ class LocalControls(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(self.controls.answers)
 
     async def test_configuration_uses_original_model_and_permissions(self):
-        value = self.request('/harness/init --goal "Small test project"')
+        value = self.request('/harnex/init --goal "Small test project"')
         value['params'].update(model='catalog-model', effort='medium', approvalPolicy='on-request', sandboxPolicy={'type': 'readOnly'})
         self.controls.cli = mock.AsyncMock(return_value='ready')
         with mock.patch('harness_cli.project.load_installer'), mock.patch('harness_cli.project._assert_no_transaction'):
@@ -299,7 +299,7 @@ class LocalControls(unittest.IsolatedAsyncioTestCase):
         self.controls.enter = mock.AsyncMock(return_value='A small analysis project')
         self.controls.cli = mock.AsyncMock(return_value='ready')
         self.controls.submit = mock.AsyncMock()
-        value = self.request('/harness/')
+        value = self.request('/harnex/')
         value['params'].update(model='selected-model', effort='high', approvalPolicy='on-request', sandboxPolicy={'type': 'readOnly'})
         self.assertTrue(await self.controls.intercept(value))
         await asyncio.gather(*list(self.controls.tasks.values()))
@@ -356,7 +356,7 @@ class LocalControls(unittest.IsolatedAsyncioTestCase):
         other.mkdir()
         self.controls.cli = mock.AsyncMock()
         with self.assertRaisesRegex(ValueError, 'own conversation'):
-            await self.controls.intercept(self.request('/harness/init --project ' + json.dumps(str(other)) + ' --goal "test"'))
+            await self.controls.intercept(self.request('/harnex/init --project ' + json.dumps(str(other)) + ' --goal "test"'))
         self.controls.cli.assert_not_called()
 
     async def test_explicit_target_does_not_select_parent_harness(self):
@@ -366,7 +366,7 @@ class LocalControls(unittest.IsolatedAsyncioTestCase):
         nested.mkdir()
         self.call.return_value = {'thread': {'cwd': str(nested)}}
         self.controls.cli = mock.AsyncMock(return_value='ready')
-        message = self.request('/harness/init --project ' + json.dumps(str(nested)) + ' --goal "nested project"')
+        message = self.request('/harnex/init --project ' + json.dumps(str(nested)) + ' --goal "nested project"')
         self.assertFalse(await self.controls.intercept(message))
         self.assertEqual(message['params']['cwd'], str(nested))
         self.assertEqual(self.controls.cli.call_args.args[0], nested)
@@ -462,7 +462,7 @@ class ManagementFilesystemTests(unittest.TestCase):
         with mock.patch('sys.stdout', stream):
             dashboard.display({'state': 'unconfigured', 'features': {'jev': {'mode': 'shadow', 'keyAvailable': True, 'key': 'private-key'}}}, self.root, 'test-version')
         text = stream.getvalue()
-        self.assertIn('Harness for Codex (test-version)', text)
+        self.assertIn('HarnEX (test-version)', text)
         self.assertIn('by sholee-pt', text)
         self.assertNotIn('private-key', text)
         self.assertIn('not-measured', text)
@@ -482,8 +482,8 @@ class ManagementFilesystemTests(unittest.TestCase):
             presentation.JSON_MODE.reset(token)
 
     def test_parser_only_reserves_qualified_single_line_commands(self):
-        self.assertIsNone(management_relay.parse({'input': [{'type': 'text', 'text': 'Explain /harness/status'}]}))
-        self.assertEqual(management_relay.parse({'input': [{'type': 'text', 'text': '/harness/switch "/with spaces"'}]}), ('switch', ['/with spaces']))
-        for text in ('/harness/status\nremove', '/harness/unknown', '/harness/status "'):
+        self.assertIsNone(management_relay.parse({'input': [{'type': 'text', 'text': 'Explain /harnex/status'}]}))
+        self.assertEqual(management_relay.parse({'input': [{'type': 'text', 'text': '/harnex/switch "/with spaces"'}]}), ('switch', ['/with spaces']))
+        for text in ('/harnex/status\nremove', '/harnex/unknown', '/harnex/status "'):
             with self.assertRaises(ValueError):
                 management_relay.parse({'input': [{'type': 'text', 'text': text}]})

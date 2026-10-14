@@ -6,7 +6,7 @@ if ($Cold -and $env:GITHUB_ACTIONS -ne 'true') { throw 'The real registry/cold c
 $Dist = [IO.Path]::GetFullPath($Dist)
 $buildInfo = Get-Content -LiteralPath (Join-Path $Dist 'build.json') -Raw | ConvertFrom-Json
 if ([string]$buildInfo.version -notmatch '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-beta)?\z') { throw 'Build version metadata is invalid.' }
-$expectedVersion = 'Harness for Codex ' + $buildInfo.version
+$expectedVersion = 'HarnEX ' + $buildInfo.version
 $base = Join-Path ([IO.Path]::GetTempPath()) ('harness-windows-check-' + [guid]::NewGuid().ToString('N'))
 [void][IO.Directory]::CreateDirectory($base)
 $binary = Join-Path $base 'command bin'
@@ -35,7 +35,7 @@ if ($Cold) { $options.CondaHome = Join-Path $base 'miniforge' }
 else { $options.CondaExe = $CondaExe; $options.NoModifyPath = $true }
 function Invoke-WebRequest {
     param($Uri, $OutFile, [switch]$UseBasicParsing, $TimeoutSec)
-    if ($Uri -like 'https://github.com/sholee-pt/Harness-Codex/releases/download/v*/*') {
+    if ($Uri -like 'https://github.com/sholee-pt/HarnEX/releases/download/v*/*') {
         $asset = Join-Path $Dist ([Uri]$Uri).Segments[-1]
         if (-not (Test-Path -LiteralPath $asset -PathType Leaf)) { throw 'Unexpected Harness asset request.' }
         Copy-Item -LiteralPath $asset -Destination $OutFile
@@ -60,7 +60,7 @@ try {
             throw 'Cold installation changed an existing Conda environment.'
         }
     }
-    $command = Join-Path $binary 'harness-codex.cmd'
+    $command = Join-Path $binary 'harnex.cmd'
     $version = & $command --version
     if ($LASTEXITCODE -ne 0 -or ($version -join [Environment]::NewLine).Trim() -cne $expectedVersion) { throw 'Installed Windows command version failed.' }
     & $command --help
@@ -71,9 +71,9 @@ try {
     $registered = $registry.GetValue('Path', $null, [Microsoft.Win32.RegistryValueOptions]::DoNotExpandEnvironmentNames)
     if ($Cold) {
         if (@($registered -split ';' | Where-Object { $_ -ieq $binary }).Count -ne 1) { throw 'User PATH entry missing or duplicated.' }
-        if ((Get-Command harness-codex).Source -ine $command) { throw 'Current PowerShell command discovery failed.' }
+        if ((Get-Command harnex).Source -ine $command) { throw 'Current PowerShell command discovery failed.' }
         $env:Path = "$binary;$env:SystemRoot\System32;$env:SystemRoot"
-        $child = & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -Command 'harness-codex --version'
+        $child = & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -Command 'harnex --version'
         if ($LASTEXITCODE -ne 0 -or ($child -join [Environment]::NewLine).Trim() -cne $expectedVersion) { throw 'Fresh PowerShell command failed.' }
         $python = Join-Path $options.CondaHome 'envs\harness\python.exe'
         $active = Get-Content -LiteralPath (Join-Path $data 'active.json') -Raw | ConvertFrom-Json

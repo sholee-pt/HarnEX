@@ -11,7 +11,7 @@ BRANCH_RE = re.compile(rf'(?:codex/)?v{NUMBER}(?:\.{NUMBER}(?:\.{NUMBER}(?:-beta
 def version_key(value: str) -> tuple[int, int, int, int]:
     match = VERSION_RE.fullmatch(value) if isinstance(value, str) else None
     if not match:
-        raise ValueError('Invalid Harness version; expected N.N.N[-beta] or a legacy N.N receipt')
+        raise ValueError('Invalid HarnEX version; expected N.N.N[-beta] or a legacy N.N receipt')
     major, minor = int(match[1]), int(match[2])
     if match[3] is None:
         return 0, major, minor, 0

@@ -63,7 +63,7 @@ if [[ ! -f "$data_directory/active.json" || -f "$data_directory/runtime.json" ||
     done
     recovery=$(mktemp -d "$runtime_root.recovery.XXXXXXXX")
     mv -T -- "$runtime_root" "$recovery/runtime"
-    printf 'Preserved incomplete Harness runtime: %s\n' "$recovery/runtime" >> "$install_log"
+    printf 'Preserved incomplete HarnEX runtime: %s\n' "$recovery/runtime" >> "$install_log"
     mkdir -- "$runtime_root"
     printf 'harness-codex runtime v1\n%s\n' "$data_directory" > "$runtime_root/.harness-runtime-owner"
   fi
@@ -103,7 +103,7 @@ if [[ -z "$conda_command" && "$direct_runtime" == false ]]; then
   conda_command="$prefix/bin/conda"
 fi
 finish_step
-start_step '[2/3] Preparing the isolated Harness environment'
+start_step '[2/3] Preparing the isolated HarnEX environment'
 if [[ "$direct_runtime" == false ]]; then
   environments=$("$conda_command" env list --json 2>> "$install_log")
   printf '%s\n' "$environments" >> "$install_log"
@@ -112,7 +112,7 @@ if [[ ${#owned_runtime[@]} -gt 0 && ! -f "$runtime_root/envs/harness/conda-meta/
   [[ ! -e "$runtime_root/envs/harness" && ! -L "$runtime_root/envs/harness" ]] || runtime_error "Incomplete runtime appeared during setup; preserved: $runtime_root/envs/harness"
   "$conda_command" create "${environment_selector[@]}" --override-channels --channel conda-forge python=3.11 git --yes >> "$install_log" 2>&1
 else
-  printf '      Reusing the existing Harness environment.\n' >> "$install_log"
+  printf '      Reusing the existing HarnEX environment.\n' >> "$install_log"
 fi
 if [[ ${#owned_runtime[@]} -gt 0 ]]; then
   selected_prefix="$runtime_root/envs/harness"
@@ -121,7 +121,7 @@ else
   # An absolute shell remains reliable when system directories precede Conda.
   selected_prefix=$("$conda_command" run --no-capture-output "${environment_selector[@]}" /bin/sh -c 'printf "%s\n" "$CONDA_PREFIX"' 2>> "$install_log")
 fi
-[[ "$selected_prefix" == /* && -f "$selected_prefix/conda-meta/history" ]] || { printf 'Unable to resolve the selected Harness environment.\n' >&2; exit 1; }
+[[ "$selected_prefix" == /* && -f "$selected_prefix/conda-meta/history" ]] || { printf 'Unable to resolve the selected HarnEX environment.\n' >&2; exit 1; }
 selected_prefix=$(realpath -e -- "$selected_prefix")
 selected_python="$selected_prefix/bin/python"
 [[ -x "$selected_python" ]] || { printf 'Selected environment has no executable Python: %s\n' "$selected_python" >&2; exit 1; }

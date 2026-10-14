@@ -1,7 +1,7 @@
 # Local code retrieval
 
 Graft is a navigation aid for large or repeatedly explored codebases.
-It does not replace source inspection, Harness generation, tests or transaction
+It does not replace source inspection, HarnEX generation, tests or transaction
 checks. Small known edits can keep ordinary search. No retrieval runs on normal
 turns unless the agent actually chooses the retrieval skill.
 
@@ -10,9 +10,9 @@ validates. An existing configured project can run the same command without
 regenerating its agents or skills:
 
 ```bash
-harness-codex init --project /path/to/project
-harness-codex graft status --project /path/to/project
-harness-codex graft query "where is request routing selected" --project /path/to/project
+harnex init --project /path/to/project
+harnex graft status --project /path/to/project
+harnex graft query "where is request routing selected" --project /path/to/project
 ```
 
 The first preparation downloads an official Node 22 Linux archive, verifies its
@@ -25,8 +25,8 @@ local log on failure. A failed dependency setup does not fail an otherwise
 successful project configuration. Retry without a package path:
 
 ```bash
-harness-codex graft enable --project /path/to/project
-harness-codex init --project /path/to/project --retrieval off
+harnex graft enable --project /path/to/project
+harnex init --project /path/to/project --retrieval off
 ```
 
 Explicit disable is remembered, including before the first setup; ordinary init
@@ -52,7 +52,7 @@ available. Init offers guided key setup; only explicit new-key entry makes a
 fixed non-project authentication call. Explicit Jev disable remains disabled
 on later init.
 Graft remains a separately installed MIT dependency;
-its license is retained in that package, and it is not bundled into Harness.
+its license is retained in that package, and it is not bundled into HarnEX.
 Other versions require adapter review instead of silently guessing API behavior.
 
 Repeated init reuses an enabled setup without probing the source tree or
@@ -65,8 +65,8 @@ ordinary source search, never a blocked coding session. A structural graph is
 not proof of complete runtime dependencies, data semantics or model correctness.
 
 ```bash
-harness-codex graft rebuild --project /path/to/project
-harness-codex graft disable --project /path/to/project
+harnex graft rebuild --project /path/to/project
+harnex graft disable --project /path/to/project
 ```
 
 Rebuild explicitly reparses changed inputs with the existing extraction cache.
@@ -81,18 +81,18 @@ project does not authorize execution through another user's saved settings.
 Character-based estimates from Graft are not reported as measured token savings.
 Measure actual task correctness, elapsed time, billed tokens and rework on paired
 tasks, including initial indexing and maintenance cost, before claiming benefit.
-Graft automatic setup and its native release validation remain Linux-only; publication of Windows Harness assets does not establish Windows Graft support.
+Graft automatic setup and its native release validation remain Linux-only; publication of Windows HarnEX assets does not establish Windows Graft support.
 
 ## Explicit external code
 
 Keep the main graph scoped to the project. Attach only needed external code with a named binding:
 
 ```bash
-harness-codex graft add /shared/library/model.py --name model-library --project /work/project
-harness-codex graft add /shared/library/src --name shared-src --project /work/project
-harness-codex graft query "where is prediction implemented" --project /work/project
-harness-codex graft status --project /work/project
-harness-codex graft remove model-library --project /work/project
+harnex graft add /shared/library/model.py --name model-library --project /work/project
+harnex graft add /shared/library/src --name shared-src --project /work/project
+harnex graft query "where is prediction implemented" --project /work/project
+harnex graft status --project /work/project
+harnex graft remove model-library --project /work/project
 ```
 
 An external binding is a local read selection, not permission to modify that code.
@@ -135,7 +135,7 @@ New configuration records ownership of the unchanged static retrieval skill in
 the portable context receipt. Init on a new host can reuse that file while
 preparing a locally selected runtime; it does not import the old host's executable
 path, credentials or external bindings. For a legacy skill without that receipt,
-`harness-codex graft enable --adopt-skill --project PATH` explicitly adopts only
+`harnex graft enable --adopt-skill --project PATH` explicitly adopts only
 the byte-identical bundled skill. Modified/user-authored skills remain preserved.
 
 Before Jev advice starts, the query rechecks Graft settings under the settings
@@ -151,6 +151,6 @@ retrieval only. Automatic prompt injection, every-turn rebuilds and the optional
 LLM deep pass are not enabled. Those additions need separate evaluation of
 correctness and total cost, including setup, extra context and failed attempts.
 Upstream's published benchmarks use different agent/model setups and do not
-establish the benefit of this Harness-Codex integration.
+establish the benefit of this HarnEX integration.
 
 Upstream: [trailhq/Graft](https://github.com/trailhq/Graft).

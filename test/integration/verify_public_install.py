@@ -40,7 +40,7 @@ def verify(dist):
         wrapper.write_text('#!' + sys.executable + '\n' + '''import json, os, pathlib, sys
 args = sys.argv[1:]
 url = next((a for a in args if a.startswith('https://')), '')
-if url.startswith('https://github.com/sholee-pt/Harness-Codex/releases/download/v'):
+if url.startswith('https://github.com/sholee-pt/HarnEX/releases/download/v'):
     name = url.rsplit('/', 1)[1]
     source = pathlib.Path(json.loads(os.environ['TEST_ASSETS'])[name])
     with open(os.environ['TEST_DOWNLOAD_LOG'], 'a') as log: log.write(name + '\\n')
@@ -69,7 +69,7 @@ else:
         assert subprocess.run(['/bin/sh', '-c', 'command -v conda'], env=env,
                               capture_output=True, timeout=10).returncode != 0
         version = json.loads((dist / 'build.json').read_text())['version']
-        pipeline = f'curl -fsSL https://github.com/sholee-pt/Harness-Codex/releases/download/v{version}/install_harness_codex.sh | sh'
+        pipeline = f'curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v{version}/install_harness_codex.sh | sh'
         def run(command, timeout=120):
             result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=timeout)
             if result.returncode:
@@ -77,9 +77,9 @@ else:
                 raise AssertionError(result.stdout[-6000:] + result.stderr[-6000:] + '\n' + json.dumps(details))
             return result.stdout
         run(['/bin/bash', '-o', 'pipefail', '-c', pipeline], timeout=1200)
-        executable = home / '.local/bin/harness-codex'
-        assert executable.is_file() and not (home / '.local/bin/harness').exists()
-        assert run([executable, '--version']).strip() == 'Harness for Codex ' + version
+        executable = home / '.local/bin/harnex'
+        assert executable.is_file() and not (home / '.local/bin/harness').exists() and not (home / '.local/bin/harness-codex').exists()
+        assert run([executable, '--version']).strip() == 'HarnEX ' + version
         assert 'config' in run([executable, '--help'])
         project = base / 'project'
         project.mkdir()
@@ -87,7 +87,7 @@ else:
         # or globally named environment is required after prefix installation.
         assert isinstance(json.loads(run([executable, 'helper', 'inventory', project])), dict)
         # A fresh real interactive Bash reads .bashrc without manual PATH setup.
-        located = run(['/bin/bash', '--noprofile', '-ic', 'command -v harness-codex']).strip()
+        located = run(['/bin/bash', '--noprofile', '-ic', 'command -v harnex']).strip()
         # Linked HOME/XDG directories can expose either spelling of the same file.
         assert Path(located).samefile(executable), located
         data = home / 'share/harness-codex'
@@ -123,7 +123,7 @@ else:
         assert (project / '.agents/skills/harness/SKILL.md').is_file()
         project_before = snapshot(project)
         from verify_cli_distribution import terminal_uninstall
-        assert 'Uninstalled harness-codex' in terminal_uninstall(executable, 'yes', env)
+        assert 'Uninstalled harnex' in terminal_uninstall(executable, 'yes', env)
         assert not runtime.exists(), 'Owned runtime cleanup left files: ' + str(list(runtime.rglob('*'))[:15])
         assert not data.exists() and not executable.exists()
         assert snapshot(project) == project_before

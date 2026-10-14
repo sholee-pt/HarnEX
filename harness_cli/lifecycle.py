@@ -1,4 +1,4 @@
-"""Remove only proved Harness-owned files, with a separate recoverable journal.
+"""Remove only proved HarnEX-owned files, with a separate recoverable journal.
 
 Removal Schema 1 deliberately is not the generator's Transaction Schema 2.
 Its seal detects local journal corruption; it is not an authorization signature.
@@ -54,7 +54,7 @@ def _helpers(source_root: Path):
         modules = [importlib.import_module(name) for name in
                    ("harness_apply", "harness_state", "harness_metadata", "harness_transaction")]
         if any(Path(module.__file__).resolve().parent != scripts.resolve() for module in modules):
-            raise LifecycleError("Another Harness helper version is already loaded; start a fresh Harness command.")
+            raise LifecycleError("Another HarnEX helper version is already loaded; start a fresh HarnEX command.")
     finally:
         sys.path.remove(str(scripts))
     return installer, *modules
@@ -306,7 +306,7 @@ def _plan(root: Path, include_generator: bool, helpers) -> tuple[dict, list, lis
     for relative in (JOURNAL, ".harness/transactions", WORKSPACES):
         installer.checked_path(root / relative)
     if state.transaction_status(root) is not None or (root / WORKSPACES).exists():
-        raise LifecycleError("A pending or orphaned Harness transaction must be recovered before removal.")
+        raise LifecycleError("A pending or orphaned HarnEX transaction must be recovered before removal.")
     operations, snapshots, replacements = [], [], []
 
     def add(relative: str, kind: str, replacement: bytes | None = None, *, expected=None, entry=None):
@@ -481,7 +481,7 @@ def remove_project(root: Path, *, source_root: Path, include_generator: bool = F
                 _set_state(root, journal, "remove-recovery-required", helpers)
             except BaseException:
                 pass
-            raise LifecycleError("Removal was interrupted; backups are retained. Run harness-codex remove --recover --project PATH. "
+            raise LifecycleError("Removal was interrupted; backups are retained. Run harnex remove --recover --project PATH. "
                                  f"Recovery detail: {recovery_error}") from exc
         if isinstance(exc, KeyboardInterrupt):
             raise
@@ -491,7 +491,7 @@ def remove_project(root: Path, *, source_root: Path, include_generator: bool = F
         _cleanup(root, journal, helpers)
     except (OSError, ValueError) as exc:
         report.update(state="removed-cleanup-required", recoveryRequired=True,
-                      warning=f"Removal committed; backups require cleanup through harness-codex remove --recover: {exc}")
+                      warning=f"Removal committed; backups require cleanup through harnex remove --recover: {exc}")
     return report
 
 

@@ -20,7 +20,7 @@ def version(source_root: Path) -> str:
             value = ast.literal_eval(node.value)
             if isinstance(value, str):
                 return value
-    raise ValueError("Harness release metadata is missing.")
+    raise ValueError("HarnEX release metadata is missing.")
 
 
 def default_data_root(*, installer: bool = False) -> Path:
@@ -69,8 +69,8 @@ def _agent_options(parser, *, destination: str) -> None:
 
 
 def build_parser(source_root: Path) -> argparse.ArgumentParser:
-    parser = _AgentParser(prog="harness-codex", description="Install, configure and use a native Codex project harness.")
-    parser.add_argument("--version", "-V", action="store_true", help="Show the installed Harness version and exit.")
+    parser = _AgentParser(prog="harnex", description="Install, configure and use a native Codex project harness.")
+    parser.add_argument("--version", "-V", action="store_true", help="Show the installed HarnEX version and exit.")
     parser.add_argument('--json', action='store_true', help='Show complete diagnostic reports as JSON.')
     _agent_options(parser, destination="_root_agent_choices")
     parser.add_argument("--no-update-check", action="store_true", help="Skip automatic upstream checks for this invocation.")
@@ -100,12 +100,12 @@ def build_parser(source_root: Path) -> argparse.ArgumentParser:
     install.add_argument("--data-dir", type=Path, default=default_data_root(installer=True))
     install.add_argument("--bin-dir", type=Path, default=default_bin_root())
     install.add_argument("--branch", help="Pin vX.Y.Z[-beta]; otherwise follow the latest release branch. Legacy branches remain readable.")
-    install.add_argument("--repository", default=distribution.DEFAULT_REPOSITORY, help="HTTPS or SSH transport for sholee-pt/Harness-Codex.")
+    install.add_argument("--repository", default=distribution.DEFAULT_REPOSITORY, help="HTTPS or SSH transport for sholee-pt/HarnEX.")
     install.add_argument("--auto-update", choices=("compatible", "check", "off"), default="compatible")
     install.add_argument("--no-modify-path", action="store_true", help="Skip user PATH registration (Bash startup on Linux; user registry on Windows).")
-    install.add_argument('--no-codex-integration', action='store_true', help='Install only the Harness tool; skip automatic Linux Codex integration.')
+    install.add_argument('--no-codex-integration', action='store_true', help='Install only the HarnEX tool; skip automatic Linux Codex integration.')
     install.add_argument("--existing", choices=("ask", "reuse", "reset"), default="ask",
-                         help="When installation traces exist, choose whether to reuse or reset Harness tool settings.")
+                         help="When installation traces exist, choose whether to reuse or reset HarnEX tool settings.")
     install.add_argument("--owned-runtime", type=Path, help=argparse.SUPPRESS)
     uninstall = commands.add_parser("uninstall", help="Remove the CLI and its owned runtime after confirmation [Y/n]; keep project harnesses and reused environments.")
     uninstall.add_argument("--data-dir", type=Path, default=default_data_root())
@@ -135,7 +135,7 @@ def _launcher_environment_gate(args, source_root: Path) -> int | None:
     status = distribution.launcher_status(data_root)
     if Path(status["sourceRoot"]).resolve() != source_root.resolve():
         if source_root.resolve().is_relative_to((data_root / "releases").resolve()):
-            raise ValueError("The active Harness release changed after this command started. "
+            raise ValueError("The active HarnEX release changed after this command started. "
                              "Repeat the installed harness command from the same parent terminal; Codex was not started.")
         return None
     args._launcher_environment_status = status
@@ -150,7 +150,7 @@ def _launcher_environment_gate(args, source_root: Path) -> int | None:
             repair = status.get("repairCommand") or "harness update --repair-launcher"
             raise ValueError(f"The legacy launcher needs offline repair. Run {repair}, then repeat this command from the same parent terminal.")
         distribution.repair_launcher(data_root)
-        print("Harness launcher repaired. The legacy invocation already changed its own environment; Codex was not started. "
+        print("HarnEX launcher repaired. The legacy invocation already changed its own environment; Codex was not started. "
               "Repeat this command from the same parent terminal to preserve your project environment.", file=sys.stderr)
         return 1
     if os.environ.get(environment.LAUNCHER_MARKER) != environment.PRESERVED_ENVIRONMENT:
@@ -178,10 +178,10 @@ def _automatic_update(args, source_root: Path, argv: list[str]) -> int | None:
         if not result.get("updateAvailable"):
             return None
         available = result.get("availableVersion", "")
-        progress = ui.Progress('Harness update available: ' + available)
-        if choose(progress, 'Update the published Harness release?', ['Skip this time', 'Update Harness']) == 0:
+        progress = ui.Progress('HarnEX update available: ' + available)
+        if choose(progress, 'Update the published HarnEX release?', ['Skip this time', 'Update HarnEX']) == 0:
             return None
-        with ui.Progress(f'Installing Harness release {available}'):
+        with ui.Progress(f'Installing HarnEX release {available}'):
             release_updates.update(data_root, selected=result)
         active = distribution.installed_status(data_root)
         new_root = Path(active["release_root"])
@@ -190,7 +190,7 @@ def _automatic_update(args, source_root: Path, argv: list[str]) -> int | None:
             environment["HARNESS_NO_UPDATE_CHECK"] = "1"
             return subprocess.call([sys.executable, "-B", str(new_root / "harness.py"), *argv], env=environment)
     except (OSError, ValueError, subprocess.SubprocessError) as exc:
-        print(f"Harness update check unavailable; continuing with the installed version. {exc}", file=sys.stderr)
+        print(f"HarnEX update check unavailable; continuing with the installed version. {exc}", file=sys.stderr)
     return None
 
 
@@ -204,7 +204,7 @@ def main(argv: list[str] | None = None, *, source_root: Path | None = None) -> i
         except KeyboardInterrupt:
             return 130
         except (OSError, ValueError, subprocess.SubprocessError) as error:
-            print('Harness Codex entry: ' + ui.clean(error), file=sys.stderr)
+            print('HarnEX Codex entry: ' + ui.clean(error), file=sys.stderr)
             return 1
     parser = build_parser(source_root)
     args = parser.parse_args(argv)
@@ -215,7 +215,7 @@ def main(argv: list[str] | None = None, *, source_root: Path | None = None) -> i
               file=sys.stderr)
         return 2
     if args.version:
-        print(f"Harness for Codex {version(source_root)}")
+        print(f"HarnEX {version(source_root)}")
         parser.exit(0)
     if args.command is None:
         parser.print_help()
@@ -249,7 +249,7 @@ def main(argv: list[str] | None = None, *, source_root: Path | None = None) -> i
                     args.repository = distribution.canonical_repository(args.repository)
                     if args.branch and args.branch.startswith('codex/'):
                         args.branch = None
-                        print('Legacy codex/ branch pin retired; updates now follow the newest compatible Harness-Codex release.')
+                        print('Legacy codex/ branch pin retired; updates now follow the newest compatible HarnEX release.')
             if not args.no_modify_path:
                 path_registration(args.bin_dir, reset=choice == 'reset', dry_run=True, previous=previous_bin)
             if args.owned_runtime:
@@ -282,10 +282,13 @@ def main(argv: list[str] | None = None, *, source_root: Path | None = None) -> i
                 if args.check or args.branch is not None or args.repository is not None:
                     raise ValueError("--repair-launcher is offline and cannot be combined with --check, --branch, or --repository.")
                 from .installation_paths import repair_entrypoints
+                if (args.data_dir / '.command-migration.json').exists():
+                    distribution.migrate_command(args.data_dir)
                 if (args.data_dir / '.entrypoint-migration.json').exists():
                     repair_entrypoints(args.data_dir)
                 ui.report(distribution.repair_launcher(args.data_dir), title='Launcher repair')
                 ui.report(repair_entrypoints(args.data_dir), title='Command path repair')
+                distribution.migrate_command(args.data_dir)
                 print("Repeat project commands from the same parent terminal so they inherit its original environment.")
                 return 0
             if args.timeout <= 0 or args.timeout > 600:
@@ -296,7 +299,7 @@ def main(argv: list[str] | None = None, *, source_root: Path | None = None) -> i
             if not pinned:
                 action = ((lambda data_root, **kw: release_updates.check(data_root, timeout=kw['timeout'])) if args.check else
                           (lambda data_root, **kw: release_updates.update(data_root, timeout=kw['timeout'])))
-            with ui.Progress('Checking for Harness updates' if args.check else 'Checking and updating Harness') as progress:
+            with ui.Progress('Checking for HarnEX updates' if args.check else 'Checking and updating HarnEX') as progress:
                 result = action(args.data_dir, branch=args.branch, repository=args.repository, timeout=args.timeout)
                 progress.outcome = 'updated' if result.get('updated') else result.get('status', 'checked')
             ui.update_report(result)
@@ -305,7 +308,7 @@ def main(argv: list[str] | None = None, *, source_root: Path | None = None) -> i
                 if integration_read(args.data_dir) is not None:
                     active = distribution.installed_status(args.data_dir)
                     ui.report(integration_install(args.data_dir, Path(active['release_root'])), title='Native Codex integration')
-                print("Tool update complete. Use harness-codex config --project PATH to refresh the owned generator and review the existing project harness.")
+                print("Tool update complete. Use harnex config --project PATH to refresh the owned generator and review the existing project harness.")
             return 0
         if args.command == 'context':
             from .workspace_context import run
@@ -342,8 +345,8 @@ def main(argv: list[str] | None = None, *, source_root: Path | None = None) -> i
             return updated
         return run_project_command(args, source_root=source_root)
     except KeyboardInterrupt:
-        print("Harness interrupted.", file=sys.stderr)
+        print("HarnEX interrupted.", file=sys.stderr)
         return 130
     except (OSError, ValueError, subprocess.SubprocessError) as exc:
-        print(f"harness: {exc}", file=sys.stderr)
+        print(f"harnex: {exc}", file=sys.stderr)
         return 1

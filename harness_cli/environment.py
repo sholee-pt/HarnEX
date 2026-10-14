@@ -16,7 +16,7 @@ def validate_interpreter() -> Path:
     expected = os.environ.get("HARNESS_INSTALL_EXPECTED_PREFIX")
     mismatch = expected is not None and os.path.normcase(str(prefix.resolve())) != os.path.normcase(str(Path(expected).resolve()))
     if prefix.name != "harness" or not (prefix / "conda-meta/history").is_file() or mismatch:
-        raise ValueError("Run Harness in its dedicated Conda environment. "
+        raise ValueError("Run HarnEX in its dedicated Conda environment. "
                          f"Expected prefix: {expected or 'the selected harness environment'}; "
                          f"actual sys.prefix: {sys.prefix}; executable: {sys.executable}; "
                          f"Python: {sys.version.split()[0]}; CONDA_PREFIX: {os.environ.get('CONDA_PREFIX', '<unset>')}. "
@@ -25,7 +25,7 @@ def validate_interpreter() -> Path:
 
 
 def helper_environment() -> dict[str, str]:
-    """Only deterministic helper subprocesses receive these Harness settings."""
+    """Only deterministic helper subprocesses receive these HarnEX settings."""
     prefix = validate_interpreter()
     result = os.environ.copy()
     result["CONDA_PREFIX"] = str(prefix)

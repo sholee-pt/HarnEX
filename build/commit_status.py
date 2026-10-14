@@ -29,7 +29,7 @@ def main():
     request = urllib.request.Request(f'https://api.github.com/repos/{repository}/statuses/{sha}',
         data=json.dumps(payload).encode(), method='POST', headers={
             'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json',
-            'Content-Type': 'application/json', 'User-Agent': 'Harness-Codex-CI'})
+            'Content-Type': 'application/json', 'User-Agent': 'HarnEX-CI'})
     with urllib.request.urlopen(request, timeout=30) as response:
         response.read()
     print(payload['context'] + ': ' + state)

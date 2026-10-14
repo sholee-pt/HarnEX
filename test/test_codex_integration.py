@@ -77,7 +77,7 @@ class CodexIntegrationTests(unittest.TestCase):
         metadata.write_text(json.dumps(value))
         archive(self.bundle, self.archive)
         before = self.registry.value
-        with self.assertRaisesRegex(ValueError, 'retired Harness launcher'):
+        with self.assertRaisesRegex(ValueError, 'retired HarnEX launcher'):
             self.install()
         self.assertEqual(self.registry.value, before)
         self.assertIsNone(integration.read(self.data))

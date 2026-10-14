@@ -11,13 +11,13 @@ off. Left returns from adaptive Auto to maintenance without applying either choi
 harness remains in place. Explicit `--maintenance` / `--adaptive` flags skip their
 respective menu. JSON, redirected output, dry-run and install-only never prompt;
 `config` and `reset` preserve these choices unless explicit flags are supplied.
-Inspect or change them later with the commands below and `harness-codex routing
+Inspect or change them later with the commands below and `harnex routing
 --adaptive status|on|off`. Adaptive Auto is a separate option; it neither selects
 Auto in `/model` nor automatically judges task quality. Its live observation and
 selection path requires the Linux adapter; the Windows native package does not
 apply this advice. See [Auto advice support](routing.md#optional-outcome-based-auto-advice).
 
-`harness-codex status --project "선택한 프로젝트 경로"`는 저장된 설정과 자동 유지보수의
+`harnex status --project "선택한 프로젝트 경로"`는 저장된 설정과 자동 유지보수의
 현재 전제조건을 구분해 표시하는 오프라인 조회임. hook 정의 누락·수정·중복, 기록된
 trust 일치 개수, 활동 추적 미완료, 적용 marker, 미해결 변경 이력, 근거 문맥 부족,
 활동 중인 세션·자식, 토큰 예산, 최근 24시간 검토 횟수와 간격 대기를 확인하는 화면임.
@@ -31,13 +31,13 @@ Adaptive evidence의 on/off는 현재 `/model`의 Auto 선택과 별개이며, �
 포함하며 POSIX shell 또는 Windows PowerShell용 인용을 적용한 명령임.
 
 ```sh
-harness-codex init --goal-file PROJECT.md --maintenance suggest
-harness-codex maintenance --mode auto
-harness-codex maintenance
-harness-codex maintenance --json
-harness-codex maintenance --mode off
+harnex init --goal-file PROJECT.md --maintenance suggest
+harnex maintenance --mode auto
+harnex maintenance
+harnex maintenance --json
+harnex maintenance --mode off
 # Explicitly reset local concerns/session observations and disable maintenance:
-harness-codex maintenance clear --yes
+harnex maintenance clear --yes
 ```
 
 `suggest` collects narrowly identified concerns and displays one review notice per
@@ -79,7 +79,7 @@ receive no repeated policy text and do not trigger a review without eligible sig
 If the session or child tracking limit is reached, automatic changes stay paused
 even after recorded sessions finish: an unrecorded writer may still be running.
 After explicitly confirming that **all** native sessions and children for this
-project have stopped, run `harness-codex maintenance recover-session --session-ref all`.
+project have stopped, run `harnex maintenance recover-session --session-ref all`.
 Its confirmation resets tracking and defers an outstanding review; project files,
 concerns, observations and preferences are retained. Ordinary Stop/Interrupt events
 for unknown sessions do not consume tracking slots. Maintenance state migrates
@@ -147,10 +147,10 @@ limits. Neither runs a review without eligible concerns. The init menus do not
 change this policy. These settings never expand edit scope:
 
 ```sh
-harness-codex maintenance --schedule adaptive --max-reviews-per-day 2 \
+harnex maintenance --schedule adaptive --max-reviews-per-day 2 \
   --min-interval-seconds 300 --max-interval-seconds 86400 --max-review-seconds 180
-harness-codex maintenance --reported-token-budget 4000
-harness-codex maintenance --reported-token-budget 0
+harnex maintenance --reported-token-budget 4000
+harnex maintenance --reported-token-budget 0
 ```
 
 The optional reported-token budget pauses further reviews after an unmeasured
@@ -204,8 +204,8 @@ See the [generator maintenance protocol](../.agents/skills/harness/references/ma
 Maintenance status lists opaque activity markers when a session or child agent blocks a review. A crash can leave a marker behind if the native stop event never arrives. After checking that the selected native session **and all its child agents have stopped**, run:
 
 ```sh
-harness-codex maintenance --project PATH
-harness-codex maintenance --project PATH recover-session --session-ref REF
+harnex maintenance --project PATH
+harnex maintenance --project PATH recover-session --session-ref REF
 ```
 
 Confirm with Enter/`y`/`yes`, or cancel with `n`/`no`. This releases only that activity marker and its review lease; concerns, change history, other sessions and project files are retained. Use `--yes` only after making the same check in automation. Elapsed time alone never releases native writers. A pending file transaction or interrupted change still requires its separate recovery procedure.
@@ -215,12 +215,12 @@ Each automatic correction records an opaque change ID, before/after manifest rev
 Applied changes start as `observing`: instructions updated, effect not established. The next hooked request carries a one-time revision notice and change ID. Record an outcome only when it is explicitly related to that correction, with the revision actually used by the task. Known model, effort, task category and runtime identity are hashed into a context group; unknown context remains descriptive and cannot trigger a comparison. Multiple records of one work item count once. Two independent, externally reported adverse outcomes in one known context group pause further automatic changes (`review-required`); they do not prove causality or stop ordinary work. Positive reports never automatically become a measured quality/cost benefit.
 
 ```sh
-harness-codex maintenance --json
-harness-codex maintenance observe --change CHANGE_ID --revision REVISION \
+harnex maintenance --json
+harnex maintenance observe --change CHANGE_ID --revision REVISION \
   --observation WORK_ITEM_ID --outcome failed --source verification \
   --model OBSERVED_MODEL --effort OBSERVED_EFFORT --category testing --runtime OBSERVED_CODEX_VERSION
-harness-codex maintenance resolve --change CHANGE_ID --decision keep
-harness-codex maintenance resolve --change CHANGE_ID --decision rollback --plan REVIEWED_PRIOR_PLAN.json
+harnex maintenance resolve --change CHANGE_ID --decision keep
+harnex maintenance resolve --change CHANGE_ID --decision rollback --plan REVIEWED_PRIOR_PLAN.json
 ```
 
 `resolve` is an explicit review action. Rollback requires an independently reviewed plan restoring exactly the prior recorded skill bytes; no project backup is hidden in evaluation state. It refuses changed revisions, user edits, topology changes, observed live writers and pending transactions. Interrupted apply/rollback leaves an intent record that pauses new changes; recover any file transaction, wait for the review lease to expire, then explicitly resolve it. A completed rollback can close its intent without repeating writes. If explicit config has already replaced that revision, inspect it and use `keep` to close the prior record as `superseded`; rollback cannot overwrite the newer configuration. Without a prior plan, use explicit config review rather than guessing old content. The history retains at most 16 changes with 32 outcome records each; only reviewed, rolled-back or superseded entries can be retired to make space. Local state is bounded at 512 KiB, with oversized writes refused before replacing the previous record.

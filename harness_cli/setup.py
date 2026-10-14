@@ -21,7 +21,7 @@ def prepare_integration(args, source_root):
         return
     with ui.Progress('Preparing official Codex integration', compact=True):
         ui.report(install(args.data_dir, source_root), title='Codex integration')
-    print('Ready: launch codex in any project and enter /harness/ to choose Init or another management action.')
+    print('Ready: launch codex in any project and enter /harnex/ to choose Init or another management action.')
 
 
 def _pause_installer(paused: bool) -> None:
@@ -47,11 +47,13 @@ def _pause_installer(paused: bool) -> None:
 
 def choose(data_root: Path, bin_dir: Path, selection: str) -> tuple[str, dict | None]:
     root, binary = dist._storage_path(data_root), dist._storage_path(bin_dir)
+    if os.path.lexists(root / '.command-migration.json'):
+        dist.migrate_command(root)
     if os.path.lexists(root / '.entrypoint-migration.json'):
         from .installation_paths import repair_entrypoints
         repair_entrypoints(root)
     existing = dist.installed_status(root) if root.exists() and any(root.iterdir()) else None
-    traces = existing is not None or any(os.path.lexists(binary / name) for name in ('harness-codex', 'harness-codex.cmd'))
+    traces = existing is not None or any(os.path.lexists(binary / name) for name in ('harnex', 'harnex.cmd', 'harness-codex', 'harness-codex.cmd'))
     if os.name != 'nt':
         from .shell import START
         profile = dist._storage_path(user_home() / '.bashrc')
@@ -64,9 +66,9 @@ def choose(data_root: Path, bin_dir: Path, selection: str) -> tuple[str, dict | 
         return 'fresh', None
     if selection != 'ask':
         return selection, existing
-    message = ('\nAn existing Harness installation or PATH registration was found.\n'
+    message = ('\nAn existing HarnEX installation or PATH registration was found.\n'
                '  reuse  Keep its update preferences and verified installation.\n'
-               '  reset  Reset Harness update preferences, check cache and managed PATH registration.\n'
+               '  reset  Reset HarnEX update preferences, check cache and managed PATH registration.\n'
                '         Project harnesses and unrelated shell settings are preserved.\n'
                'Choose reuse/reset [reuse]; Ctrl+C cancels: ')
     try:

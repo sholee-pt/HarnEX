@@ -12,7 +12,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if ($Help) {
-    Write-Output 'Harness for Codex 0.12.0-beta Windows installer. Options: -CondaExe PATH, -CondaHome PATH, -DataDir PATH, -BinDir PATH, -AutoUpdate compatible|check|off, -Existing ask|reuse|reset, -NoModifyPath.'
+    Write-Output 'HarnEX 0.12.0-beta Windows installer. Options: -CondaExe PATH, -CondaHome PATH, -DataDir PATH, -BinDir PATH, -AutoUpdate compatible|check|off, -Existing ask|reuse|reset, -NoModifyPath.'
     return
 }
 if ($env:OS -ne 'Windows_NT' -or -not [Environment]::Is64BitProcess -or $env:PROCESSOR_ARCHITECTURE -ne 'AMD64') {
@@ -43,13 +43,13 @@ foreach ($directory in @($selectedData, $selectedBin, "$selectedData-runtime", $
 }
 $version = '0.12.0-beta'
 $name = "harness-codex-$version-windows.zip"
-$release = "https://github.com/sholee-pt/Harness-Codex/releases/download/v$version"
+$release = "https://github.com/sholee-pt/HarnEX/releases/download/v$version"
 $temporary = Join-Path ([IO.Path]::GetTempPath()) ('harness-codex-install-' + [guid]::NewGuid().ToString('N'))
 $temporary = [IO.Path]::GetFullPath($temporary)
 [void][IO.Directory]::CreateDirectory($temporary)
 try {
     $ProgressPreference = 'SilentlyContinue'
-    Write-Host "Downloading Harness for Codex $version..."
+    Write-Host "Downloading HarnEX $version..."
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
     try {
         Invoke-WebRequest -UseBasicParsing -TimeoutSec 300 -Uri "$release/$name" -OutFile (Join-Path $temporary $name)

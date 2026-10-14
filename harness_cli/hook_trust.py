@@ -179,9 +179,9 @@ def prepare(source_root, root, *, binary='codex', mode='auto'):
         expected = maintenance.hook_command(source_root)
         installed = maintenance.install_hooks(source_root)
         if mode == 'manual':
-            return {'status': 'manual-review-required', 'guidance': 'Use /hooks to review and trust the Harness handler.'}
+            return {'status': 'manual-review-required', 'guidance': 'Use /hooks to review and trust the HarnEX handler.'}
         from .project import _codex_command
-        with ui.Progress('Preparing Harness hook trust', compact=True) as progress:
+        with ui.Progress('Preparing HarnEX hook trust', compact=True) as progress:
             maintenance.probe_hook(expected, project_root(root))
             result = trust(_codex_command(binary), project_root(root), checked_path(installed['path']), expected, progress)
             result['executionCheck'] = 'passed'

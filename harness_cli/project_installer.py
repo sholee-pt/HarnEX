@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install the Harness generator inside an existing, explicitly selected folder.
+"""Install the HarnEX generator inside an existing, explicitly selected folder.
 
 Only .agents/skills/harness is owned by this installer. It never configures Git,
 the project harness, or a user-level skill location implicitly. An existing

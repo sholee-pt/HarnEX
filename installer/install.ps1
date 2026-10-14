@@ -13,7 +13,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if ($Help) {
-    Write-Output 'Install Harness for Codex on Windows x64. Options: -CondaExe PATH, -CondaHome PATH (isolated Miniforge), -DataDir PATH, -BinDir PATH, -AutoUpdate compatible|check|off, -Existing ask|reuse|reset, -NoModifyPath.'
+    Write-Output 'Install HarnEX on Windows x64. Options: -CondaExe PATH, -CondaHome PATH (isolated Miniforge), -DataDir PATH, -BinDir PATH, -AutoUpdate compatible|check|off, -Existing ask|reuse|reset, -NoModifyPath.'
     return
 }
 if ($env:OS -ne 'Windows_NT' -or -not [Environment]::Is64BitProcess -or $env:PROCESSOR_ARCHITECTURE -ne 'AMD64') {
@@ -26,7 +26,7 @@ if ($SourceRoot -and -not (Test-Path -LiteralPath (Join-Path $SourceRoot 'harnes
     $SourceRoot = Split-Path -Parent $SourceRoot
 }
 if (-not $SourceRoot -or -not (Test-Path -LiteralPath (Join-Path $SourceRoot 'harness.py') -PathType Leaf)) {
-    throw "Run install.ps1 from a complete Harness source archive. Resolved source: '$SourceRoot'; script directory: '$PSScriptRoot'."
+    throw "Run install.ps1 from a complete HarnEX source archive. Resolved source: '$SourceRoot'; script directory: '$PSScriptRoot'."
 }
 if (-not $DataDir) { $DataDir = Join-Path $env:LOCALAPPDATA 'HarnessCodex' }
 if (-not $BinDir) { $BinDir = Join-Path $env:LOCALAPPDATA 'Programs\HarnessCodex\bin' }
@@ -121,7 +121,7 @@ function Complete-HarnessStep {
     if ($liveProgress) { [HarnessInstallClock]::Stop() }
     Write-Host ("  OK  {0}: done ({1}s)" -f $installStep, [int]$stepClock.Elapsed.TotalSeconds) -ForegroundColor Green
 }
-Write-Host "`nHarness for Codex installer`n================================`nDetailed log: $installLog"
+Write-Host "`nHarnEX installer`n================================`nDetailed log: $installLog"
 Start-HarnessStep '[1/3] Checking installation tools'
 $ownedRuntime = $null
 $runtimeReference = Join-Path $DataDir 'runtime.json'
@@ -204,7 +204,7 @@ function Invoke-HarnessConda {
     }
 }
 Complete-HarnessStep
-Start-HarnessStep '[2/3] Preparing the isolated Harness environment'
+Start-HarnessStep '[2/3] Preparing the isolated HarnEX environment'
 $environmentJson = Invoke-HarnessConda info --json
 if ($condaExit -ne 0) { throw "Unable to inspect Conda environments (exit $condaExit)." }
 $environmentInfo = $environmentJson -join "`n" | ConvertFrom-Json
@@ -250,7 +250,7 @@ if ($existingEnvironments.Count -eq 0) {
     Invoke-HarnessConda create @environmentSelector --override-channels --channel conda-forge python=3.11 git --yes | Out-Null
     if ($condaExit -ne 0) { throw "Unable to create the harness Conda environment (exit $condaExit)." }
 } else {
-    Write-Host '      Reusing the existing Harness environment.'
+    Write-Host '      Reusing the existing HarnEX environment.'
     # A dedicated Git makes updates work even when the calling shell has no Git.
     Invoke-HarnessConda run --no-capture-output @environmentSelector git --version | Out-Null
     if ($condaExit -ne 0) {
@@ -261,7 +261,7 @@ if ($existingEnvironments.Count -eq 0) {
 }
 Complete-HarnessStep
 Start-HarnessStep '[3/3] Installing command and applying PATH preferences'
-if (-not $expectedEnvironment) { throw 'Unable to resolve the selected Harness environment.' }
+if (-not $expectedEnvironment) { throw 'Unable to resolve the selected HarnEX environment.' }
 $selectedPython = Join-Path $expectedEnvironment 'python.exe'
 Assert-HarnessPath $selectedPython
 if (-not (Test-Path -LiteralPath $selectedPython -PathType Leaf)) { throw "Selected environment has no Python: $selectedPython" }
@@ -273,7 +273,7 @@ if ($ownedRuntime) { $installArguments += @('--owned-runtime', $ownedRuntime) }
 if ($NoModifyPath) { $installArguments += '--no-modify-path' }
 try { $installOutput = Invoke-HarnessConda @installArguments }
 finally { $env:HARNESS_INSTALL_EXPECTED_PREFIX = $previousExpectedPrefix }
-if ($condaExit -ne 0) { throw "Harness installation failed (exit $condaExit)." }
+if ($condaExit -ne 0) { throw "HarnEX installation failed (exit $condaExit)." }
 if (-not $NoModifyPath) {
     if (-not @($env:Path -split ';' | Where-Object { $_.TrimEnd('\') -ieq $BinDir.TrimEnd('\') }).Count) {
         $env:Path = "$BinDir;$env:Path"
@@ -282,7 +282,7 @@ if (-not $NoModifyPath) {
 Complete-HarnessStep
 # Keep the CLI receipt contract intact; replay only its existing human summary.
 $installOutput | Where-Object { $_ -like 'Installed *' } | ForEach-Object { Write-Host $_ }
-if (-not $NoModifyPath) { Write-Host 'Ready in this PowerShell session: harness-codex --version' }
+if (-not $NoModifyPath) { Write-Host 'Ready in this PowerShell session: harnex --version' }
 Write-Host "Installation complete. Detailed log: $installLog"
 } catch {
     if ($liveProgress -and ('HarnessInstallClock' -as [type])) { [HarnessInstallClock]::Stop() }

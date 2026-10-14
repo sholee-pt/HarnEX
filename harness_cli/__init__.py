@@ -1,1 +1,1 @@
-"""Standalone command frontend for native project-local Harness workflows."""
+"""Standalone command frontend for native project-local HarnEX workflows."""

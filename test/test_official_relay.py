@@ -282,7 +282,7 @@ class UpdateTests(unittest.TestCase):
                 for path in new.rglob('*'):
                     if path.is_file():
                         bundle.add(path, arcname='harness-codex-0.23.0-beta/' + path.relative_to(new).as_posix())
-            value = {'name': 'harness-codex-0.23.0-beta-linux.tar.gz', 'url': 'https://api.github.com/repos/sholee-pt/Harness-Codex/releases/assets/1',
+            value = {'name': 'harness-codex-0.23.0-beta-linux.tar.gz', 'url': 'https://api.github.com/repos/sholee-pt/HarnEX/releases/assets/1',
                      'digest': 'sha256:' + hashlib.sha256(archive.read_bytes()).hexdigest(), 'size': archive.stat().st_size}
             selected = {'updateAvailable': True, 'availableVersion': '0.23.0-beta',
                         'release': {'tag_name': 'v0.23.0-beta', 'assets': [value]}}
@@ -437,7 +437,7 @@ for line in sys.stdin:
             def __init__(self):
                 self.queue, self.messages = asyncio.Queue(), []
                 self.queue.put_nowait({'id': 1, 'method': 'turn/start', 'params': {'threadId': 't1',
-                    'input': [{'type': 'text', 'text': '/harness/'}]}})
+                    'input': [{'type': 'text', 'text': '/harnex/'}]}})
             def __aiter__(self):
                 return self
             async def __anext__(self):

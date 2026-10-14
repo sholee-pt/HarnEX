@@ -15,14 +15,14 @@ import urllib.request
 from . import distribution as dist, native_package as package
 from .presentation import Progress
 
-API = 'https://api.github.com/repos/sholee-pt/Harness-Codex'
+API = 'https://api.github.com/repos/sholee-pt/HarnEX'
 
 
 def platform_key():
     if platform.machine().lower() not in {'amd64', 'x86_64'}:
-        raise ValueError('The extended native UI currently supports Linux/Windows x86_64. Use harness-codex init --no-codex-integration with a separately installed Codex on this architecture.')
+        raise ValueError('The extended native UI currently supports Linux/Windows x86_64. Use harnex init --no-codex-integration with a separately installed Codex on this architecture.')
     if sys.platform not in {'win32', 'linux'}:
-        raise ValueError('The extended native UI currently supports Linux/Windows x86_64. Use harness-codex init --no-codex-integration with a separately installed Codex on this platform.')
+        raise ValueError('The extended native UI currently supports Linux/Windows x86_64. Use harnex init --no-codex-integration with a separately installed Codex on this platform.')
     return ('windows-' if sys.platform == 'win32' else 'linux-') + 'x86_64'
 
 
@@ -33,7 +33,7 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 def _download(url, destination, limit, *, token=None):
     deadline = time.monotonic() + 300
-    headers = {'User-Agent': 'Harness-Codex-native-ui'}
+    headers = {'User-Agent': 'HarnEX-native-ui'}
     if token:
         if not url.startswith(API + '/releases/'):
             raise ValueError('Credentials are restricted to this GitHub release API')
@@ -72,7 +72,7 @@ def _private_assets(version):
     if response.returncode or not token:
         raise ValueError('Native UI download needs GitHub release access; configure an HTTPS credential or use --native-ui-archive PATH.')
     request = urllib.request.Request(API + '/releases/tags/v' + version,
-        headers={'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'User-Agent': 'Harness-Codex-native-ui'})
+        headers={'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'User-Agent': 'HarnEX-native-ui'})
     with urllib.request.build_opener(NoRedirect()).open(request, timeout=30) as incoming:
         payload = incoming.read(256 * 1024 + 1)
     if len(payload) > 256 * 1024:
@@ -82,7 +82,7 @@ def _private_assets(version):
 
 
 def fetch(version, name, temporary):
-    base = 'https://github.com/sholee-pt/Harness-Codex/releases/download/v' + version + '/'
+    base = 'https://github.com/sholee-pt/HarnEX/releases/download/v' + version + '/'
     sums, archive = temporary / 'SHA256SUMS', temporary / name
     token, assets = None, {}
     try:
@@ -115,7 +115,7 @@ def ensure(data_root, version, *, archive=None):
         if destination.exists():
             package.verify(destination, version, platform_name)
         else:
-            with Progress('Preparing the original Codex UI with Harness Auto'), tempfile.TemporaryDirectory(prefix='harness-native-ui-') as temporary:
+            with Progress('Preparing the original Codex UI with HarnEX Auto'), tempfile.TemporaryDirectory(prefix='harness-native-ui-') as temporary:
                 temporary = Path(temporary).resolve()
                 if archive is None:
                     archive = fetch(version, f'harness-codex-ui-{version}-{platform_name}.tar.gz', temporary)

@@ -144,7 +144,7 @@ class DashboardTests(unittest.TestCase):
     def test_next_commands_name_selected_project_from_another_directory(self):
         installer = project.load_installer(REPO)
         absent = project.project_status(REPO, self.root, installer)
-        self.assertEqual(shlex.split(absent['nextCommand']), ['harness-codex', 'init', '--project', str(self.root)])
+        self.assertEqual(shlex.split(absent['nextCommand']), ['harnex', 'init', '--project', str(self.root)])
         harness_apply.apply_application(harness_apply.build_application(self.root, minimal_plan(self.root)))
         before = Path.cwd()
         try:
@@ -155,7 +155,7 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(shlex.split(configured['nextCommand']), ['codex', '--cd', str(self.root)])
         (self.root / '.harness/transaction.json').write_text(json.dumps({'operation': 'remove'}))
         pending = project.project_status(REPO, self.root, installer)
-        self.assertEqual(shlex.split(pending['nextCommand']), ['harness-codex', 'remove', '--project', str(self.root), '--recover'])
+        self.assertEqual(shlex.split(pending['nextCommand']), ['harnex', 'remove', '--project', str(self.root), '--recover'])
 
     @unittest.skipIf(os.name == 'nt', 'POSIX shell execution')
     def test_posix_command_keeps_shell_metacharacters_literal(self):

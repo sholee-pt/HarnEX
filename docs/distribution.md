@@ -1,6 +1,6 @@
 # Release assets and verification
 
-Each [GitHub Release](https://github.com/sholee-pt/Harness-Codex/releases) contains installation instructions and version changes directly in its body.
+Each [GitHub Release](https://github.com/sholee-pt/HarnEX/releases) contains installation instructions and version changes directly in its body.
 
 | Asset | Platform | Purpose |
 | --- | --- | --- |
@@ -10,9 +10,9 @@ Each [GitHub Release](https://github.com/sholee-pt/Harness-Codex/releases) conta
 | `harness-codex-VERSION-windows.zip` | Windows, when separately published | Generator, management CLI and source installer |
 | `harness-codex-ui-VERSION-windows-x86_64.tar.gz` | Windows, when separately published | Matching native Codex package with Auto and Windows helpers |
 | `SHA256SUMS` | Published platforms | SHA-256 digests of the downloadable payloads and installers |
-| `build.json` | Published platforms | Exact Harness source commit and build metadata |
+| `build.json` | Published platforms | Exact HarnEX source commit and build metadata |
 
-The [v0.35.3-beta release](https://github.com/sholee-pt/Harness-Codex/releases/tag/v0.35.3-beta) contains all seven assets after successful [Linux](https://github.com/sholee-pt/Harness-Codex/actions/runs/38237923067) and [Windows](https://github.com/sholee-pt/Harness-Codex/actions/runs/38240636795) verification, from source commit `d3cf44d67cfbfb0084bee3a5bce87a3cd6971616`. Later documentation commits do not replace that release source.
+The [v0.35.3-beta release](https://github.com/sholee-pt/HarnEX/releases/tag/v0.35.3-beta) contains all seven assets after successful [Linux](https://github.com/sholee-pt/HarnEX/actions/runs/38237923067) and [Windows](https://github.com/sholee-pt/HarnEX/actions/runs/38240636795) verification, from source commit `d3cf44d67cfbfb0084bee3a5bce87a3cd6971616`. Later documentation commits do not replace that release source.
 
 On Linux, official Codex packages are fetched separately from `openai/codex` during integration setup and confirmed updates. They are neither rebuilt nor repackaged as Harness-versioned UI assets. Windows uses the separately built version-matched native package. Source snapshots generated automatically by GitHub are not the release installers.
 
@@ -34,6 +34,6 @@ Each Windows release requires explicit authorization for that release only. The 
 
 The Windows workflow ref selects a separate validation checkout. Its resolved commit must match `source_commit` outside `test/` and `.github/workflows/windows-release.yml`; only those validation changes may differ. Even a later documentation-only commit fails that identity guard. Check the resolved ref and diff before dispatch instead of assuming the newest development branch can supplement an older Linux release. Both checkouts must remain clean; the native executable is built from `source_commit`, not from the validation checkout.
 
-Interactive prelaunch checks display their progress. Native fallback guidance explicitly identifies both unavailable features—Harness Auto and `/harness/` management—and supplies terminal commands for the selected project. These messages do not change Codex arguments, settings or permissions, and do not add checks to help, automation or disabled update channels.
+Interactive prelaunch checks display their progress. Native fallback guidance explicitly identifies both unavailable features—HarnEX Auto and `/harnex/` management—and supplies terminal commands for the selected project. These messages do not change Codex arguments, settings or permissions, and do not add checks to help, automation or disabled update channels.
 
 The Linux workflow publishes `Harness / verification` and `Harness / release` commit statuses against its exact `GITHUB_SHA`. The Windows workflow publishes `Harness / Windows release` against the selected source commit. A release alone does not create a commit checkmark or transfer passing statuses to later commits. Cancelled, skipped or failed required jobs cannot produce a successful release status. After dispatch, provide the Actions link and stop; the repository owner checks progress. Do not poll, watch or schedule monitoring without a new request.

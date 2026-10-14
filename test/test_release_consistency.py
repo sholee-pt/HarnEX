@@ -27,7 +27,7 @@ import harness_transaction  # noqa: E402
 
 class ReleaseConsistencyTests(unittest.TestCase):
     def test_release_metadata_is_consistent(self) -> None:
-        self.assertEqual(harness_metadata.HARNESS_VERSION, "0.35.3-beta")
+        self.assertEqual(harness_metadata.HARNESS_VERSION, "0.36.0-beta")
         self.assertEqual(harness_metadata.AUTHORING_CONTRACT_VERSION, 3)
         self.assertEqual(harness_metadata.ARTIFACT_CONTRACT_VERSION, 2)
         self.assertIn('9.11', harness_metadata.ARTIFACT_COMPATIBLE_GENERATOR_VERSIONS)
@@ -77,9 +77,9 @@ class ReleaseConsistencyTests(unittest.TestCase):
         current = harness_metadata.HARNESS_VERSION
         self.assertIn('Version-v' + current.replace('-', '--'), readme)
         self.assertIn('git clone --branch v' + current, readme)
-        self.assertIn('| [`v' + current.replace('-beta', '‑beta') + '`](#harness-for-codex-v' + current.replace('.', '') + ')', versions)
-        self.assertIn('This branch contains Harness for Codex v' + current, agents)
-        self.assertEqual(workflow.splitlines()[0], 'name: Harness for Codex')
+        self.assertIn('| [`v' + current.replace('-beta', '‑beta') + '`](#harnex-v' + current.replace('.', '') + ')', versions)
+        self.assertIn('This branch contains HarnEX v' + current, agents)
+        self.assertEqual(workflow.splitlines()[0], 'name: HarnEX')
         self.assertIn("run-name: ${{ inputs.publish && 'Linux release' || 'Checks' }} · ${{ github.base_ref || github.ref_name }}", workflow)
         self.assertIn("github.ref == 'refs/heads/v" + current + "'", workflow)
         self.assertNotIn('\n  push:', workflow)

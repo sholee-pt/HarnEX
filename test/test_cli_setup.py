@@ -88,7 +88,7 @@ esac
         self.assertEqual(files(backups[0] / 'runtime'), before)
         self.assertTrue((self.prefix / 'conda-meta/history').is_file())
         self.assertFalse((self.runtime / '.harness-runtime-files.json').exists())
-        self.assertIn('Preserved incomplete Harness runtime:', result.stdout)
+        self.assertIn('Preserved incomplete HarnEX runtime:', result.stdout)
         self.assertIn(self.posix(backups[0] / 'runtime'), log)
         result, log = self.install()
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr + log)
@@ -127,7 +127,7 @@ esac
         self.assertEqual(result.returncode, 23, result.stdout + result.stderr + log)
         backup = next(self.base.glob('tool data-runtime.recovery.*'))
         self.assertEqual(files(backup / 'runtime'), before)
-        self.assertIn('Preserved incomplete Harness runtime:', result.stderr)
+        self.assertIn('Preserved incomplete HarnEX runtime:', result.stderr)
         self.assertNotIn('Installation complete.', result.stdout)
         self.assertFalse((self.base / 'tool data-runtime.bootstrap-lock').exists())
 
@@ -317,7 +317,7 @@ class ReinstallTests(unittest.TestCase):
         self.assertIsNone(status['branch'])
         self.assertEqual(status['auto_update'], 'off')
         self.assertEqual(status['version'], '0.11.0-beta')
-        self.assertEqual(status['repository'], 'git@github.com:sholee-pt/Harness-Codex.git')
+        self.assertEqual(status['repository'], 'git@github.com:sholee-pt/HarnEX.git')
 
     def test_noninteractive_choice_is_explicit_and_unknown_files_are_preserved(self):
         with mock.patch.object(sys.stdin, 'isatty', return_value=False), mock.patch('builtins.open', side_effect=OSError('no terminal')):

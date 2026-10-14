@@ -93,7 +93,7 @@ class EnvironmentTests(unittest.TestCase):
             args = SimpleNamespace(command="start", dry_run=False)
             with mock.patch.dict(os.environ, {"HARNESS_TOOL_HOME": str(data)}):
                 with mock.patch.object(dist, "launcher_status", return_value={"sourceRoot": str(current), "state": "current"}):
-                    with self.assertRaisesRegex(ValueError, "active Harness release changed"):
+                    with self.assertRaisesRegex(ValueError, "active HarnEX release changed"):
                         main._launcher_environment_gate(args, old)
 
     def test_codex_substitute_runs_actual_project_python_selected_on_path(self):

@@ -26,7 +26,7 @@ name: harness-retrieval
 description: Find relevant code with the project's explicitly enabled local Graft index when broad or repeated code navigation would otherwise require many source reads. Use ordinary source reads for small known edits.
 ---
 
-Use `harness-codex graft query "QUESTION" --project PROJECT_ROOT` only when code
+Use `harnex graft query "QUESTION" --project PROJECT_ROOT` only when code
 navigation benefits from a structural index. Read the returned relevant source
 before editing. Results are navigation hints, not complete dependency or behavior
 proof. Do not infer data contracts, test success or permission from a graph.

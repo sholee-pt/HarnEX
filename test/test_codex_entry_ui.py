@@ -80,11 +80,11 @@ class EntryUiTests(unittest.TestCase):
 
     def test_release_progress_precedes_both_probes_and_failure_is_not_success(self):
         def codex(*args, **kwargs):
-            self.assertIn('Checking Codex and Harness updates', self.output.getvalue())
+            self.assertIn('Checking Codex and HarnEX updates', self.output.getvalue())
             self.assertEqual(kwargs['timeout'], 5)
             raise TimeoutError('fixture unavailable')
         def harness(*args, **kwargs):
-            self.assertIn('Checking Codex and Harness updates', self.output.getvalue())
+            self.assertIn('Checking Codex and HarnEX updates', self.output.getvalue())
             return {'updateAvailable': False}
         with mock.patch.object(entry.dist, 'installed_status', return_value={'auto_update': 'compatible', 'branch': None}), \
              mock.patch.object(entry.official_codex, 'check', side_effect=codex), \
@@ -135,12 +135,12 @@ class EntryUiTests(unittest.TestCase):
                     _, compatible, execute = self.launch(args, native=kind == 'saved-native',
                         failure=ValueError('fixture unsupported capability') if kind == 'unsupported' else None)
                 output = self.output.getvalue()
-                self.assertIn('Harness Auto and /harness/ management are unavailable', output)
+                self.assertIn('HarnEX Auto and /harnex/ management are unavailable', output)
                 for action in ('status', 'init', 'config'):
-                    expected = presentation.command(['harness-codex', action, '--project', str(self.project)])
+                    expected = presentation.command(['harnex', action, '--project', str(self.project)])
                     self.assertIn(expected, output)
                     if os.name == 'posix':
-                        self.assertEqual(shlex.split(expected), ['harness-codex', action, '--project', str(self.project)])
+                        self.assertEqual(shlex.split(expected), ['harnex', action, '--project', str(self.project)])
                 expected_args = ['-c', 'check_for_update_on_startup=false', *args] if kind == 'unsupported' else args
                 self.assertEqual(execute.call_args.args[1], [str(self.root / 'codex'), *expected_args])
                 if kind != 'unsupported':
@@ -171,8 +171,8 @@ class EntryUiTests(unittest.TestCase):
     def test_native_install_offer_has_management_alternatives_without_applying_a_choice(self):
         with mock.patch.object(entry, 'choose', return_value=0):
             self.assertFalse(entry.choose_native_install('0.159.0', ValueError('fixture unsupported'), project=self.project))
-        self.assertIn('/harness/ management are unavailable', self.output.getvalue())
-        self.assertIn(presentation.command(['harness-codex', 'init', '--project', str(self.project)]), self.output.getvalue())
+        self.assertIn('/harnex/ management are unavailable', self.output.getvalue())
+        self.assertIn(presentation.command(['harnex', 'init', '--project', str(self.project)]), self.output.getvalue())
 
 
 if __name__ == '__main__':

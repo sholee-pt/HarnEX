@@ -96,7 +96,7 @@ def verify(root, version, platform):
             or value.get('schema') != 1 or value.get('version') != version or value.get('platform') != platform
             or value.get('upstreamCommit') != UPSTREAM or value.get('target') != TARGETS.get(platform)
             or not re.fullmatch('[0-9a-f]{64}', value.get('extensionSha256', ''))):
-        raise ValueError('Native UI package is incompatible with this Harness release')
+        raise ValueError('Native UI package is incompatible with this HarnEX release')
     files, directories = inventory(root)
     if files != value.get('files') or sorted(directories) != value.get('directories'):
         raise ValueError('Native UI package files differ from their receipt; preserved for inspection')

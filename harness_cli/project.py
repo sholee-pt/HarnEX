@@ -30,7 +30,7 @@ def register_project_commands(subparsers) -> None:
         "start": "Deprecated alias for new.",
         "doctor": "Check project files and activation contracts without launching Codex.",
         "status": "Show whether a generator and project harness already exist.",
-        "remove": "Preview or remove only unchanged Harness-owned project files.",
+        "remove": "Preview or remove only unchanged HarnEX-owned project files.",
         "reset": "Preview or remove the generated harness, then configure it afresh.",
     }
     for command, description in descriptions.items():
@@ -71,7 +71,7 @@ def register_project_commands(subparsers) -> None:
                                help="Reference a UTF-8 Markdown brief; no file-size limit and no full-text prompt copy.")
         if command == "init":
             parser.add_argument('--hook-trust', choices=('auto', 'manual'), default='auto',
-                                help='Register Harness maintenance hooks and trust their exact definitions through Codex (default: auto), even with maintenance/adaptive off. Manual leaves native trust unchanged.')
+                                help='Register HarnEX maintenance hooks and trust their exact definitions through Codex (default: auto), even with maintenance/adaptive off. Manual leaves native trust unchanged.')
             parser.add_argument("--dry-run", action="store_true",
                                 help="Preview generator installation; do not write or launch Codex.")
             parser.add_argument("--install-only", action="store_true",
@@ -80,8 +80,8 @@ def register_project_commands(subparsers) -> None:
             parser.add_argument("prompt", nargs="?", help="Optional initial task, supplied as one quoted argument.")
         if command in {'new', 'resume'}:
             parser.add_argument('--ui', choices=('native', 'harness'), default='native',
-                                help='Use the installed Codex (default), or its pinned original UI with the Harness Auto extension.')
-            parser.add_argument('--routing-profiles', type=Path, help='Optional JSON model preferences for the Harness UI.')
+                                help='Use the installed Codex (default), or its pinned original UI with the HarnEX Auto extension.')
+            parser.add_argument('--routing-profiles', type=Path, help='Optional JSON model preferences for the HarnEX UI.')
             parser.add_argument('--native-ui-archive', type=Path, help='Install a downloaded native UI release archive for --ui harness.')
         if command == "resume":
             parser.add_argument("session_id", nargs="?", help="Native Codex session ID or name; omit to open its picker.")
@@ -123,11 +123,11 @@ def _pending_transaction(root: Path, installer) -> str | None:
 def _assert_no_transaction(root: Path, installer) -> None:
     pending = _pending_transaction(root, installer)
     if pending in {"orphaned-removal-workspace", "orphaned-transaction-workspace"}:
-        raise ProjectError("Harness recovery data exists without its journal. Preserve the backup directory and review its ownership manually before configuration; automatic recovery cannot establish the original state.")
+        raise ProjectError("HarnEX recovery data exists without its journal. Preserve the backup directory and review its ownership manually before configuration; automatic recovery cannot establish the original state.")
     if pending == "removal-pending":
-        raise ProjectError("An interrupted removal must be recovered first. Run " + ui.command(["harness-codex", "remove", "--project", root, "--recover"]) + " to preview recovery, then add --yes.")
+        raise ProjectError("An interrupted removal must be recovered first. Run " + ui.command(["harnex", "remove", "--project", root, "--recover"]) + " to preview recovery, then add --yes.")
     if pending:
-        raise ProjectError("A project transaction is pending. Run " + ui.command(["harness-codex", "doctor", "--project", root]) + " and recover it before continuing.")
+        raise ProjectError("A project transaction is pending. Run " + ui.command(["harnex", "doctor", "--project", root]) + " and recover it before continuing.")
 
 
 def _goal_input(args, installer) -> str | None:
@@ -212,7 +212,7 @@ def _report(source_root: Path, root: Path, *, doctor: bool = False) -> tuple[int
     scripts = source_root / ".agents/skills/harness/scripts"
     helper = scripts / ("harness_doctor.py" if doctor else "validate_harness.py")
     if not helper.is_file():
-        raise ProjectError(f"The Harness installation is missing {helper.name}; reinstall the tool.")
+        raise ProjectError(f"The HarnEX installation is missing {helper.name}; reinstall the tool.")
     arguments = [sys.executable, "-B", str(helper)]
     arguments += ["--root", str(root)] if doctor else [str(root)]
     completed = subprocess.run(arguments, capture_output=True, text=True, encoding="utf-8", check=False,
@@ -320,8 +320,8 @@ def _check_existing(source_root: Path, root: Path, *, required: bool = False) ->
         return True
     ui.report(report, title='Project harness needs attention', error=True)
     raise ProjectError(
-        "The project harness is not ready. Run " + ui.command(["harness-codex", "doctor", "--project", root]) + " and resolve its findings; "
-        "use harness-codex init for a new installation or config for a supported upgrade."
+        "The project harness is not ready. Run " + ui.command(["harnex", "doctor", "--project", root]) + " and resolve its findings; "
+        "use harnex init for a new installation or config for a supported upgrade."
     )
 
 
@@ -363,8 +363,8 @@ def project_status(source_root: Path, root: Path, installer) -> dict:
             result["errors"].append("Recovery data exists without its journal; preserve it for manual ownership review.")
             result["nextCommand"] = None
         else:
-            result["nextCommand"] = ui.command(["harness-codex", "remove", "--project", root, "--recover"] if pending == "removal-pending"
-                                               else ["harness-codex", "doctor", "--project", root])
+            result["nextCommand"] = ui.command(["harnex", "remove", "--project", root, "--recover"] if pending == "removal-pending"
+                                               else ["harnex", "doctor", "--project", root])
         return result
     if result["harnessPresent"]:
         code, report = _report(source_root, root)
@@ -392,9 +392,9 @@ def project_status(source_root: Path, root: Path, installer) -> dict:
     can_reread = (result["state"] == "stale-evidence"
                   and _only_stale_evidence(report, root=root, source_root=source_root))
     result["nextCommand"] = ui.command(["codex", "--cd", root] if result["state"] == "configured" or can_reread
-                                      else ["harness-codex", "config", "--project", root] if result["state"] in {"generator-only", "stale-evidence", "upgrade-required"}
-                                      else ["harness-codex", "init", "--project", root] if result["state"] == "absent"
-                                      else ["harness-codex", "doctor", "--project", root])
+                                      else ["harnex", "config", "--project", root] if result["state"] in {"generator-only", "stale-evidence", "upgrade-required"}
+                                      else ["harnex", "init", "--project", root] if result["state"] == "absent"
+                                      else ["harnex", "doctor", "--project", root])
     if result["state"] == "stale-evidence":
         result["guidance"] = (
             "New conversations can re-read changed source without regenerating the harness. Review configuration only if responsibilities or verification risks changed."
@@ -415,9 +415,9 @@ def _configuration_prompt(goal: str | None, *, context: str | None = None) -> st
         "After configuration, explain the validation result. Confirm whether the new native components are available "
         "before using them; if they are not visible, direct the user to a fresh native codex session."
         " The CLI maintains .harness/GUIDE.md as the single project harness guide. "
-        "Do not create dated/versioned Harness guide copies or edit that CLI-owned guide; "
+        "Do not create dated/versioned HarnEX guide copies or edit that CLI-owned guide; "
         "keep project-specific routing instructions in the managed project harness."
-        " Run bundled Python helpers through harness-codex helper SCRIPT_NAME (without .py); "
+        " Run bundled Python helpers through harnex helper SCRIPT_NAME (without .py); "
         "this selects the installed interpreter without activating or changing the project's environment. "
         "For older generator references, replace conda run -n harness python <skill-root>/scripts/SCRIPT_NAME.py "
         "with that helper command."
@@ -433,7 +433,7 @@ def _configuration_prompt(goal: str | None, *, context: str | None = None) -> st
 
 def _compat_conversation(args):
     """One-release forwarding only: no project validation, metadata query or injected turn."""
-    print(f"'harness-codex {args.command}' is deprecated. Run 'codex"
+    print(f"'harnex {args.command}' is deprecated. Run 'codex"
           + (" resume" if args.command == 'resume' else "")
           + "' directly from the configured project.", file=sys.stderr)
     command = _codex_command(args.codex_binary)
@@ -479,7 +479,7 @@ def _configure_retrieval(args, source_root, root):
         ui.report(report, title='Graft retrieval')
     except (OSError, ValueError, subprocess.SubprocessError) as exc:
         ui.report({'state': 'unavailable', 'guidance': 'The project harness remains usable with ordinary code search.',
-                   'warnings': [str(exc), 'Retry with harness-codex graft enable --project PATH.']}, title='Graft retrieval', error=True)
+                   'warnings': [str(exc), 'Retry with harnex graft enable --project PATH.']}, title='Graft retrieval', error=True)
         return
     if args.command == 'init' and report.get('state') == 'enabled':
         from .jev import automatic as automatic_jev
@@ -491,7 +491,7 @@ def _configure_retrieval(args, source_root, root):
                 ui.report(login(result['model'], interactive=not getattr(args, 'json', False)), title='Jev authentication')
         except (OSError, ValueError) as exc:
             ui.report({'state': 'unavailable', 'guidance': 'Graft and ordinary code search remain available.',
-                       'warnings': [str(exc), 'Retry with harness-codex jev enable --project PATH.']}, title='Jev advice', error=True)
+                       'warnings': [str(exc), 'Retry with harnex jev enable --project PATH.']}, title='Jev advice', error=True)
 
 
 def _launch(command: list[str], root: Path, prompt: str, *, settings: str = 'native', environment=None) -> int:
@@ -504,7 +504,7 @@ def _launch(command: list[str], root: Path, prompt: str, *, settings: str = 'nat
         arguments.append(prompt)
     if os.name == 'nt' and len(subprocess.list2cmdline(arguments).encode('utf-16-le')) // 2 + 1 > 32767:
         raise ProjectError('The combined native command exceeds the Windows command-line limit.')
-    print("Opening interactive Codex configuration. Exit Codex to return to Harness.", flush=True)
+    print("Opening interactive Codex configuration. Exit Codex to return to HarnEX.", flush=True)
     try:
         result = subprocess.run(arguments, cwd=root, check=False, env=codex_environment() if environment is None else environment)
     except KeyboardInterrupt:
@@ -545,7 +545,7 @@ def _finish_configuration(source_root: Path, root: Path, command: list[str], goa
     else:
         status = _launch(command, root, prompt, settings=getattr(args, 'settings', 'native'))
     if status:
-        print(f"Configuration {'interrupted' if status == 130 else 'stopped'}; completion has not been confirmed. Run " + ui.command(['harness-codex', 'status', '--project', root]) + '.',
+        print(f"Configuration {'interrupted' if status == 130 else 'stopped'}; completion has not been confirmed. Run " + ui.command(['harnex', 'status', '--project', root]) + '.',
               file=sys.stderr)
         return status
     if not os.path.lexists(root / '.harness/manifest.json'):
@@ -554,7 +554,7 @@ def _finish_configuration(source_root: Path, root: Path, command: list[str], goa
             outcome.show_resume(root)
         state = project_status(source_root, root, load_installer(source_root))
         ui.report(state, title='Configuration incomplete', error=True)
-        print('A complete project harness was not created. Continue with ' + ui.command(['harness-codex', 'config', '--project', root]) + '.', file=sys.stderr)
+        print('A complete project harness was not created. Continue with ' + ui.command(['harnex', 'config', '--project', root]) + '.', file=sys.stderr)
         return 1
     with ui.Progress('[3/3] Validate project harness files', compact=True) as progress:
         status, report = _report(source_root, root)
@@ -565,7 +565,7 @@ def _finish_configuration(source_root: Path, root: Path, command: list[str], goa
             outcome.show_details()
             outcome.show_resume(root)
         ui.report(report, title='Configuration needs attention', error=True)
-        print("Codex exited, but a valid project harness was not confirmed. Run " + ui.command(['harness-codex', 'config', '--project', root]) + " to continue.",
+        print("Codex exited, but a valid project harness was not confirmed. Run " + ui.command(['harnex', 'config', '--project', root]) + " to continue.",
               file=sys.stderr)
         return status or 1
     if outcome and args.details:
@@ -633,9 +633,9 @@ def run_project_command(args: argparse.Namespace, *, source_root: Path) -> int:
                 existing_status = project_status(source_root, root, installer)
                 print(f"A project harness already exists ({existing_status['state']}).")
                 if existing_status["state"] == "configured":
-                    print("Use codex to work, harness-codex config to review it, or reset/remove to replace or remove its owned files.")
+                    print("Use codex to work, harnex config to review it, or reset/remove to replace or remove its owned files.")
                 else:
-                    print("Review harness-codex status/doctor before use. For a supported upgrade or stale evidence, supply --goal/--goal-file to init for a reviewed update.")
+                    print("Review harnex status/doctor before use. For a supported upgrade or stale evidence, supply --goal/--goal-file to init for a reviewed update.")
                 if args._existing_init_noop:
                     from .project_preferences import configure
                     configure(args, source_root, root)
@@ -670,7 +670,7 @@ def run_project_command(args: argparse.Namespace, *, source_root: Path) -> int:
                 print("Dry-run only: no generator files were written and Codex was not launched.")
                 return 0
             if args.install_only:
-                print("Generator installed. This command did not configure the project harness. Run " + ui.command(['harness-codex', 'config', '--project', root]) + " in a terminal.")
+                print("Generator installed. This command did not configure the project harness. Run " + ui.command(['harnex', 'config', '--project', root]) + " in a terminal.")
                 return 0
             return _finish_configuration(source_root, root, command, args._goal_text, args=args)
         if args.command == "configure":
@@ -679,7 +679,7 @@ def run_project_command(args: argparse.Namespace, *, source_root: Path) -> int:
             _check_existing(source_root, root)
             destination = root / ".agents/skills/harness"
             if not (destination / "SKILL.md").is_file():
-                raise ProjectError("The generator is not installed. Run " + ui.command(['harness-codex', 'init', '--project', root]) + " first.")
+                raise ProjectError("The generator is not installed. Run " + ui.command(['harnex', 'init', '--project', root]) + " first.")
             installation = installer.install(root, source=source, dry_run=True)
             if installation["writes"] or installation["removes"] or installation["directoriesCreated"]:
                 print('Updating the owned project generator before reviewing the existing harness.')
@@ -718,13 +718,13 @@ def run_project_command(args: argparse.Namespace, *, source_root: Path) -> int:
             report = lifecycle.remove_project(root, source_root=source_root, dry_run=False)
             ui.report(report, title='Previous project harness removal')
             if report.get("recoveryRequired"):
-                raise ProjectError("Removal committed but cleanup remains pending. Run " + ui.command(['harness-codex', 'remove', '--project', root, '--recover']) + ", then add --yes; run " + ui.command(['harness-codex', 'config', '--project', root]) + " after recovery.")
+                raise ProjectError("Removal committed but cleanup remains pending. Run " + ui.command(['harnex', 'remove', '--project', root, '--recover']) + ", then add --yes; run " + ui.command(['harnex', 'config', '--project', root]) + " after recovery.")
             _assert_no_transaction(root, installer)
-            print("Previous generated harness removed. Starting fresh configuration; if Codex stops early, use " + ui.command(['harness-codex', 'config', '--project', root]) + " to continue.")
+            print("Previous generated harness removed. Starting fresh configuration; if Codex stops early, use " + ui.command(['harnex', 'config', '--project', root]) + " to continue.")
             return _finish_configuration(source_root, root, command, args._goal_text, args=args)
         raise ProjectError(f"Unknown project command: {args.command}")
     except KeyboardInterrupt:
-        print("Harness interrupted.", file=sys.stderr)
+        print("HarnEX interrupted.", file=sys.stderr)
         return 130
     except (OSError, ValueError) as exc:
         print(f"harness: {exc}", file=sys.stderr)
