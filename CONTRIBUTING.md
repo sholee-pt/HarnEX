@@ -4,7 +4,7 @@ Changes should keep HarnEX small, runtime-native, and safe to rerun. See the lic
 
 ## Branches
 
-- HarnEX development branches use `vX.Y.Z-beta`, with tags such as `v0.36.3-beta`. These are HarnEX versions, not Codex product versions.
+- HarnEX development branches use `vX.Y.Z-beta`, with tags such as `v0.36.4-beta`. These are HarnEX versions, not Codex product versions.
 - This repository contains the Codex edition only.
 - X marks major or large-scale changes; Y covers minor features, improvements, refactoring and optimization; Z covers bug fixes. Explanatory documentation-only changes do not increment the version.
 - Start a new version branch from the latest verified release branch. See [versioning](docs/versioning.md) for the current policy and historical label migrations.
@@ -75,11 +75,11 @@ Linux integration checks run in the manual Linux workflow. A separately authoriz
 
 ```bash
 conda run -n harness python test/integration/prepare_release_baselines.py --output /tmp/harness-baselines
-conda run -n harness python test/integration/verify_cli_upgrade.py --baseline /tmp/harness-baselines/v0362 --output /tmp/cli-upgrade.json
-conda run -n harness python test/integration/verify_release_upgrade.py --baseline /tmp/harness-baselines/v0362 --output /tmp/project-upgrade.json
+conda run -n harness python test/integration/verify_cli_upgrade.py --baseline /tmp/harness-baselines/v0363 --output /tmp/cli-upgrade.json
+conda run -n harness python test/integration/verify_release_upgrade.py --baseline /tmp/harness-baselines/v0363 --output /tmp/project-upgrade.json
 ```
 
-Release comparison runs only against the immediately preceding version baseline (v0.36.2-beta, `9ef2b74f18b7496430771a3608bf1b71b563ca56`), defined in [prepare_release_baselines.py](test/integration/prepare_release_baselines.py). CI does not recreate the entire historical version matrix. Functional regression tests still check supported contracts and failure cases. Add an older source comparison only for a concrete compatibility defect that requires it.
+Release comparison runs only against the immediately preceding version baseline (v0.36.3-beta, `5d563a91b7f547cd87f9cf942cfbcfdbca937d75`), defined in [prepare_release_baselines.py](test/integration/prepare_release_baselines.py). CI does not recreate the entire historical version matrix. Functional regression tests still check supported contracts and failure cases. Add an older source comparison only for a concrete compatibility defect that requires it.
 
 Parser differential checks require the pinned optional `test/requirements-validation.txt`. Cold installer checks download Miniforge and create an isolated environment; the Windows registry/cold check is restricted to disposable CI runners. These are distinct from unit tests and must not run implicitly during unittest discovery.
 

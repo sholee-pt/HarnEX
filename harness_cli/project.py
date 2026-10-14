@@ -339,24 +339,32 @@ def _has_router_content(router: Path, installer) -> bool:
     return False
 
 
+def _generator_status(source_root: Path, root: Path, installer) -> dict:
+    result = {"state": "absent", "errors": []}
+    destination = installer.checked_path(root / ".agents/skills/harness")
+    if os.path.lexists(destination):
+        try:
+            if destination == source_root / ".agents/skills/harness":
+                result["state"] = "source-checkout"
+            else:
+                entries = installer.snapshot(destination)
+                managed = installer.read_receipt(entries)
+                result["state"] = "installed" if managed else "absent"
+        except (OSError, ValueError) as exc:
+            result["state"] = "invalid-or-unowned"
+            result["errors"].append(str(exc))
+    return result
+
+
 def project_status(source_root: Path, root: Path, installer) -> dict:
     """Distinguish a copied generator from a configured project harness."""
     result = {"runtime": "codex", "state": "absent", "generator": "absent", "harnessPresent": False, "errors": []}
     pending = _pending_transaction(root, installer)
     manifest = installer.checked_path(root / ".harness/manifest.json")
     result["harnessPresent"] = os.path.lexists(manifest)
-    destination = installer.checked_path(root / ".agents/skills/harness")
-    if os.path.lexists(destination):
-        try:
-            if destination == source_root / ".agents/skills/harness":
-                result["generator"] = "source-checkout"
-            else:
-                entries = installer.snapshot(destination)
-                managed = installer.read_receipt(entries)
-                result["generator"] = "installed" if managed else "absent"
-        except (OSError, ValueError) as exc:
-            result["generator"] = "invalid-or-unowned"
-            result["errors"].append(str(exc))
+    generator = _generator_status(source_root, root, installer)
+    result["generator"] = generator['state']
+    result["errors"].extend(generator['errors'])
     if pending:
         result["state"] = pending
         if pending in {"orphaned-removal-workspace", "orphaned-transaction-workspace"}:
@@ -619,11 +627,16 @@ def run_project_command(args: argparse.Namespace, *, source_root: Path) -> int:
                                             "orphaned-removal-workspace", "orphaned-transaction-workspace"} else 0
         if args.command == "doctor":
             status, report = _report(source_root, root, doctor=True)
+            report['projectGenerator'] = _generator_status(source_root, root, installer)
+            if report['projectGenerator']['state'] == 'invalid-or-unowned':
+                status, report['valid'] = 1, False
+                report['errors'].extend(report['projectGenerator']['errors'])
             from .codex_integration import status as integration_status
             from .main import default_data_root
             report['codexIntegration'] = integration_status(default_data_root())
             if report['codexIntegration']['state'] == 'invalid':
-                status = 1
+                status, report['valid'] = 1, False
+                report['errors'].append('Codex integration: ' + report['codexIntegration']['error'])
             if hasattr(args, "_launcher_environment_status"):
                 report["cliLauncher"] = args._launcher_environment_status
             ui.report(report, title='Project harness diagnosis')
@@ -633,6 +646,9 @@ def run_project_command(args: argparse.Namespace, *, source_root: Path) -> int:
             existing = os.path.lexists(root / ".harness/manifest.json")
             if existing:
                 existing_status = project_status(source_root, root, installer)
+                if existing_status['state'] == 'invalid':
+                    ui.report(existing_status, title='Project harness needs attention', error=True)
+                    raise ProjectError('Existing project files failed validation; inspect harnex status/doctor and resolve the findings before retrying init.')
                 print(f"A project harness already exists ({existing_status['state']}).")
                 if existing_status["state"] == "configured":
                     print("Use codex to work, harnex config to review it, or reset/remove to replace or remove its owned files.")

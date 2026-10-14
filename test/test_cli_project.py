@@ -126,6 +126,44 @@ class ProjectCliTests(unittest.TestCase):
             self.assertEqual(preferences.call_count, 2)
             self.assertIn('harnex routing --adaptive', (self.root / '.harness/GUIDE.md').read_text())
 
+    def test_existing_init_refuses_modified_generator_before_preferences_or_integration(self):
+        self.assertEqual(self.run_cli('init', '--install-only')[0], 0)
+        self.generate()
+        (self.root / '.agents/skills/harness/SKILL.md').write_text('User changes to preserve.', encoding='utf-8')
+        before = snapshot(self.root)
+        with mock.patch('harness_cli.project_preferences.configure') as preferences, \
+                mock.patch.object(project, '_configure_integration') as integration, \
+                mock.patch.object(project, '_configure_retrieval') as retrieval:
+            code, out, err = self.run_cli('init')
+        self.assertEqual(code, 1)
+        self.assertIn('failed validation', err)
+        preferences.assert_not_called()
+        integration.assert_not_called()
+        retrieval.assert_not_called()
+        self.assertEqual(snapshot(self.root), before)
+        self.codex.assert_not_called()
+
+    def test_doctor_reports_generator_and_integration_failures_in_validity_and_exit_status(self):
+        self.assertEqual(self.run_cli('init', '--install-only')[0], 0)
+        self.generate()
+        with mock.patch('harness_cli.codex_integration.status', return_value={'state': 'invalid', 'error': 'Modified integration'}):
+            code, out, err = self.run_cli('doctor', tty=False)
+        report = json.loads(out)
+        self.assertEqual(code, 1, err)
+        self.assertFalse(report['valid'])
+        self.assertIn('Codex integration: Modified integration', report['errors'])
+        (self.root / '.agents/skills/harness/SKILL.md').write_text('User changes to preserve.', encoding='utf-8')
+        before = snapshot(self.root)
+        with mock.patch('harness_cli.codex_integration.status', return_value={'state': 'absent'}):
+            code, out, err = self.run_cli('doctor', tty=False)
+        report = json.loads(out)
+        self.assertEqual(code, 1, err)
+        self.assertFalse(report['valid'])
+        self.assertEqual(report['projectGenerator']['state'], 'invalid-or-unowned')
+        self.assertTrue(report['errors'])
+        self.assertEqual(snapshot(self.root), before)
+        self.codex.assert_not_called()
+
     def test_dry_run_does_not_need_codex_or_terminal_and_does_not_write(self):
         (self.root / "user.txt").write_text("keep", encoding="utf-8")
         before = snapshot(self.root)

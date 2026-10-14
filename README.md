@@ -5,8 +5,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/sholee-pt/HarnEX/tree/v0.36.3-beta"><img src="https://img.shields.io/badge/Version-v0.36.3--beta-2563EB.svg?style=flat-square" alt="Version: v0.36.3-beta"></a>
-  <a href="https://github.com/sholee-pt/HarnEX/actions/workflows/codex-beta.yml"><img src="https://github.com/sholee-pt/HarnEX/actions/workflows/codex-beta.yml/badge.svg?branch=v0.36.3-beta&amp;event=workflow_dispatch" alt="Linux verification and release status"></a>
+  <a href="https://github.com/sholee-pt/HarnEX/tree/v0.36.4-beta"><img src="https://img.shields.io/badge/Version-v0.36.4--beta-2563EB.svg?style=flat-square" alt="Version: v0.36.4-beta"></a>
+  <a href="https://github.com/sholee-pt/HarnEX/actions/workflows/codex-beta.yml"><img src="https://github.com/sholee-pt/HarnEX/actions/workflows/codex-beta.yml/badge.svg?branch=v0.36.4-beta&amp;event=workflow_dispatch" alt="Linux verification and release status"></a>
   <a href="#agent-editions"><img src=".github/badges/agent-codex.svg" alt="Agent: Codex"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-64748B.svg?style=flat-square" alt="License: Apache 2.0"></a>
 </p>
@@ -37,7 +37,7 @@ Behind that experience, HarnEX brings its own project-analysis, orchestration an
 
 Windows uses a separate native package and terminal management commands; it does not yet provide Linux's in-conversation management adapter. Routing rules and structural checks do not establish measured cost or quality gains. See [architecture](docs/architecture.md), [management](docs/management.md) and [routing](docs/routing.md).
 
-**Latest changes:** v0.36.3-beta skips the reuse/reset prompt when only shared PATH registration remains after uninstall. It also includes the v0.36.2-beta migration for recognized pre-rename Graft settings; see [retrieval compatibility](docs/retrieval.md).
+**Latest development changes:** v0.36.4-beta fixes platform release discovery, resumed-model validation and repeated init after project generator changes. It is not yet published; the installer below remains pinned to v0.36.3-beta, which skips reuse/reset when only shared PATH registration remains. Recognized pre-rename Graft settings remain supported; see [retrieval compatibility](docs/retrieval.md).
 
 **Beta releases:** Linux **[v0.36.3-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.3-beta)** is published with the `harnex` command and `/harnex/` controls. No Windows assets are currently listed in the published releases. The previously verified v0.35.3-beta Windows release is no longer available at its release URL.
 
@@ -54,10 +54,10 @@ harnex --version
 
 Previous releases retain their version tags and installation commands on the [Releases page](https://github.com/sholee-pt/HarnEX/releases). Starting with v0.36.0-beta, standalone installers are named `install_harnex.sh` and `install_harnex.ps1`; use them only after the corresponding platform assets are published.
 
-For source installation or development, clone the **v0.36.3-beta** branch:
+For source installation or development, clone the **v0.36.4-beta** branch:
 
 ```bash
-git clone --branch v0.36.3-beta --single-branch https://github.com/sholee-pt/HarnEX.git HarnEX
+git clone --branch v0.36.4-beta --single-branch https://github.com/sholee-pt/HarnEX.git HarnEX
 bash HarnEX/installer/install.sh
 harnex --version
 ```
@@ -71,12 +71,12 @@ Supports Linux x86_64 and aarch64. Source cloning requires Git; installation req
 **Windows x86_64:** No downloadable Windows release is currently available on the [Releases page](https://github.com/sholee-pt/HarnEX/releases). To preview the HarnEX management CLI from source, run in 64-bit PowerShell under your normal script execution policy:
 
 ```powershell
-git clone --branch v0.36.3-beta --single-branch https://github.com/sholee-pt/HarnEX.git HarnEX
+git clone --branch v0.36.4-beta --single-branch https://github.com/sholee-pt/HarnEX.git HarnEX
 & ./HarnEX/installer/install.ps1
 harnex --version
 ```
 
-The matching v0.36.3-beta Windows native package has not been published. Full Windows integration requires that separate release; source installation alone does not provide it. Existing installations can retain their verified Windows package while waiting for a compatible published update.
+The matching v0.36.4-beta Windows native package has not been published. Full Windows integration requires that separate release; source installation alone does not provide it. Existing installations can retain their verified Windows package while waiting for a compatible published update.
 
 When a Windows release is available, its standalone installer verifies the ZIP, prepares an isolated Python 3.11 environment and Git, and registers the command in user PATH. First project setup requires an already installed Codex CLI with working account/provider access: HarnEX runs that CLI before installing its own Windows integration. Use an interactive PowerShell terminal. If `codex` resolves to a `.cmd` or `.bat` wrapper, select the actual native `codex.exe` with `--codex-binary`; batch wrappers are rejected. The following full integration example requires matching HarnEX Windows assets to be published first. Replace its paths with your project, existing Markdown brief and native executable:
 
@@ -88,7 +88,7 @@ codex --cd 'C:\path\to\project'
 
 After successful project configuration, `init/config` downloads the matching Windows native package with Auto and Windows helpers. This is separate from Linux's official-package adapter: the `/harnex/` management menu, independent official Codex updates and observed-outcome Auto advice below apply to Linux. Use terminal `harnex` commands on Windows. Graft automatic setup and persistent Jev login remain Linux-only. Windows publication requires separate authorization and validation for each release; future Linux releases do not imply Windows assets. From v0.36.1-beta, release-channel updates select only releases with complete assets for the current OS and architecture. Older installed updaters still require you to confirm the target's Windows files before accepting an update. See [Windows setup and updates](docs/installation.md#windows-setup-and-updates).
 
-When migrating from 0.10.0-beta, run this installer once: its updater cannot discover the new unprefixed branches. If a verified installation exists, choose **`reuse`** to retain tool preferences or **`reset`** to reset HarnEX update preferences, its check cache and managed PATH registration. Project harnesses and unrelated settings are preserved. Shared PATH registration alone does not trigger this choice. Unattended installation accepts `--existing reuse|reset` on Linux or `-Existing reuse|reset` on Windows. See [installation options](https://github.com/sholee-pt/HarnEX/blob/v0.36.3-beta/docs/installation.md).
+When migrating from 0.10.0-beta, run this installer once: its updater cannot discover the new unprefixed branches. If a verified installation exists, choose **`reuse`** to retain tool preferences or **`reset`** to reset HarnEX update preferences, its check cache and managed PATH registration. Project harnesses and unrelated settings are preserved. Shared PATH registration alone does not trigger this choice. Unattended installation accepts `--existing reuse|reset` on Linux or `-Existing reuse|reset` on Windows. See [installation options](https://github.com/sholee-pt/HarnEX/blob/v0.36.4-beta/docs/installation.md).
 
 ## Quick Start
 
@@ -120,7 +120,7 @@ codex resume --last
 
 On Linux, `init` also prepares local Graft retrieval and enables Jev shadow advice automatically. The first setup downloads Graft's isolated runtime; subsequent projects reuse it. If no TypeSafe key is available, init guides you to its key page and accepts hidden input once, saving it for later projects without shell exports or restart. A newly entered key uses one small authentication request; existing credentials make no init API call. You can skip login and continue ordinary retrieval. Eligible Jev queries may send bounded code snippets to TypeSafe. Use `--retrieval off` to skip both setups, or `harnex jev disable` to keep only local retrieval. Explicit opt-outs survive repeated init. See [retrieval controls](docs/retrieval.md) and [Jev authentication and behavior](docs/jev.md).
 
-Choose **Codex defaults** or **Manual** with the arrow keys and Enter. Codex defaults uses the recommended model and reasoning from your Codex catalog for configuration; it does not enable per-request HarnEX Auto routing. Manual offers the available models, reasoning levels and permissions. `--settings auto|manual|native` selects a mode directly. Three concise stages show configuration progress and file validation. Questions and approvals stay visible. See [session settings](docs/sessions.md#session-settings).
+Choose **Codex defaults**, **Manual** or **Keep native settings** with the arrow keys and Enter. Codex defaults uses the recommended model and reasoning from your Codex catalog for configuration; it preserves supported saved choices when resuming and does not enable per-request HarnEX Auto routing. Manual offers the available models, reasoning levels and permissions. Keep native settings skips model discovery and adds no model, reasoning or permission overrides. `--settings auto|manual|native` selects a mode directly. Three concise stages show configuration progress and file validation. Questions and approvals stay visible. See [session settings](docs/sessions.md#session-settings).
 
 After successful setup, interactive `init` offers two project preferences: **maintenance** (`off`, `suggest`, `auto`) and **observed-outcome advice for Auto** (`off`, `on`). Each menu explains its effect; Enter keeps the current setting. New projects start with both off. Maintenance reviews can use conversation tokens; local Auto advice makes no extra model call and needs recorded quality feedback. Its observation and selection path requires the Linux adapter; enabling the preference does not add it to the Windows native package. Change either later with `harnex maintenance --mode suggest` or `harnex routing --adaptive on`. These commands and status checks are also listed in `.harness/GUIDE.md`. See [maintenance](docs/maintenance.md) and [Auto advice](docs/routing.md#optional-outcome-based-auto-advice).
 
@@ -228,19 +228,19 @@ After reinstalling, run `status` in a project to recognize its retained harness.
 ## Documentation
 
 - [Native Codex CLI integration and automatic model routing](docs/routing.md)
-- [Installation, reinstall choices and troubleshooting](https://github.com/sholee-pt/HarnEX/blob/v0.36.3-beta/docs/installation.md)
-- [Project and conversation lifecycle](https://github.com/sholee-pt/HarnEX/blob/v0.36.3-beta/docs/sessions.md)
+- [Installation, reinstall choices and troubleshooting](https://github.com/sholee-pt/HarnEX/blob/v0.36.4-beta/docs/installation.md)
+- [Project and conversation lifecycle](https://github.com/sholee-pt/HarnEX/blob/v0.36.4-beta/docs/sessions.md)
 - [Bounded maintenance and local records](docs/maintenance.md)
 - [Optional task checkpoints and selective resume](.agents/skills/harness/references/task-checkpoints.md)
 - [Optional local Graft retrieval](docs/retrieval.md)
 - [Optional Jev advice, local observations and evaluation limits](docs/jev.md)
 - [Dependency and optimization review](docs/optimization-review.md)
 - [Beta versioning and migration](docs/versioning.md)
-- [Generated structure and design](https://github.com/sholee-pt/HarnEX/blob/v0.36.3-beta/docs/architecture.md)
-- [Quality evaluation and optional local evidence](https://github.com/sholee-pt/HarnEX/blob/v0.36.3-beta/docs/evaluation.md)
+- [Generated structure and design](https://github.com/sholee-pt/HarnEX/blob/v0.36.4-beta/docs/architecture.md)
+- [Quality evaluation and optional local evidence](https://github.com/sholee-pt/HarnEX/blob/v0.36.4-beta/docs/evaluation.md)
 - [Workflow efficiency, instruction inventory and selected OMX concepts](docs/workflow-efficiency.md)
 - [External specialist skills and selected upstream improvements](docs/external-skills.md)
-- [Release assets and verification](https://github.com/sholee-pt/HarnEX/blob/v0.36.3-beta/docs/distribution.md)
+- [Release assets and verification](https://github.com/sholee-pt/HarnEX/blob/v0.36.4-beta/docs/distribution.md)
 - [Changelog](CHANGELOG.md) · [GitHub Releases](https://github.com/sholee-pt/HarnEX/releases) · [Contributing](CONTRIBUTING.md)
 
 ## Agent editions

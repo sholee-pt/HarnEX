@@ -2,6 +2,7 @@
 
 | Version | Plan | Manifest | Transaction | Main change or patch |
 | :---: | :---: | :---: | :---: | --- |
+| [`v0.36.4‑beta`](#harnex-v0364-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Consistent project diagnostics, guarded init/resume and complete platform release discovery |
 | [`v0.36.3‑beta`](#harnex-v0363-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Skip reinstall choices for shared PATH registration without an installed tool |
 | [`v0.36.2‑beta`](#harnex-v0362-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Migrate recognized pre-rename Graft settings without losing user choices or edits |
 | [`v0.36.1‑beta`](#harnex-v0361-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Select and prepare updates only from complete releases for the current platform |
@@ -107,6 +108,15 @@
 | [`v0.2.1‑beta`](#harness-for-codex-v021-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | True no-op updates, complete action-map checks, CI and fixture dry-run corrections |
 | [`v0.2.0‑beta`](#harness-for-codex-v020-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | JSON proposal, no-write dry-run, guarded deterministic apply, instruction precedence |
 | [`v0.1.0‑beta`](#harness-for-codex-v010-beta) | Direct&nbsp;generation | Schema&nbsp;1 | None | Project-adaptive agents and skills, native Codex paths, initial ownership manifest |
+
+## HarnEX v0.36.4-beta
+
+- Search all bounded release-list pages before selecting the newest complete release for the current platform. Incomplete or timed-out discovery reports an unavailable check rather than a partial up-to-date result.
+- Validate resumed-model reasoning options before retaining saved settings; malformed catalogs return recovery guidance instead of an uncaught exception.
+- Stop repeated init before preferences, hook trust or integration setup when the existing project generator fails ownership validation; preserve user edits.
+- Make CLI doctor check the same project generator ownership and report integration failures consistently in both its JSON validity and exit status.
+- Document all three configuration choices and distinguish published-release updates from an explicit development branch pin.
+- Compare upgrade checks against the published v0.36.3-beta source. This development version does not change the README's published installation URL.
 
 ## HarnEX v0.36.3-beta
 

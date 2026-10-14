@@ -12,7 +12,7 @@ The installer validates the old installation, creates the new command and record
 
 Storage paths (`harness-codex` on Linux and `HarnessCodex` on Windows), the `harness` Conda environment, `HARNESS_*` variables, ownership markers and project `.harness`/`.agents/skills/harness` paths remain stable. From v0.36.0-beta, the standalone installers are `install_harnex.sh` and `install_harnex.ps1`. Earlier releases retain their original `install_harness_codex` filenames. Archive names such as `harness-codex-VERSION-linux.tar.gz` remain compatibility identifiers; they do not select the installed command name.
 
-The published [Linux v0.36.3-beta assets](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.3-beta) install `harnex`, provide `/harnex/` controls, migrate recognized pre-rename Graft settings and skip reinstall choices when only shared PATH remains. No Windows assets are currently listed in the published releases; the previously verified v0.35.3-beta release URL is unavailable. Windows v0.36.3-beta source is available for the new command, but its matching native package still requires separate publication before full Windows integration can complete.
+The published [Linux v0.36.3-beta assets](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.3-beta) install `harnex`, provide `/harnex/` controls, migrate recognized pre-rename Graft settings and skip reinstall choices when only shared PATH remains. No Windows assets are currently listed in the published releases; the previously verified v0.35.3-beta release URL is unavailable. Windows v0.36.4-beta development source is available for the new command, but its matching native package still requires separate publication before full Windows integration can complete.
 
 The [README installation guide](../README.md#installation-guide) provides the standard commands. Release installers are version-bound; subsequent `harnex update` follows published HarnEX releases. Explicit `--branch` pins retain the developer source-update path.
 
@@ -85,14 +85,14 @@ The [README Windows section](../README.md#for-windows) tracks current publicatio
 ## Source installation
 
 ```bash
-git clone --branch v0.36.3-beta --single-branch https://github.com/sholee-pt/HarnEX.git
+git clone --branch v0.36.4-beta --single-branch https://github.com/sholee-pt/HarnEX.git
 bash HarnEX/installer/install.sh
 source ~/.bashrc
 ```
 
 On Windows, the source installer can be exercised from PowerShell for development: `& ./HarnEX/installer/install.ps1` under your normal script execution policy. This does not establish a verified Windows native release. The source scripts install an existing checkout; `install_harnex.sh` and `.ps1` first download a release and then invoke the corresponding source installer. Installation does not alter project Git state.
 
-Selecting a branch in `git clone` selects the initial source only; it does not pin HarnEX's update channel. New installations without an explicit HarnEX branch pin follow published releases, while `reuse` preserves an existing pin. For deliberate development tracking, the Linux source installer accepts `--branch v0.36.3-beta`; the installed CLI also accepts `harnex update --branch v0.36.3-beta`. That CLI command can update source immediately and saves the pin. It does not publish or verify a matching Windows native package.
+Selecting a branch in `git clone` selects the initial source only; it does not pin HarnEX's update channel. New installations without an explicit HarnEX branch pin follow published releases, while `reuse` preserves an existing pin. For deliberate development tracking, the Linux source installer accepts `--branch v0.36.4-beta`; the installed CLI also accepts `harnex update --branch v0.36.4-beta`. That CLI command can update source immediately and saves the pin. It does not publish or verify a matching Windows native package.
 
 The v0.33.0-beta updater introduces a source-layout contract while retaining the
 complete earlier file layout as an upgrade bridge. Later refactors can declare

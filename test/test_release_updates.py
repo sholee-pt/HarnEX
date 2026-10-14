@@ -30,6 +30,35 @@ def release_fixture(version, platforms=('linux', 'windows')):
 
 
 class PlatformSelectionTests(unittest.TestCase):
+    def test_discovery_searches_all_pages_before_selecting_a_platform_version(self):
+        first = [release_fixture(f'0.37.{number}-beta', ('linux',)) for number in range(100)]
+        second = [release_fixture('0.36.3-beta', ('windows',)), release_fixture('1.0.0', ('linux',))]
+        for target, expected in [('windows-x86_64', 'v0.36.3-beta'), ('linux-x86_64', 'v1.0.0')]:
+            with self.subTest(target=target), mock.patch.object(updates, 'metadata', side_effect=[first, second]) as metadata:
+                self.assertEqual(updates.latest_harness(target=target)['tag_name'], expected)
+                self.assertEqual([call.args[1] for call in metadata.call_args_list],
+                                 ['releases?per_page=100', 'releases?per_page=100&page=2'])
+
+    def test_incomplete_discovery_never_reports_a_partial_result_as_current(self):
+        full_page = [release_fixture('0.36.3-beta')] * 100
+        with mock.patch.object(updates, 'metadata', return_value=full_page) as metadata:
+            with self.assertRaisesRegex(ValueError, 'page bound'):
+                updates.latest_harness(target='linux-x86_64')
+            self.assertEqual(metadata.call_count, 20)
+        with mock.patch.object(updates, 'metadata', return_value=full_page) as metadata, \
+                mock.patch.object(updates.time, 'monotonic', side_effect=[0, 1, 6]):
+            with self.assertRaisesRegex(TimeoutError, 'discovery timed out'):
+                updates.latest_harness(target='linux-x86_64', timeout=5)
+            self.assertEqual(metadata.call_count, 1)
+            self.assertEqual(metadata.call_args.kwargs['timeout'], 4)
+        with mock.patch.object(updates, 'metadata', side_effect=[full_page, {}]):
+            with self.assertRaisesRegex(ValueError, 'Invalid GitHub release list'):
+                updates.latest_harness(target='linux-x86_64')
+        with mock.patch.object(updates, 'metadata', return_value=[release_fixture('0.36.3-beta')]), \
+                mock.patch.object(updates.time, 'monotonic', side_effect=[0, 1, 6]):
+            with self.assertRaisesRegex(TimeoutError, 'discovery timed out'):
+                updates.latest_harness(target='linux-x86_64', timeout=5)
+
     def test_host_detection_and_unsupported_architectures(self):
         for system, machine, expected in [('linux', 'x86_64', 'linux-x86_64'), ('linux', 'arm64', 'linux-aarch64'),
                                            ('win32', 'AMD64', 'windows-x86_64'), ('win32', 'ARM64', None), ('darwin', 'arm64', None)]:

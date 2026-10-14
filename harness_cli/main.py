@@ -99,7 +99,7 @@ def build_parser(source_root: Path) -> argparse.ArgumentParser:
     install = commands.add_parser("install", help="Install this tool into user-local managed storage.")
     install.add_argument("--data-dir", type=Path, default=default_data_root(installer=True))
     install.add_argument("--bin-dir", type=Path, default=default_bin_root())
-    install.add_argument("--branch", help="Pin vX.Y.Z[-beta]; otherwise follow the latest release branch. Legacy branches remain readable.")
+    install.add_argument("--branch", help="Pin a development branch vX.Y.Z[-beta]; otherwise follow published releases for this platform. Legacy branches remain readable.")
     install.add_argument("--repository", default=distribution.DEFAULT_REPOSITORY, help="HTTPS or SSH transport for sholee-pt/HarnEX.")
     install.add_argument("--auto-update", choices=("compatible", "check", "off"), default="compatible")
     install.add_argument("--no-modify-path", action="store_true", help="Skip user PATH registration (Bash startup on Linux; user registry on Windows).")

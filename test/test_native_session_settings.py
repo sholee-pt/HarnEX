@@ -3,6 +3,7 @@ import contextlib
 import io
 from pathlib import Path
 import subprocess
+import time
 import tomllib
 import unittest
 from unittest import mock
@@ -11,6 +12,17 @@ from harness_cli import native_session, project, session_settings
 
 
 class NativeSessionSettingsTests(unittest.TestCase):
+    def test_resume_rejects_malformed_reasoning_catalog_with_actionable_guidance(self):
+        for efforts in (None, [None], ['high'], [{'reasoningEffort': None}], [{'reasoningEffort': ''}]):
+            for current_effort in ('high', None):
+                with self.subTest(efforts=efforts, current=current_effort):
+                    server = mock.Mock()
+                    server.call.return_value = {'data': [{'model': 'saved-model', 'supportedReasoningEfforts': efforts}]}
+                    with self.assertRaisesRegex(ValueError, '--settings native'):
+                        session_settings.automatic(server, time.monotonic() + 30, resume=True,
+                                                   current={'model': 'saved-model', 'reasoningEffort': current_effort})
+                    self.assertEqual([call.args[0] for call in server.call.call_args_list], ['model/list'])
+
     def arguments(self, permission, *, root=Path('/selected/project'), confirm=True):
         server = mock.Mock()
         server.call.side_effect = lambda method, params, **kwargs: {

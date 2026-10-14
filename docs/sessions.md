@@ -20,7 +20,7 @@ harnex doctor --json
 ```
 
 `init/config` preserve user text and place a separately owned block in the active
-root instruction file (`AGENTS.override.md` before `AGENTS.md`). They do not
+root instruction file (nonempty `AGENTS.override.md`, then `AGENTS.md`, then configured fallback names). They do not
 create an override to bypass existing guidance. Existing explicit-skill projects
 remain readable and migrate to a managed pointer on reviewed `config`.
 
@@ -34,6 +34,8 @@ metadata paths are refused; an existing selected directory alias is resolved.
 Creating an empty folder does not supply a project goal: configuration may still
 ask what work is intended. A later configuration failure preserves the created
 folder and completed setup files for retry.
+
+Repeated `init` also checks the installed project generator's ownership. Invalid or modified generator files stop setup before preferences, hook trust or integration changes. Inspect `harnex status` and preserve those files while resolving the reported conflict; rerunning init does not authorize overwriting them. `doctor` reports generator and Codex integration failures both in its exit status and its JSON `valid` field.
 
 ## Shared mounts and server changes
 
@@ -115,7 +117,7 @@ harnex config --settings manual
 codex
 ```
 
-Codex defaults selects the catalog's recommended model and its advertised supported default reasoning level for new/configuration work. Resume reads saved settings without loading turns and preserves an available model/effort pair. If that pair is removed or unknown, it selects and reports a supported default before opening the session. No usable resume default requires manual selection. This configuration choice is separate from per-request HarnEX Auto routing. It does not run a separate model to choose a model, infer pricing, or claim command-specific optimal performance. For new work, a catalog with no supported recommendation retains native settings; an empty catalog or connection failure reports an error with the `--settings native` fallback.
+Codex defaults selects the catalog's recommended model and its advertised supported default reasoning level for new/configuration work. Resume reads saved settings without loading turns and preserves an available model/effort pair. If that pair is removed or unknown, it selects and reports a supported default before opening the session. No usable resume default requires manual selection. Malformed reasoning options are rejected before resuming, with guidance to use `--settings native`. This configuration choice is separate from per-request HarnEX Auto routing. It does not run a separate model to choose a model, infer pricing, or claim command-specific optimal performance. For new work, a catalog with no supported recommendation retains native settings; an empty catalog or connection failure reports an error with the `--settings native` fallback.
 
 Manual lists visible models and supported reasoning levels from the installed Codex catalog. A removed saved model requires a current choice; a removed effort or changed model offers its supported default effort. Choices apply only to this native conversation; global settings remain unchanged. Changing a model after generating a harness does not require regenerating the harness. Supported tools, reasoning choices and output quality may differ by model.
 

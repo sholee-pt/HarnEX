@@ -33,8 +33,13 @@ def automatic(server, deadline, *, resume=False, current=None):
         raise ValueError('No visible models are available; check native Codex account/provider settings.')
     current = current or {}
     retained = next((m for m in models if m['model'] == current.get('model')), None) if resume else None
+    if retained:
+        efforts = retained.get('supportedReasoningEfforts')
+        if (not isinstance(efforts, list) or any(not isinstance(e, dict) or not isinstance(e.get('reasoningEffort'), str)
+                                               or not e['reasoningEffort'] for e in efforts)):
+            raise ValueError('Codex returned invalid reasoning options; retry with --settings native.')
     if retained and (current.get('reasoningEffort') is None or current['reasoningEffort'] in
-                     [item.get('reasoningEffort') for item in retained.get('supportedReasoningEfforts', [])]):
+                     [item['reasoningEffort'] for item in efforts]):
         server.progress.line('Codex defaults: keep the available resumed conversation model and reasoning.')
         return {}
     model = retained or next((m for m in models if m.get('isDefault') is True), None)

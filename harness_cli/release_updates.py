@@ -116,9 +116,23 @@ def platform_assets(release, target):
 
 def latest_harness(*, timeout=5, target=None):
     target = target or target_platform()
-    releases = metadata(REPOSITORY, 'releases?per_page=100', timeout=timeout)
-    if not isinstance(releases, list):
-        raise ValueError('Invalid GitHub release list')
+    deadline = time.monotonic() + timeout
+    releases = []
+    for page in range(1, 21):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError('HarnEX release discovery timed out; retry the update check')
+        suffix = 'releases?per_page=100' + (f'&page={page}' if page > 1 else '')
+        entries = metadata(REPOSITORY, suffix, timeout=remaining)
+        if time.monotonic() >= deadline:
+            raise TimeoutError('HarnEX release discovery timed out; retry the update check')
+        if not isinstance(entries, list) or len(entries) > 100:
+            raise ValueError('Invalid GitHub release list')
+        releases.extend(entries)
+        if len(entries) < 100:
+            break
+    else:
+        raise ValueError('HarnEX release discovery exceeded its page bound; no complete update check was possible')
     candidates = [item for item in releases if isinstance(item, dict) and not item.get('draft') and
                   isinstance(item.get('tag_name'), str) and re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+(?:-beta)?', item['tag_name'])]
     for release in sorted(candidates, key=lambda item: dist._version(item['tag_name'][1:]), reverse=True):
