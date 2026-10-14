@@ -15,7 +15,7 @@ from harness_cli.paths import checked_path as _checked_path
 from harness_cli.versions import VERSION_RE
 
 
-BOOTSTRAPS = ("install_harness_codex.sh", "install_harness_codex.ps1")
+BOOTSTRAPS = ("install_harnex.sh", "install_harnex.ps1")
 ROOT_FILES = ("harness.py", "install.py", "environment.yml", "README.md", "LICENSE",
               "installer/install.sh", "installer/install.ps1",
               *("installer/" + name for name in BOOTSTRAPS))

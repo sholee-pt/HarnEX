@@ -48,7 +48,7 @@ def tag_commit(call, endpoint, reference):
 def verified_assets(dist, commit, tag, notes):
     version = tag[1:]
     archive_name = f'harness-codex-{version}-linux.tar.gz'
-    limits = {archive_name: distribution.MAX_TREE_BYTES * 2, 'install_harness_codex.sh': 1024 * 1024,
+    limits = {archive_name: distribution.MAX_TREE_BYTES * 2, 'install_harnex.sh': 1024 * 1024,
               'SHA256SUMS': 4096, 'build.json': 16384}
     dist = checked_path(dist)
     if not dist.is_dir() or {path.name for path in dist.iterdir()} != set(limits):
@@ -80,9 +80,9 @@ def verified_assets(dist, commit, tag, notes):
         if match is None or match[2] in checksums:
             raise ValueError('Release checksum manifest is invalid or ambiguous')
         checksums[match[2]] = match[1]
-    expected = {name: hashlib.sha256(assets[name]).hexdigest() for name in (archive_name, 'install_harness_codex.sh')}
+    expected = {name: hashlib.sha256(assets[name]).hexdigest() for name in (archive_name, 'install_harnex.sh')}
     if (checksums != expected or report.get('sha256') != expected[archive_name]
-            or report.get('bootstrapSha256') != expected['install_harness_codex.sh']):
+            or report.get('bootstrapSha256') != expected['install_harnex.sh']):
         raise ValueError('Release checksums disagree with asset bytes or build report')
     files = {}
     total = 0
@@ -109,7 +109,7 @@ def verified_assets(dist, commit, tag, notes):
     # checksums and caller-supplied provenance alone do not establish identity.
     source_version, source_commit, source_files, bootstraps = collect_source(Path(__file__).resolve().parents[1])
     if (source_version != version or source_commit != commit or source_files != files
-            or render_bootstraps(bootstraps, version)['install_harness_codex.sh'] != assets['install_harness_codex.sh']):
+            or render_bootstraps(bootstraps, version)['install_harnex.sh'] != assets['install_harnex.sh']):
         raise ValueError('Release payload does not match the selected immutable source checkout')
     return assets, note_bytes
 

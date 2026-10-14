@@ -8,7 +8,7 @@ Install the current source with `bash HarnEX/installer/install.sh` on Linux or `
 
 The installer validates the old installation, creates the new command and records its ownership, then removes the verified old launchers. It refuses to replace an unrelated `harnex` file or delete a modified old launcher. An interrupted command replacement retains `.command-migration.json`; rerun installation after resolving reported conflicts. On Linux, whichever managed command is present can also run `update --repair-launcher`. On Windows, use `./HarnEX/installer/install.ps1 -Existing reuse` for the initial replacement and its recovery: an executing batch launcher cannot safely delete itself. Modified files are preserved.
 
-Storage paths (`harness-codex` on Linux and `HarnessCodex` on Windows), the `harness` Conda environment, `HARNESS_*` variables, ownership markers and project `.harness`/`.agents/skills/harness` paths remain stable. Download filenames such as `install_harness_codex.sh` and `harness-codex-VERSION-linux.tar.gz` are compatibility identifiers. They do not select the installed command name.
+Storage paths (`harness-codex` on Linux and `HarnessCodex` on Windows), the `harness` Conda environment, `HARNESS_*` variables, ownership markers and project `.harness`/`.agents/skills/harness` paths remain stable. From v0.36.0-beta, the standalone installers are `install_harnex.sh` and `install_harnex.ps1`. Earlier releases retain their original `install_harness_codex` filenames. Archive names such as `harness-codex-VERSION-linux.tar.gz` remain compatibility identifiers; they do not select the installed command name.
 
 The latest published v0.35.3-beta assets still install `harness-codex` and use `/harness/`; they do not contain the HarnEX changes. v0.36.0-beta source is available for the new command. A matching Windows native package still requires separate publication before full Windows integration can complete.
 
@@ -59,18 +59,20 @@ points are preserved by either opt-out; they are not uninstalled.
 
 `--auto-update` / `-AutoUpdate` are installer options, not `codex` launch arguments. Passing a different policy together with `reuse` keeps the old policy; use the explicit `reset` choice to apply changed installer preferences, or `HARNESS_NO_UPDATE_CHECK=1` to suppress checks for the current process without resetting preferences. Neither setting prevents downloads required by an explicitly requested installation/configuration.
 
-Choose an existing published tag from Releases for `RELEASE_TAG`; a branch's newer commits are not included in its already published assets.
+For v0.36.0-beta or newer, choose an existing published tag from Releases for `RELEASE_TAG`; a branch's newer commits are not included in its already published assets. For older releases, use the original installer name shown in that release's instructions.
 
 ```bash
-curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/RELEASE_TAG/install_harness_codex.sh | sh -s -- --existing reuse
+curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/RELEASE_TAG/install_harnex.sh | sh -s -- --existing reuse
 source ~/.bashrc
 ```
 
-For Windows release reinstallation, download the PowerShell installer from the selected release as shown in the [README](../README.md#for-windows), then run:
+For a separately published Windows release v0.36.0-beta or newer, download its `install_harnex.ps1` asset, then run:
 
 ```powershell
-& ./install_harness_codex.ps1 -Existing reuse
+& ./install_harnex.ps1 -Existing reuse
 ```
+
+The [README Windows example](../README.md#for-windows) remains pinned to the latest verified Windows assets. If it still selects v0.35.3-beta, use that release's `install_harness_codex.ps1` filename instead.
 
 ## Source installation
 
@@ -80,7 +82,7 @@ bash HarnEX/installer/install.sh
 source ~/.bashrc
 ```
 
-On Windows, the source installer can be exercised from PowerShell for development: `& ./HarnEX/installer/install.ps1` under your normal script execution policy. This does not establish a verified Windows native release. The source scripts install an existing checkout; `install_harness_codex.sh` and `.ps1` first download a release and then invoke the corresponding source installer. Installation does not alter project Git state.
+On Windows, the source installer can be exercised from PowerShell for development: `& ./HarnEX/installer/install.ps1` under your normal script execution policy. This does not establish a verified Windows native release. The source scripts install an existing checkout; `install_harnex.sh` and `.ps1` first download a release and then invoke the corresponding source installer. Installation does not alter project Git state.
 
 Selecting a branch in `git clone` selects the initial source only; it does not pin HarnEX's update channel. New installations without an explicit HarnEX branch pin follow published releases, while `reuse` preserves an existing pin. For deliberate development tracking, the Linux source installer accepts `--branch v0.36.0-beta`; the installed CLI also accepts `harnex update --branch v0.36.0-beta`. That CLI command can update source immediately and saves the pin. It does not publish or verify a matching Windows native package.
 

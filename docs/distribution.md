@@ -1,12 +1,12 @@
 # Release assets and verification
 
-Each [GitHub Release](https://github.com/sholee-pt/HarnEX/releases) contains installation instructions and version changes directly in its body.
+Each [GitHub Release](https://github.com/sholee-pt/HarnEX/releases) contains installation instructions and version changes directly in its body. The following names apply from v0.36.0-beta; earlier releases retain `install_harness_codex.sh` and `install_harness_codex.ps1`.
 
 | Asset | Platform | Purpose |
 | --- | --- | --- |
-| `install_harness_codex.sh` | Linux | One-command downloader and checksum verifier |
+| `install_harnex.sh` | Linux | One-command downloader and checksum verifier |
 | `harness-codex-VERSION-linux.tar.gz` | Linux | Generator, management CLI, Auto adapter and source installer |
-| `install_harness_codex.ps1` | Windows, when separately published | PowerShell downloader and checksum verifier |
+| `install_harnex.ps1` | Windows, when separately published | PowerShell downloader and checksum verifier |
 | `harness-codex-VERSION-windows.zip` | Windows, when separately published | Generator, management CLI and source installer |
 | `harness-codex-ui-VERSION-windows-x86_64.tar.gz` | Windows, when separately published | Matching native Codex package with Auto and Windows helpers |
 | `SHA256SUMS` | Published platforms | SHA-256 digests of the downloadable payloads and installers |

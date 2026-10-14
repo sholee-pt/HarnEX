@@ -24,8 +24,8 @@ class ReleasePublishTests(unittest.TestCase):
         self.commit, self.tag = 'b' * 40, 'v0.33.0-beta'
         self.files = {'harness.py': b'# committed source\n', '_release.json': json.dumps({
             'version': self.tag[1:], 'commit': self.commit, 'runtime': 'codex'}).encode()}
-        self.bootstraps = {'install_harness_codex.sh': b'VERSION=0.12.0-beta\n',
-                           'install_harness_codex.ps1': b"$version = '0.12.0-beta'\n# HarnEX 0.12.0-beta Windows installer.\n"}
+        self.bootstraps = {'install_harnex.sh': b'VERSION=0.12.0-beta\n',
+                           'install_harnex.ps1': b"$version = '0.12.0-beta'\n# HarnEX 0.12.0-beta Windows installer.\n"}
         write_artifacts(self.dist, self.tag[1:], self.commit, self.files, self.bootstraps)
         patcher = mock.patch.object(release_publish, 'collect_source', return_value=(
             self.tag[1:], self.commit, self.files.copy(), self.bootstraps))
@@ -88,7 +88,7 @@ class ReleasePublishTests(unittest.TestCase):
         gh.assert_not_called()
 
     def test_missing_or_unrelated_assets_never_query_github(self):
-        for name in ('SHA256SUMS', 'install_harness_codex.sh', f'harness-codex-{self.tag[1:]}-linux.tar.gz'):
+        for name in ('SHA256SUMS', 'install_harnex.sh', f'harness-codex-{self.tag[1:]}-linux.tar.gz'):
             with self.subTest(name=name):
                 path = self.dist / name
                 content = path.read_bytes()
@@ -103,7 +103,7 @@ class ReleasePublishTests(unittest.TestCase):
         gh.assert_not_called()
 
     def test_checksums_and_immutable_source_are_both_required(self):
-        bootstrap = self.dist / 'install_harness_codex.sh'
+        bootstrap = self.dist / 'install_harnex.sh'
         bootstrap.write_bytes(bootstrap.read_bytes() + b'# changed\n')
         with mock.patch.object(release_publish, 'gh') as gh, self.assertRaisesRegex(ValueError, 'checksums'):
             self.publish()
@@ -119,7 +119,7 @@ class ReleasePublishTests(unittest.TestCase):
         uploads = []
         def github(*arguments, **kwargs):
             if arguments[0] == 'api':
-                (self.dist / 'install_harness_codex.sh').write_text('changed after validation')
+                (self.dist / 'install_harnex.sh').write_text('changed after validation')
                 return json.dumps({'object': {'type': 'commit', 'sha': self.commit}})
             paths = [value for value in arguments if isinstance(value, Path)]
             uploads.extend(paths)
@@ -127,7 +127,7 @@ class ReleasePublishTests(unittest.TestCase):
                 self.assertTrue(path.is_file())
                 if os.name == 'posix':
                     self.assertEqual(path.stat().st_mode & 0o777, 0o600)
-            bootstrap = next(path for path in paths if path.name == 'install_harness_codex.sh')
+            bootstrap = next(path for path in paths if path.name == 'install_harnex.sh')
             self.assertEqual(bootstrap.read_bytes(), b'VERSION=' + self.tag[1:].encode() + b'\n')
             return ''
         with mock.patch.object(release_publish, 'gh', side_effect=github):
@@ -150,7 +150,7 @@ class ReleasePublishTests(unittest.TestCase):
         report['sha256'] = digest
         report_path.write_text(json.dumps(report))
         (self.dist / 'SHA256SUMS').write_text(f'{digest}  {path.name}\n' +
-            report['bootstrapSha256'] + '  install_harness_codex.sh\n')
+            report['bootstrapSha256'] + '  install_harnex.sh\n')
         with mock.patch.object(release_publish, 'gh') as gh, self.assertRaisesRegex(ValueError, 'permissions'):
             self.publish()
         gh.assert_not_called()

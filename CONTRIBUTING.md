@@ -35,7 +35,7 @@ The `[Doc]` rule applies to repository explanations such as README, contribution
 
 | Location | Responsibility |
 | --- | --- |
-| `installer/install_harness_codex.sh` / `.ps1` | Download and verify release assets; published as standalone Linux/Windows installers |
+| `installer/install_harnex.sh` / `.ps1` | Download and verify release assets; published as standalone Linux/Windows installers |
 | `installer/install.sh` / `.ps1` | Prepare Conda and install from a checkout or verified archive |
 | `harness.py` / `install.py` | Small CLI/project-installer entry points whose root paths remain compatible with existing installations |
 | `harness_cli/project_installer.py` | Project-local generator installation, ownership, rollback and source-bound installer loading |

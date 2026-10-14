@@ -109,7 +109,9 @@
 
 - Rename the project and repository to HarnEX, with `harnex` as the primary management command and `/harnex/` as the in-conversation namespace.
 - Replace owned `harness-codex` and earlier `harness` launchers with `harnex`, without retaining command aliases. Use ownership checks and a recoverable replacement record; conflicting or modified user commands are preserved. Older `/harness/` in-conversation inputs remain readable.
-- Retain installation storage, credentials, project artifacts, environment names and release asset filenames so the name change does not create a second installation or invalidate existing ownership records.
+- Rename the standalone installers to `install_harnex.sh` and `install_harnex.ps1`, including build, checksum, publication and installation-test references. Previously published installers retain their original filenames.
+- Pin source downloaders to v0.36.0-beta as well as rendered release assets, and check that both paths agree with release metadata. Restore the external `revfactory/harness` reference without renaming the upstream project.
+- Retain installation storage, credentials, project artifacts, environment names and archive filenames so the name change does not create a second installation or invalidate existing ownership records.
 - Update installation, migration and project guidance to distinguish the current source from the previously published v0.35.3-beta assets. Older API updaters require a current installer across the repository rename.
 - Present the Codex management experience alongside HarnEX's project-analysis, orchestration and validated-update logic. Preserve platform distinctions and the Apache-2.0 license.
 

@@ -83,7 +83,7 @@ class ReleaseBuildTests(unittest.TestCase):
         with mock.patch.object(release_publish, '__file__', str(self.root / 'build/release_publish.py')):
             assets, content = release_publish.verified_assets(self.output, self.commit, 'v' + self.version, notes)
             self.assertEqual(set(assets), {f'harness-codex-{self.version}-linux.tar.gz',
-                                          'install_harness_codex.sh', 'SHA256SUMS', 'build.json'})
+                                          'install_harnex.sh', 'SHA256SUMS', 'build.json'})
             self.assertEqual(content, b'Fixture release')
             (self.root / 'harness.py').write_text('# changed after the build\n')
             with mock.patch.object(release_publish, 'gh') as github, self.assertRaisesRegex(ValueError, 'clean committed source'):
@@ -98,10 +98,10 @@ class ReleaseBuildTests(unittest.TestCase):
         self.assertFalse(report["developmentBuild"])
         self.assertEqual(report["sha256"], hashlib.sha256(artifact.read_bytes()).hexdigest())
         self.assertEqual((self.output / "SHA256SUMS").read_text(encoding="utf-8"),
-                         f"{report['sha256']}  {artifact.name}\n{report['bootstrapSha256']}  install_harness_codex.sh\n"
+                         f"{report['sha256']}  {artifact.name}\n{report['bootstrapSha256']}  install_harnex.sh\n"
                          f"{report['windowsSha256']}  harness-codex-{self.version}-windows.zip\n"
-                         f"{report['windowsBootstrapSha256']}  install_harness_codex.ps1\n")
-        linux_bootstrap = (self.output / "install_harness_codex.sh").read_bytes()
+                         f"{report['windowsBootstrapSha256']}  install_harnex.ps1\n")
+        linux_bootstrap = (self.output / "install_harnex.sh").read_bytes()
         self.assertIn(('VERSION=' + self.version + '\n').encode(), linux_bootstrap)
         self.assertEqual(report["bootstrapSha256"], hashlib.sha256(linux_bootstrap).hexdigest())
         files = self.contents(artifact)
@@ -114,7 +114,7 @@ class ReleaseBuildTests(unittest.TestCase):
                 self.assertEqual(entry.external_attr >> 16, 0o100644)
                 windows_files[entry.filename.split('/', 1)[1]] = archive.read(entry)
         self.assertEqual(windows_files, files)
-        bootstrap = self.output / 'install_harness_codex.ps1'
+        bootstrap = self.output / 'install_harnex.ps1'
         self.assertIn("$version = '" + self.version + "'\n", bootstrap.read_text())
         self.assertIn('HarnEX ' + self.version + ' Windows installer.', bootstrap.read_text())
         self.assertEqual(report['windowsBootstrapSha256'], hashlib.sha256(bootstrap.read_bytes()).hexdigest())
@@ -123,9 +123,9 @@ class ReleaseBuildTests(unittest.TestCase):
                                     "branch": f"v{self.version}", "sourceContract": dist.SOURCE_CONTRACT})
         expected = {}
         for name in build_source.ROOT_FILES:
-            if Path(name).name not in {"install_harness_codex.sh", "install_harness_codex.ps1"}:
+            if Path(name).name not in {"install_harnex.sh", "install_harnex.ps1"}:
                 expected[Path(name).name] = (self.root / name).read_bytes()
-        for name in ("install_harness.sh", "install_harness_codex.sh", "install_harness_codex.ps1"):
+        for name in ("install_harness.sh", "install_harnex.sh", "install_harnex.ps1"):
             self.assertNotIn(name, files, "Download-only installers do not belong in runtime archives")
         for name in build_source.ROOT_DIRS:
             for path in (self.root / name).rglob("*"):
@@ -142,8 +142,8 @@ class ReleaseBuildTests(unittest.TestCase):
         self.assertEqual(report["files"], len(files))
 
     def test_ambiguous_downloader_versions_fail_before_output_creation(self):
-        for name, declaration in [('install_harness_codex.sh', 'VERSION=0.1.0-beta'),
-                                  ('install_harness_codex.ps1', "$version = '0.1.0-beta'")]:
+        for name, declaration in [('install_harnex.sh', 'VERSION=0.1.0-beta'),
+                                  ('install_harnex.ps1', "$version = '0.1.0-beta'")]:
             with self.subTest(name=name):
                 path = self.root / 'installer' / name
                 original = path.read_bytes()
@@ -167,7 +167,7 @@ class ReleaseBuildTests(unittest.TestCase):
         report = build_release.build(self.root, self.output)
         self.assertEqual(report['platforms'], ['linux'])
         self.assertNotIn('windowsArtifact', report)
-        expected = {f'harness-codex-{self.version}-linux.tar.gz', 'install_harness_codex.sh'}
+        expected = {f'harness-codex-{self.version}-linux.tar.gz', 'install_harnex.sh'}
         self.assertEqual({p.name for p in self.output.iterdir()}, expected | {'SHA256SUMS', 'build.json'})
         sums = dict(line.split('  ', 1)[::-1] for line in (self.output / 'SHA256SUMS').read_text().splitlines())
         self.assertEqual(set(sums), expected)

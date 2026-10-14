@@ -29,7 +29,7 @@ $registry = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey('Environment', [b
 $oldPath = $registry.GetValue('Path', $null, [Microsoft.Win32.RegistryValueOptions]::DoNotExpandEnvironmentNames)
 $oldKind = if ($null -ne $oldPath) { $registry.GetValueKind('Path') } else { $null }
 $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
-$bootstrap = Join-Path $Dist 'install_harness_codex.ps1'
+$bootstrap = Join-Path $Dist 'install_harnex.ps1'
 $options = @{DataDir=$data; BinDir=$binary; AutoUpdate='off'; Existing='reuse'}
 if ($Cold) { $options.CondaHome = Join-Path $base 'miniforge' }
 else { $options.CondaExe = $CondaExe; $options.NoModifyPath = $true }

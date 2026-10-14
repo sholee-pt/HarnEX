@@ -1,7 +1,7 @@
 ### Linux installation
 
 ```bash
-curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v{version}/install_harness_codex.sh | sh
+curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v{version}/install_harnex.sh | sh
 harnex --version
 # Existing tool installation:
 harnex update
@@ -19,7 +19,7 @@ For a Windows supplement, first project configuration requires an existing nativ
 
 | Asset | Purpose |
 | --- | --- |
-| `install_harness_codex.sh` | Linux downloader and isolated tool setup |
+| `install_harnex.sh` | Linux downloader and isolated tool setup |
 | `harness-codex-{version}-linux.tar.gz` | Generator, CLI and source installer |
 | `SHA256SUMS` | Checksums of the downloadable assets |
 | `build.json` | Exact HarnEX source commit and platforms |

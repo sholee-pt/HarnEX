@@ -1,15 +1,15 @@
 #!/bin/sh
 # Public, version-bound bootstrap. This entire file also works through `| sh`.
 set -eu
-VERSION=0.12.0-beta
+VERSION=0.36.0-beta
 fail() { printf 'HarnEX installer: %s\n' "$*" >&2; exit 1; }
 usage() {
-  printf '%s\n' 'Usage: sh install_harness_codex.sh [OPTIONS]' \
+  printf '%s\n' 'Usage: sh install_harnex.sh [OPTIONS]' \
     'Installs harnex and its dedicated Python environment without sudo.' \
     '  --bin-dir PATH          Command directory (default: ~/.local/bin)' \
     '  --data-dir PATH         Managed Codex tool storage' \
     '  --auto-update POLICY    compatible, check, or off' \
-    '  --existing MODE         ask (default), reuse, or reset Harness settings' \
+    '  --existing MODE         ask (default), reuse, or reset HarnEX settings' \
     '  --activate MODE         ask (default), shell, or skip opening a ready Bash' \
     '  --no-modify-path        Do not register PATH in ~/.bashrc' \
     '  --no-codex-integration  Install only the HarnEX management tool' \

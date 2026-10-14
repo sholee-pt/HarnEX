@@ -48,7 +48,7 @@ def prepare(dist, published, commit):
         raise ValueError('Expected an existing Linux release and a verified Windows supplement')
     old_sums, new_sums = checksums(published / 'SHA256SUMS'), checksums(dist / 'SHA256SUMS')
     linux = f'harness-codex-{version}-linux.tar.gz'
-    for name, field in ((linux, 'sha256'), ('install_harness_codex.sh', 'bootstrapSha256')):
+    for name, field in ((linux, 'sha256'), ('install_harnex.sh', 'bootstrapSha256')):
         actual = digest(dist / name)
         if actual != original.get(field) or actual != incoming.get(field) or actual != old_sums.get(name) or actual != new_sums.get(name):
             raise ValueError('Rebuilt Linux payload differs from the published release')
@@ -57,7 +57,7 @@ def prepare(dist, published, commit):
     if (linux_native in old_sums or linux_record) and (not linux_record.get('sha256') or linux_record['sha256'] != old_sums.get(linux_native)):
         raise ValueError('The Linux native release is not complete')
     windows = f'harness-codex-{version}-windows.zip'
-    bootstrap = 'install_harness_codex.ps1'
+    bootstrap = 'install_harnex.ps1'
     native = f'harness-codex-ui-{version}-windows-x86_64.tar.gz'
     additions = {}
     for name, field in ((windows, 'windowsSha256'), (bootstrap, 'windowsBootstrapSha256')):
@@ -101,8 +101,8 @@ def notes(body, version):
 ### Windows installation (one-off verified supplement)
 
 ```powershell
-Invoke-WebRequest 'https://github.com/sholee-pt/HarnEX/releases/download/v{version}/install_harness_codex.ps1' -OutFile ./install_harness_codex.ps1
-& ./install_harness_codex.ps1
+Invoke-WebRequest 'https://github.com/sholee-pt/HarnEX/releases/download/v{version}/install_harnex.ps1' -OutFile ./install_harnex.ps1
+& ./install_harnex.ps1
 harnex --version
 ```
 

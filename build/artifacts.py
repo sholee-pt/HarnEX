@@ -16,8 +16,8 @@ def render_bootstraps(templates: dict[str, bytes], version: str) -> dict[str, by
     """Bind standalone downloaders to the version of the archives being built."""
     rendered = {}
     for name, pattern, assignment in (
-        ('install_harness_codex.sh', r'^VERSION=([^\r\n]+)$', 'VERSION=' + version),
-        ('install_harness_codex.ps1', r"^\$version = '([^'\r\n]+)'$", "$version = '" + version + "'"),
+        ('install_harnex.sh', r'^VERSION=([^\r\n]+)$', 'VERSION=' + version),
+        ('install_harnex.ps1', r"^\$version = '([^'\r\n]+)'$", "$version = '" + version + "'"),
     ):
         text = templates[name].decode('utf-8').replace('\r\n', '\n')
         previous = re.findall(pattern, text, re.M)
@@ -52,11 +52,11 @@ def write_artifacts(output: Path, version: str, commit: str | None,
         with gzip.GzipFile(fileobj=stream, filename="", mode="wb", mtime=0) as compressed:
             compressed.write(content.getvalue())
     digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-    bootstrap = output / "install_harness_codex.sh"
+    bootstrap = output / "install_harnex.sh"
     with bootstrap.open("xb") as stream:
-        stream.write(bootstraps["install_harness_codex.sh"])
+        stream.write(bootstraps["install_harnex.sh"])
     bootstrap.chmod(0o755)
-    bootstrap_digest = hashlib.sha256(bootstraps["install_harness_codex.sh"]).hexdigest()
+    bootstrap_digest = hashlib.sha256(bootstraps["install_harnex.sh"]).hexdigest()
     report = {"runtime": "codex", "version": version, "commit": commit, "developmentBuild": commit is None,
               "platforms": ['linux'] if platform == 'linux' else ['linux', 'windows'],
               "artifact": str(artifact), "sha256": digest, "bootstrapSha256": bootstrap_digest, "files": len(files)}
@@ -70,7 +70,7 @@ def write_artifacts(output: Path, version: str, commit: str | None,
                 info.external_attr = (stat.S_IFREG | 0o644) << 16
                 archive.writestr(info, data, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
         windows_digest = hashlib.sha256(windows.read_bytes()).hexdigest()
-        windows_bootstrap = output / "install_harness_codex.ps1"
+        windows_bootstrap = output / "install_harnex.ps1"
         windows_bootstrap.write_bytes(bootstraps[windows_bootstrap.name])
         windows_bootstrap_digest = hashlib.sha256(windows_bootstrap.read_bytes()).hexdigest()
         sums += f"{windows_digest}  {windows.name}\n{windows_bootstrap_digest}  {windows_bootstrap.name}\n"

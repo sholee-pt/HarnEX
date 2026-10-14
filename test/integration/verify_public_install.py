@@ -69,7 +69,7 @@ else:
         assert subprocess.run(['/bin/sh', '-c', 'command -v conda'], env=env,
                               capture_output=True, timeout=10).returncode != 0
         version = json.loads((dist / 'build.json').read_text())['version']
-        pipeline = f'curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v{version}/install_harness_codex.sh | sh'
+        pipeline = f'curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v{version}/install_harnex.sh | sh'
         def run(command, timeout=120):
             result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=timeout)
             if result.returncode:

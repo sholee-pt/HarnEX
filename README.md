@@ -50,7 +50,7 @@ curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v0.35.3-beta/in
 harness-codex --version
 ```
 
-Previous releases retain their version tags and installation commands on the [Releases page](https://github.com/sholee-pt/HarnEX/releases).
+Previous releases retain their version tags and installation commands on the [Releases page](https://github.com/sholee-pt/HarnEX/releases). Starting with v0.36.0-beta, standalone installers are named `install_harnex.sh` and `install_harnex.ps1`; use them only after the corresponding platform assets are published.
 
 To install **HarnEX v0.36.0-beta** and use the commands below, install the development source:
 

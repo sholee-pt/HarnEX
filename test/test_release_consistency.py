@@ -100,6 +100,13 @@ class ReleaseConsistencyTests(unittest.TestCase):
             harness_metadata.TRANSACTION_SCHEMA_VERSION,
         )
 
+    def test_source_downloaders_target_current_release_before_rendering(self) -> None:
+        from build.artifacts import render_bootstraps
+        from build.source import BOOTSTRAPS
+        templates = {name: (REPO_ROOT / 'installer' / name).read_bytes() for name in BOOTSTRAPS}
+        rendered = render_bootstraps(templates, harness_metadata.HARNESS_VERSION)
+        self.assertEqual(rendered, {name: content.replace(b'\r\n', b'\n') for name, content in templates.items()})
+
     def test_current_version_literal_has_one_python_source(self) -> None:
         literal_assignments: list[tuple[str, str]] = []
         for path in SCRIPTS.glob("*.py"):

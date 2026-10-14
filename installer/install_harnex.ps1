@@ -12,7 +12,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if ($Help) {
-    Write-Output 'HarnEX 0.12.0-beta Windows installer. Options: -CondaExe PATH, -CondaHome PATH, -DataDir PATH, -BinDir PATH, -AutoUpdate compatible|check|off, -Existing ask|reuse|reset, -NoModifyPath.'
+    Write-Output 'HarnEX 0.36.0-beta Windows installer. Options: -CondaExe PATH, -CondaHome PATH, -DataDir PATH, -BinDir PATH, -AutoUpdate compatible|check|off, -Existing ask|reuse|reset, -NoModifyPath.'
     return
 }
 if ($env:OS -ne 'Windows_NT' -or -not [Environment]::Is64BitProcess -or $env:PROCESSOR_ARCHITECTURE -ne 'AMD64') {
@@ -41,7 +41,7 @@ foreach ($directory in @($selectedData, $selectedBin, "$selectedData-runtime", $
         $current = Split-Path -Parent $current
     }
 }
-$version = '0.12.0-beta'
+$version = '0.36.0-beta'
 $name = "harness-codex-$version-windows.zip"
 $release = "https://github.com/sholee-pt/HarnEX/releases/download/v$version"
 $temporary = Join-Path ([IO.Path]::GetTempPath()) ('harness-codex-install-' + [guid]::NewGuid().ToString('N'))
@@ -55,7 +55,7 @@ try {
         Invoke-WebRequest -UseBasicParsing -TimeoutSec 300 -Uri "$release/$name" -OutFile (Join-Path $temporary $name)
         Invoke-WebRequest -UseBasicParsing -TimeoutSec 300 -Uri "$release/SHA256SUMS" -OutFile (Join-Path $temporary 'SHA256SUMS')
     } catch {
-        throw 'Unable to download the Harness release. Check network access and the release URL.'
+        throw 'Unable to download the HarnEX release. Check network access and the release URL.'
     }
     Write-Host 'Verifying checksum and extracting the release...'
     $lines = @(Get-Content -LiteralPath (Join-Path $temporary 'SHA256SUMS') | Where-Object { $_ -cmatch ('^[0-9a-f]{64}  ' + [regex]::Escape($name) + '$') })
@@ -66,7 +66,7 @@ try {
     try { $digest = [BitConverter]::ToString($hasher.ComputeHash($stream)).Replace('-', '').ToLowerInvariant() }
     finally { $stream.Dispose(); $hasher.Dispose() }
     if ($digest -cne $lines[0].Substring(0, 64)) {
-        throw 'Harness SHA-256 verification failed.'
+        throw 'HarnEX SHA-256 verification failed.'
     }
     Add-Type -AssemblyName System.IO.Compression.FileSystem
     $archive = [IO.Compression.ZipFile]::OpenRead($archivePath)
@@ -88,7 +88,7 @@ try {
             }
         }
         if (-not $seen.Contains($prefix + 'install.ps1') -or -not $seen.Contains($prefix + 'harness.py')) {
-            throw 'Incomplete Harness Windows archive.'
+            throw 'Incomplete HarnEX Windows archive.'
         }
     } finally { $archive.Dispose() }
     [IO.Compression.ZipFile]::ExtractToDirectory($archivePath, $temporary)

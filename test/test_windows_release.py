@@ -21,7 +21,7 @@ class WindowsReleaseTests(unittest.TestCase):
         self.dist, self.published = self.root / 'dist', self.root / 'published'
         self.published.mkdir()
         self.commit = 'b' * 40
-        bootstraps = {name: (ROOT / 'installer' / name).read_bytes() for name in ('install_harness_codex.sh', 'install_harness_codex.ps1')}
+        bootstraps = {name: (ROOT / 'installer' / name).read_bytes() for name in ('install_harnex.sh', 'install_harnex.ps1')}
         self.incoming = write_artifacts(self.dist, VERSION, self.commit, {'harness.py': b'fixture'}, bootstraps, platform='both')
         self.original = {key: value for key, value in self.incoming.items() if not key.startswith('windows')}
         self.linux_native = f'harness-codex-ui-{VERSION}-linux-x86_64.tar.gz'
