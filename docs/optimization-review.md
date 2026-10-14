@@ -32,7 +32,8 @@ contract. Neither alone authorizes apply. Source freshness remains separate,
 and existing reviewed stale-evidence handling remains in the CLI. Malformed
 contracts and modified managed files are not silently relabelled valid.
 
-Cross-validation uses the immediately preceding v0.15.0-beta source. Existing
+For the v0.16.0-beta review, cross-validation used the preceding v0.15.0-beta source.
+The current release baseline is documented in [CONTRIBUTING.md](../CONTRIBUTING.md#running-checks). Existing
 transaction/upgrade/runtime-plan tests remain part of regression coverage;
 there is no full historical source comparison matrix. Graft's actual Linux
 package smoke is a release gate separate from adapter unit tests. No offline

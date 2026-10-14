@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/sholee-pt/HarnEX/tree/v0.36.0-beta"><img src="https://img.shields.io/badge/Version-v0.36.0--beta-2563EB.svg?style=flat-square" alt="Version: v0.36.0-beta"></a>
+  <a href="https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.0-beta"><img src="https://img.shields.io/badge/Version-v0.36.0--beta-2563EB.svg?style=flat-square" alt="Version: v0.36.0-beta"></a>
   <a href="https://github.com/sholee-pt/HarnEX/actions/workflows/codex-beta.yml"><img src="https://github.com/sholee-pt/HarnEX/actions/workflows/codex-beta.yml/badge.svg?branch=v0.36.0-beta&amp;event=workflow_dispatch" alt="Linux verification and release status"></a>
   <a href="#agent-editions"><img src=".github/badges/agent-codex.svg" alt="Agent: Codex"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-64748B.svg?style=flat-square" alt="License: Apache 2.0"></a>
@@ -37,22 +37,22 @@ Behind that experience, HarnEX brings its own project-analysis, orchestration an
 
 Windows uses a separate native package and terminal management commands; it does not yet provide Linux's in-conversation management adapter. Routing rules and structural checks do not establish measured cost or quality gains. See [architecture](docs/architecture.md), [management](docs/management.md) and [routing](docs/routing.md).
 
-**Development beta:** The current HarnEX source is **v0.36.0-beta**. The renamed `harnex` command is available from this source branch. The latest published release is still **v0.35.3-beta**, under the previous Harness-Codex name; it installs `harness-codex` and uses `/harness/`. No v0.36.0-beta release is implied by this source update.
+**Beta releases:** Linux **v0.36.0-beta** is published with the `harnex` command and `/harnex/` controls. The latest published Windows release remains **v0.35.3-beta**, under the previous Harness-Codex name; it installs `harness-codex`. Windows v0.36.0-beta assets are not yet published.
 
 ## Installation Guide
 
 ### For Linux
 
-**Latest published release: [v0.35.3-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.35.3-beta)** (previous command name; published Linux and Windows assets)
+**Latest published Linux release: [v0.36.0-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.0-beta)**
 
 ```bash
-curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v0.35.3-beta/install_harness_codex.sh | sh
-harness-codex --version
+curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v0.36.0-beta/install_harnex.sh | sh
+harnex --version
 ```
 
 Previous releases retain their version tags and installation commands on the [Releases page](https://github.com/sholee-pt/HarnEX/releases). Starting with v0.36.0-beta, standalone installers are named `install_harnex.sh` and `install_harnex.ps1`; use them only after the corresponding platform assets are published.
 
-To install **HarnEX v0.36.0-beta** and use the commands below, install the development source:
+For source installation or development, clone the **v0.36.0-beta** branch:
 
 ```bash
 git clone --branch v0.36.0-beta --single-branch https://github.com/sholee-pt/HarnEX.git HarnEX
@@ -60,7 +60,7 @@ bash HarnEX/installer/install.sh
 harnex --version
 ```
 
-For an existing installation, select `reuse` to retain its settings. HarnEX replaces the owned `harness-codex` command with `harnex`; the old command is removed, so update any scripts that call it. Existing project files, storage and credentials remain in place. A user-owned `harnex` command or modified old launcher is preserved and reported as a conflict. Install from this source or a future verified HarnEX installer to cross the repository rename: older release updaters reject GitHub API redirects. See [migration details](docs/installation.md#harnex-name-and-command-migration).
+For an existing installation, select `reuse` to retain its settings. HarnEX replaces the owned `harness-codex` command with `harnex`; the old command is removed, so update any scripts that call it. Existing project files, storage and credentials remain in place. A user-owned `harnex` command or modified old launcher is preserved and reported as a conflict. Run the Linux release installer above or install from source to cross the repository rename: older release updaters reject GitHub API redirects. See [migration details](docs/installation.md#harnex-name-and-command-migration).
 
 Supports Linux x86_64 and aarch64. Source cloning requires Git; installation requires curl, Bash, tar and sha256sum. The installer validates the tool payload, prepares an isolated Python 3.11 environment and Git, installs the command in `~/.local/bin`, and registers PATH in `~/.bashrc`. Published release installation additionally verifies its archive checksum. No sudo is required. After installation, press Enter or type yes to open a new Bash with ~/.bashrc loaded. Exit returns to the original shell. To stay in the original shell instead, run `source ~/.bashrc` yourself. Redirected installation skips this prompt.
 

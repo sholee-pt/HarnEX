@@ -1,5 +1,9 @@
 # Auto relay feasibility experiment
 
+This page describes the retained feasibility experiment. The production adapter
+has a separate [release gate](../../docs/distribution.md#maintainers); the experiment's
+limitations below do not describe the full current release validation.
+
 Run the **Auto relay feasibility** workflow manually on Linux. It downloads the
 official Codex package identified by `build/native_ui/upstream.json` and the
 latest official stable release at run time. It does not compile Codex, publish a
@@ -49,7 +53,8 @@ live model inference, future Codex versions and production reliability remain
 unverified by this first-stage experiment. Inspect the artifact after the run;
 do not infer those properties from a green workflow result.
 
-Dependencies in `requirements-auto-relay.txt` are installed only for this manual
-experiment, not into the shipped Harness package. The workflow has one Ubuntu
+`requirements-auto-relay.txt` is used by this experiment and the production
+official-relay release gate. The production adapter prepares `websockets` separately;
+the `pexpect` and `pyte` terminal test drivers are not runtime dependencies. The workflow has one Ubuntu
 job, read-only repository permissions, a 15-minute limit and seven-day evidence
 retention. Its logs and artifact contain synthetic test data only.
