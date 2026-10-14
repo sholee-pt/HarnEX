@@ -32,6 +32,30 @@ def directory_metadata(path):
 
 
 class ProjectInstallTests(unittest.TestCase):
+    def test_permission_crosscheck_validates_versions_before_platform_skip(self):
+        from integration import verify_installer_permissions as permissions
+
+        baseline = permissions.copy_source(REPO_ROOT, self.base / "previous source")
+        metadata = baseline / permissions.SKILL / "scripts/harness_metadata.py"
+        current = permissions.version(REPO_ROOT)
+        self.assertNotEqual(current, "0.36.0-beta")
+        metadata.write_text(metadata.read_text(encoding="utf-8").replace(current, "0.36.0-beta"), encoding="utf-8")
+        for candidate, expected in ((REPO_ROOT, "skipped"), (baseline, "failed")):
+            with self.subTest(candidate=candidate):
+                output = self.base / "permission report.json"
+                command = [str(permissions.__file__), "--baseline", str(baseline), "--candidate", str(candidate), "--output", str(output)]
+                with mock.patch.object(sys, "argv", command), mock.patch.object(permissions, "os") as platform, mock.patch("builtins.print"):
+                    platform.name = "nt"
+                    code = permissions.main()
+                report = json.loads(output.read_text(encoding="utf-8"))
+                self.assertEqual(report["status"], expected, report)
+                self.assertEqual(code, int(expected == "failed"))
+                self.assertFalse(report["posixPermissionsVerified"])
+                if expected == "skipped":
+                    self.assertEqual(report["sources"]["candidate"]["version"], current)
+                else:
+                    self.assertIn("candidate must match the current source version", report["error"])
+
     def test_permission_crosscheck_source_runs_the_real_installer(self):
         from integration import verify_installer_permissions as permissions
 

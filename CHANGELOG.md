@@ -112,6 +112,7 @@
 - Download the platform-specific source archive, recheck the selected platform before writing, and extract Windows ZIPs with portable-path, file-type and size limits.
 - For an existing Windows integration, download and verify the matching native package before switching the active tool source. Preserve separate immutable version folders and existing project files; final integration registration remains a separate step.
 - Compare upgrades against the published v0.36.0-beta source and retain its artifact/evaluation compatibility. Published installation links remain pinned to available assets.
+- Read the installer permission check's candidate version from current source metadata, preserving the pinned previous-version check and rejecting mismatched candidates before platform-specific skips.
 
 ## HarnEX v0.36.0-beta
 
