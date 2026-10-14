@@ -105,7 +105,7 @@ def build_parser(source_root: Path) -> argparse.ArgumentParser:
     install.add_argument("--no-modify-path", action="store_true", help="Skip user PATH registration (Bash startup on Linux; user registry on Windows).")
     install.add_argument('--no-codex-integration', action='store_true', help='Install only the HarnEX tool; skip automatic Linux Codex integration.')
     install.add_argument("--existing", choices=("ask", "reuse", "reset"), default="ask",
-                         help="When installation traces exist, choose whether to reuse or reset HarnEX tool settings.")
+                         help="When a verified installation exists, choose whether to reuse or reset HarnEX tool settings.")
     install.add_argument("--owned-runtime", type=Path, help=argparse.SUPPRESS)
     uninstall = commands.add_parser("uninstall", help="Remove the CLI and its owned runtime after confirmation [Y/n]; keep project harnesses and reused environments.")
     uninstall.add_argument("--data-dir", type=Path, default=default_data_root())

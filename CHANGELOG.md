@@ -2,6 +2,7 @@
 
 | Version | Plan | Manifest | Transaction | Main change or patch |
 | :---: | :---: | :---: | :---: | --- |
+| [`v0.36.3‑beta`](#harnex-v0363-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Skip reinstall choices for shared PATH registration without an installed tool |
 | [`v0.36.2‑beta`](#harnex-v0362-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Migrate recognized pre-rename Graft settings without losing user choices or edits |
 | [`v0.36.1‑beta`](#harnex-v0361-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Select and prepare updates only from complete releases for the current platform |
 | [`v0.36.0‑beta`](#harnex-v0360-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Introduce HarnEX and the harnex command with compatible installation migration |
@@ -106,6 +107,13 @@
 | [`v0.2.1‑beta`](#harness-for-codex-v021-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | True no-op updates, complete action-map checks, CI and fixture dry-run corrections |
 | [`v0.2.0‑beta`](#harness-for-codex-v020-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | JSON proposal, no-write dry-run, guarded deterministic apply, instruction precedence |
 | [`v0.1.0‑beta`](#harness-for-codex-v010-beta) | Direct&nbsp;generation | Schema&nbsp;1 | None | Project-adaptive agents and skills, native Codex paths, initial ownership manifest |
+
+## HarnEX v0.36.3-beta
+
+- Ask reuse/reset only for a verified installed tool; shared Bash or Windows PATH registration alone proceeds as a fresh installation without terminal input.
+- Preserve command files without a verified installation and report their paths before any preference prompt. Invalid or unowned tool directories remain protected.
+- Retain explicit reset behavior and existing-installation preferences; document the difference between tool removal and shared PATH preservation.
+- Compare upgrade checks against the preceding v0.36.2-beta source.
 
 ## HarnEX v0.36.2-beta
 

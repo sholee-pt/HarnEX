@@ -7,7 +7,6 @@ import sys
 import stat
 
 from . import distribution as dist
-from .paths import user_home
 
 
 def prepare_integration(args, source_root):
@@ -53,20 +52,15 @@ def choose(data_root: Path, bin_dir: Path, selection: str) -> tuple[str, dict | 
         from .installation_paths import repair_entrypoints
         repair_entrypoints(root)
     existing = dist.installed_status(root) if root.exists() and any(root.iterdir()) else None
-    traces = existing is not None or any(os.path.lexists(binary / name) for name in ('harnex', 'harnex.cmd', 'harness-codex', 'harness-codex.cmd'))
-    if os.name != 'nt':
-        from .shell import START
-        profile = dist._storage_path(user_home() / '.bashrc')
-        if profile.is_file() and profile.stat().st_size <= 1024 * 1024:
-            traces = traces or START.encode() in profile.read_bytes()
-    else:
-        from .windows_path import register_path
-        traces = traces or register_path(binary, dry_run=True)['state'] == 'unchanged'
-    if not traces:
-        return 'fresh', None
+    if existing is None:
+        commands = [binary / name for name in ('harnex', 'harnex.cmd', 'harness-codex', 'harness-codex.cmd') if os.path.lexists(binary / name)]
+        if commands:
+            raise ValueError('HarnEX commands exist without a verified installation; inspect these preserved files before reinstalling: ' + ', '.join(map(str, commands)))
+        # Shared PATH registration is not an installation or saved preferences.
+        return 'fresh' if selection == 'ask' else selection, None
     if selection != 'ask':
         return selection, existing
-    message = ('\nAn existing HarnEX installation or PATH registration was found.\n'
+    message = ('\nAn existing HarnEX installation was found.\n'
                '  reuse  Keep its update preferences and verified installation.\n'
                '  reset  Reset HarnEX update preferences, check cache and managed PATH registration.\n'
                '         Project harnesses and unrelated shell settings are preserved.\n'

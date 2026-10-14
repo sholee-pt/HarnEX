@@ -26,7 +26,7 @@ class HarnEXIdentityTests(unittest.TestCase):
             path = source / name
             path.parent.mkdir(parents=True, exist_ok=True)
             if name in {dist.METADATA, '.agents/skills/harness/assets/manifest.json'}:
-                data = data.replace(b'0.36.2-beta', b'0.35.3-beta')
+                data = data.replace(b'0.36.3-beta', b'0.35.3-beta')
             path.write_bytes(data)
         state = dist.install_tool(source, self.data, self.binary)
         if command == 'harness':
@@ -148,7 +148,7 @@ class HarnEXIdentityTests(unittest.TestCase):
         self.assertFalse(command.exists())
         result = subprocess.run([str(self.binary / 'harnex.cmd'), '--version'], capture_output=True, text=True, timeout=60)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stdout.strip(), 'HarnEX 0.36.2-beta')
+        self.assertEqual(result.stdout.strip(), 'HarnEX 0.36.3-beta')
 
     def test_uninstall_preview_includes_all_owned_commands(self):
         state = dist.install_tool(REPO, self.data, self.binary)

@@ -10,7 +10,7 @@ The installer validates the old installation, creates the new command and record
 
 Storage paths (`harness-codex` on Linux and `HarnessCodex` on Windows), the `harness` Conda environment, `HARNESS_*` variables, ownership markers and project `.harness`/`.agents/skills/harness` paths remain stable. From v0.36.0-beta, the standalone installers are `install_harnex.sh` and `install_harnex.ps1`. Earlier releases retain their original `install_harness_codex` filenames. Archive names such as `harness-codex-VERSION-linux.tar.gz` remain compatibility identifiers; they do not select the installed command name.
 
-The published Linux v0.36.1-beta assets install `harnex` and provide `/harnex/` controls. No Windows assets are currently listed in the published releases; the previously verified v0.35.3-beta release URL is unavailable. Windows v0.36.2-beta source is available for the new command, but its matching native package still requires separate publication before full Windows integration can complete.
+The published Linux v0.36.1-beta assets install `harnex` and provide `/harnex/` controls. No Windows assets are currently listed in the published releases; the previously verified v0.35.3-beta release URL is unavailable. Windows v0.36.3-beta source is available for the new command, but its matching native package still requires separate publication before full Windows integration can complete.
 
 The [README installation guide](../README.md#installation-guide) provides the standard commands. Release installers are version-bound; subsequent `harnex update` follows published HarnEX releases. Explicit `--branch` pins retain the developer source-update path.
 
@@ -50,12 +50,14 @@ points are preserved by either opt-out; they are not uninstalled.
 | `--data-dir PATH` | `-DataDir PATH` | Managed CLI storage |
 | `--bin-dir PATH` | `-BinDir PATH` | Command directory |
 | `--auto-update compatible\|check\|off` | `-AutoUpdate compatible\|check\|off` | Between-session update policy |
-| `--existing ask\|reuse\|reset` | `-Existing ask\|reuse\|reset` | Existing-installation choice |
+| `--existing ask\|reuse\|reset` | `-Existing ask\|reuse\|reset` | Verified existing-installation choice |
 | `--activate ask\|shell\|skip` | — | Ask to open a child Bash, open it explicitly, or skip activation |
 | `--no-modify-path` | `-NoModifyPath` | Skip PATH registration |
 | `--no-codex-integration` | — | Skip Linux Codex package and entry-point setup |
 | `CONDA_EXE=/path/to/conda` | `-CondaExe PATH` | Use an existing environment manager |
 | — | `-CondaHome PATH` | Select a dedicated Miniforge location |
+
+From v0.36.3-beta, the reuse/reset prompt requires a verified installed tool. A shared PATH entry left after uninstall is not an installation or saved tool preferences, so installation proceeds without that prompt. Explicit `--existing reset` still requests PATH reset. Command files without a verified installation are preserved and reported as a conflict before prompting; a nonempty unowned or damaged tool directory still requires inspection. The usual PATH registration checks continue to protect user-edited shell/registry settings.
 
 `reuse` retains the repository transport and automatic-update policy. Branch pins are retained except for the [one-time legacy-to-beta migration](versioning.md). `reset` applies the supplied/default preferences, clears the update-check cache and rebuilds the exact managed PATH registration. Both preserve verified releases and runtime files, project harnesses, unrelated shell/registry settings and modified user content. Reset does not authorize removing unknown directories. Without a terminal, an existing installation requires an explicit choice.
 
@@ -79,14 +81,14 @@ The [README Windows section](../README.md#for-windows) tracks current publicatio
 ## Source installation
 
 ```bash
-git clone --branch v0.36.2-beta --single-branch https://github.com/sholee-pt/HarnEX.git
+git clone --branch v0.36.3-beta --single-branch https://github.com/sholee-pt/HarnEX.git
 bash HarnEX/installer/install.sh
 source ~/.bashrc
 ```
 
 On Windows, the source installer can be exercised from PowerShell for development: `& ./HarnEX/installer/install.ps1` under your normal script execution policy. This does not establish a verified Windows native release. The source scripts install an existing checkout; `install_harnex.sh` and `.ps1` first download a release and then invoke the corresponding source installer. Installation does not alter project Git state.
 
-Selecting a branch in `git clone` selects the initial source only; it does not pin HarnEX's update channel. New installations without an explicit HarnEX branch pin follow published releases, while `reuse` preserves an existing pin. For deliberate development tracking, the Linux source installer accepts `--branch v0.36.2-beta`; the installed CLI also accepts `harnex update --branch v0.36.2-beta`. That CLI command can update source immediately and saves the pin. It does not publish or verify a matching Windows native package.
+Selecting a branch in `git clone` selects the initial source only; it does not pin HarnEX's update channel. New installations without an explicit HarnEX branch pin follow published releases, while `reuse` preserves an existing pin. For deliberate development tracking, the Linux source installer accepts `--branch v0.36.3-beta`; the installed CLI also accepts `harnex update --branch v0.36.3-beta`. That CLI command can update source immediately and saves the pin. It does not publish or verify a matching Windows native package.
 
 The v0.33.0-beta updater introduces a source-layout contract while retaining the
 complete earlier file layout as an upgrade bridge. Later refactors can declare
