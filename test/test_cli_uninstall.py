@@ -90,6 +90,23 @@ class UninstallTests(unittest.TestCase):
             self.invoke()
             forget.assert_called_once()
 
+    def test_credential_cleanup_failure_preserves_file_and_harnex_guidance(self):
+        from harness_cli import jev_auth
+        key = 'private-fixture-value-not-for-output'
+        home = jev_auth.home()
+        home.mkdir()
+        (home / 'typesafe.json').write_text(key)
+        before = files(home)
+        with mock.patch.object(jev_auth, 'forget', side_effect=ValueError(key)) as forget:
+            status, output, _ = self.invoke()
+        forget.assert_called_once()
+        self.assertEqual(status, 0)
+        self.assertFalse((self.data / 'launcher.py').exists())
+        self.assertEqual(files(home), before)
+        self.assertIn('Credential file to inspect: ' + str(home / 'typesafe.json'), output)
+        self.assertIn('Reinstall HarnEX before using harnex jev logout', output)
+        self.assertNotIn(key, output)
+
     @unittest.skipUnless(os.name == 'posix', 'Saved credentials require POSIX ownership checks')
     def test_preserved_credential_reports_post_removal_location_without_secret(self):
         from harness_cli import jev_auth
@@ -104,7 +121,7 @@ class UninstallTests(unittest.TestCase):
         self.assertEqual(files(home), before)
         self.assertIn('tool removal step completed', output)
         self.assertIn(str(home / 'typesafe.json'), output)
-        self.assertIn('Reinstall Harness before using harnex jev logout', output)
+        self.assertIn('Reinstall HarnEX before using harnex jev logout', output)
         self.assertNotIn('before uninstalling', output)
         self.assertNotIn(key, output)
 
