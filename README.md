@@ -1,7 +1,7 @@
 <h1 align="center">HarnEX <img src="https://img.shields.io/badge/Beta-F59E0B.svg?style=flat-square" alt="Beta" height="24"></h1>
 
 <p align="center">
-  An enhanced Codex experience, powered by project-aware harness orchestration.
+  An enhanced Codex CLI experience, powered by project-aware harness orchestration.
 </p>
 
 <p align="center">
@@ -24,31 +24,31 @@
   <a href="CHANGELOG.md">Changelog</a>
 </p>
 
-**HarnEX extends the experience inside Codex with guided project setup, in-conversation management, project switching and optional Auto model selection.** On Linux, these controls work through an adapter around the unmodified official Codex terminal, preserving its conversations, renderer, history and permission controls.
+**HarnEX extends Codex CLI with guided project setup, in-conversation management, project switching and optional Auto model selection.** On Linux, these controls work inside the unmodified official Codex CLI terminal through a local adapter, preserving its conversations, renderer, history and permission controls.
 
 Behind that experience, HarnEX brings its own project-analysis, orchestration and safe-update logic. It derives agents and skills from workspace evidence, distinguishes direct work from delegation and coordination, and materializes validated plans before applying changes with ownership and hash checks. One shared project harness keeps those decisions consistent across plain folders, Git worktrees and workspaces containing multiple repositories.
 
 | Layer | What HarnEX adds |
 | --- | --- |
-| Inside Codex on Linux | `/harnex/` menus, guided setup, local status, project preferences, queued project switching and update choices |
+| Inside Codex CLI on Linux | `/harnex/` menus, guided setup, local status, project preferences, queued project switching and update choices |
 | Project harness | Project-specific instructions, evidence-based agent/skill selection and task-level orchestration contracts |
 | Controlled changes | Deterministic plan generation, validation, ownership checks, recoverable changes and opt-in maintenance |
 | Optional assistance | Auto model/effort routing, local Graft retrieval and separately configured Jev advice |
 
 Windows uses a separate native package and terminal management commands; it does not yet provide Linux's in-conversation management adapter. Routing rules and structural checks do not establish measured cost or quality gains. See [architecture](docs/architecture.md), [management](docs/management.md) and [routing](docs/routing.md).
 
-**Development source:** v0.36.3-beta skips the reuse/reset prompt when only shared PATH registration remains after uninstall; these changes are not yet published as release assets.
+**Latest changes:** v0.36.3-beta skips the reuse/reset prompt when only shared PATH registration remains after uninstall. It also includes the v0.36.2-beta migration for recognized pre-rename Graft settings; see [retrieval compatibility](docs/retrieval.md).
 
-**Beta releases:** Linux **v0.36.1-beta** is published with the `harnex` command and `/harnex/` controls. No Windows assets are currently listed in the published releases. The previously verified v0.35.3-beta Windows release is no longer available at its release URL.
+**Beta releases:** Linux **[v0.36.3-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.3-beta)** is published with the `harnex` command and `/harnex/` controls. No Windows assets are currently listed in the published releases. The previously verified v0.35.3-beta Windows release is no longer available at its release URL.
 
 ## Installation Guide
 
 ### For Linux
 
-**Latest published Linux release: [v0.36.1-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.1-beta)**
+**Latest published Linux release: [v0.36.3-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.3-beta)**
 
 ```bash
-curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v0.36.1-beta/install_harnex.sh | sh
+curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v0.36.3-beta/install_harnex.sh | sh
 harnex --version
 ```
 
@@ -86,13 +86,13 @@ harnex init --project 'C:\path\to\project' --goal-file 'C:\path\to\PROJECT.md' -
 codex --cd 'C:\path\to\project'
 ```
 
-After successful project configuration, `init/config` downloads the matching Windows native package with Auto and Windows helpers. This is separate from Linux's official-package adapter: the `/harnex/` management menu, independent official Codex updates and observed-outcome Auto advice below apply to Linux. Use terminal `harnex` commands on Windows. Graft automatic setup and persistent Jev login remain Linux-only. Windows publication requires separate authorization and validation for each release; future Linux releases do not imply Windows assets. From v0.36.1-beta, the updater selects only releases with complete assets for the current OS and architecture. Older installed updaters still require you to confirm the target's Windows files before accepting an update. See [Windows setup and updates](docs/installation.md#windows-setup-and-updates).
+After successful project configuration, `init/config` downloads the matching Windows native package with Auto and Windows helpers. This is separate from Linux's official-package adapter: the `/harnex/` management menu, independent official Codex updates and observed-outcome Auto advice below apply to Linux. Use terminal `harnex` commands on Windows. Graft automatic setup and persistent Jev login remain Linux-only. Windows publication requires separate authorization and validation for each release; future Linux releases do not imply Windows assets. From v0.36.1-beta, release-channel updates select only releases with complete assets for the current OS and architecture. Older installed updaters still require you to confirm the target's Windows files before accepting an update. See [Windows setup and updates](docs/installation.md#windows-setup-and-updates).
 
 When migrating from 0.10.0-beta, run this installer once: its updater cannot discover the new unprefixed branches. If a verified installation exists, choose **`reuse`** to retain tool preferences or **`reset`** to reset HarnEX update preferences, its check cache and managed PATH registration. Project harnesses and unrelated settings are preserved. Shared PATH registration alone does not trigger this choice. Unattended installation accepts `--existing reuse|reset` on Linux or `-Existing reuse|reset` on Windows. See [installation options](https://github.com/sholee-pt/HarnEX/blob/v0.36.3-beta/docs/installation.md).
 
 ## Quick Start
 
-Default Linux installation also prepares the official Codex command. Codex handles login and retains its native model, trust, sandbox and approval settings. After applying PATH, you can start setup entirely from its screen:
+Default Linux installation also prepares the official Codex CLI command. Codex CLI handles login and retains its native model, trust, sandbox and approval settings. After applying PATH, you can start setup entirely from its terminal screen:
 
 ```bash
 codex
@@ -172,7 +172,7 @@ See [integration and routing](docs/routing.md).
 | `status` | Read-only installation, compatibility and evidence status, with a suggested next command |
 | `doctor` | Read-only ownership, manifest, references and activation checks |
 | `skills` | List project skills; `skills add --source PATH --dry-run` previews a reviewed local specialist skill import |
-| `update --check` | Check for a newer published HarnEX release without installing it |
+| `update --check` | Check for a newer complete HarnEX release for the current OS and architecture, or the explicitly pinned source branch, without installing it |
 | `update` | Update HarnEX and migrate an existing integration; project agents and skills are reviewed separately |
 | `remove` | Preview removal of the project's unchanged generated harness files |
 | `reset` | Preview removal and fresh configuration of the project harness |
@@ -221,11 +221,13 @@ harnex uninstall
 
 Uninstall preserves project harnesses, native Codex conversations and pre-existing Conda environments. It removes the verified tool installation, its removable PATH registration and unchanged files in a runtime created exclusively for this installation. Added or modified files and shared PATH entries are preserved and reported. Windows finishes runtime cleanup after the command exits.
 
+With v0.36.3-beta, shared PATH registration alone does not trigger a reuse/reset prompt on reinstall. A verified installed tool still offers that choice; orphan command files or invalid tool directories are preserved and reported for inspection. See [reinstall choices](docs/installation.md#options).
+
 After reinstalling, run `status` in a project to recognize its retained harness. Reuse it with `codex`/`codex resume`, review it with `config`, or explicitly `reset` it. Remove project harnesses before uninstalling if you no longer need them; the tool never searches your disk to delete projects.
 
 ## Documentation
 
-- [Native Codex integration and automatic model routing](docs/routing.md)
+- [Native Codex CLI integration and automatic model routing](docs/routing.md)
 - [Installation, reinstall choices and troubleshooting](https://github.com/sholee-pt/HarnEX/blob/v0.36.3-beta/docs/installation.md)
 - [Project and conversation lifecycle](https://github.com/sholee-pt/HarnEX/blob/v0.36.3-beta/docs/sessions.md)
 - [Bounded maintenance and local records](docs/maintenance.md)
@@ -243,7 +245,7 @@ After reinstalling, run `status` in a project to recognize its retained harness.
 
 ## Agent editions
 
-This repository provides **`harnex`** and needs no `--agent` option. Hidden legacy Codex selectors remain accepted for older scripts. Claude integration is outside this repository; this command does not implement Claude sessions.
+This repository provides **`harnex` for Codex CLI** and needs no `--agent` option. Hidden legacy Codex selectors remain accepted for older scripts. Claude integration is outside this repository; this command does not implement Claude sessions.
 
 ## License
 

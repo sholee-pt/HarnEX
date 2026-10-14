@@ -1,6 +1,6 @@
-# Management inside Codex
+# Management inside Codex CLI
 
-The ordinary `harnex` commands remain available. When `codex` starts through
+The ordinary `harnex` commands remain available. When Codex CLI (`codex`) starts through
 the HarnEX integration, type a qualified command such as `/harnex/status` in
 the composer. Use `/harnex/` for a small management menu.
 
@@ -98,7 +98,7 @@ profiles, and a standalone Codex launch without the adapter use terminal
 | `/harnex/switch` | Choose a reachable project from recent native conversation metadata. |
 | `/harnex/switch "PROJECT_PATH"` | Select another existing project and choose its resume picker or a new conversation. |
 | `/harnex/switch --cancel` | Cancel a queued switch only; retain other kinds of reservations. |
-| `/harnex/update --check` | Check the published HarnEX version; a network request, not a model request. |
+| `/harnex/update --check` | Check complete published HarnEX releases for the current OS and architecture, or the explicitly pinned source branch; a network request, not a model request. |
 | `/harnex/update` | Check, then optionally queue the terminal updater after normal Codex exit. |
 | `/harnex/update --cancel` | Cancel a queued HarnEX update only. |
 | `/harnex/tool` | Update checks, update scheduling, terminal uninstall and queued-action review. |

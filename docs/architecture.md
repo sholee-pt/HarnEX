@@ -1,5 +1,7 @@
 # Project harness architecture
 
+HarnEX extends Codex CLI with project setup, management and optional Auto routing. Its generator produces Codex-native project files; the generator-only installation below is also available without the CLI integration.
+
 ## What It Generates
 
 ```text

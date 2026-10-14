@@ -1,6 +1,6 @@
-# Project management and native conversations
+# Project management and Codex CLI conversations
 
-HarnEX creates and maintains one project-local harness. Codex uses it through
+HarnEX creates and maintains one project-local harness. Codex CLI uses it through
 its native root instructions, agents and skills. HarnEX adds no bootstrap user
 turn. Its local Auto preference record contains thread IDs and booleans only;
 Codex remains the owner of conversation history and resume.

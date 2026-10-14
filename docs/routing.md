@@ -1,6 +1,6 @@
-# Official Codex with HarnEX Auto
+# Official Codex CLI with HarnEX Auto
 
-This page describes the Linux official-package adapter. The separately verified Windows x86_64 release uses a Harness-versioned native package with Auto; its installation and update path is described in [installation](installation.md). The Linux adapter's management menu, protocol checks and independent Codex updates do not describe the Windows package.
+This page describes the Linux adapter for official Codex CLI packages. Windows x86_64 integration requires a separately published, HarnEX-versioned native Codex CLI package with Auto; its installation and update path is described in [installation](installation.md). The Linux adapter's management menu, protocol checks and independent Codex updates do not describe the Windows package.
 
 ```bash
 harnex init --goal-file PROJECT.md
@@ -21,7 +21,7 @@ Official packages are downloaded from `openai/codex`, checked against GitHub's a
 ```bash
 codex update                 # Explicitly update the owned official Codex package
 codex update --auto          # Explicitly re-enable the adapter after compatibility passes
-harnex update --check # Check published HarnEX releases
+harnex update --check # Check HarnEX's configured update channel
 harnex update         # Explicitly update HarnEX
 HARNESS_NO_UPDATE_CHECK=1 codex
 HARNESS_CODEX_NATIVE=1 codex  # Official UI without the Auto adapter
@@ -142,4 +142,4 @@ The opt-in paid model-switch smoke requires a preference file selecting two dist
 
 Before connecting, HarnEX checks for the official remote interface and a usable model catalog. If those checks fail it offers native mode or exit. Unexpected protocol failure stops the adapter and directs the user to resume; it never silently resubmits a request. Capability checks do not prove all future APIs, account restrictions or live tool behavior. Linux CI uses real official TUI and app-server processes with a synthetic local model provider, not paid inference.
 
-Confirmed uninstall removes unchanged owned entry points, preferences, packages and exact PATH blocks. Edited or unknown files are preserved for review. Native history, authentication, standalone Codex and project harnesses remain intact. Windows native builds require a separately authorized workflow and are not part of Linux publication; see [release verification](distribution.md).
+Confirmed uninstall removes unchanged owned entry points, preferences, packages and removable exact PATH blocks. Shared command directories retain their PATH registration to preserve other commands; from v0.36.3-beta, that entry alone does not trigger reuse/reset on reinstall. Edited or unknown files are preserved for review. Native history, authentication, standalone Codex and project harnesses remain intact. Windows native builds require a separately authorized workflow and are not part of Linux publication; see [release verification](distribution.md).
