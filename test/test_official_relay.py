@@ -18,6 +18,7 @@ from unittest import mock
 from harness_cli import auto_relay as relay, codex_entry as entry, official_codex as official, release_updates as updates
 from harness_cli import codex_integration as integration, distribution as dist, integration_path, native_package
 from test_cli_distribution import source
+from test_release_updates import release_fixture
 
 
 def catalog():
@@ -271,7 +272,7 @@ class UpdateTests(unittest.TestCase):
                     official.removal_files(data)
 
     def test_real_release_activation_preserves_previous_files_and_rejects_bad_bytes(self):
-        with tempfile.TemporaryDirectory() as temporary:
+        with tempfile.TemporaryDirectory() as temporary, mock.patch.object(updates, 'target_platform', return_value='linux-x86_64'):
             root = Path(temporary)
             old = source(root / 'old', '0.22.3-beta', commit='a' * 40)
             new = source(root / 'new', '0.23.0-beta', commit='b' * 40)
@@ -284,8 +285,9 @@ class UpdateTests(unittest.TestCase):
                         bundle.add(path, arcname='harness-codex-0.23.0-beta/' + path.relative_to(new).as_posix())
             value = {'name': 'harness-codex-0.23.0-beta-linux.tar.gz', 'url': 'https://api.github.com/repos/sholee-pt/HarnEX/releases/assets/1',
                      'digest': 'sha256:' + hashlib.sha256(archive.read_bytes()).hexdigest(), 'size': archive.stat().st_size}
-            selected = {'updateAvailable': True, 'availableVersion': '0.23.0-beta',
-                        'release': {'tag_name': 'v0.23.0-beta', 'assets': [value]}}
+            release = release_fixture('0.23.0-beta', ('linux',))
+            release['assets'] = [item for item in release['assets'] if item['name'] != value['name']] + [value]
+            selected = {'updateAvailable': True, 'availableVersion': '0.23.0-beta', 'release': release}
             with mock.patch.object(updates, 'request', side_effect=lambda *args, **kw: io.BytesIO(b'corrupt')):
                 with self.assertRaisesRegex(ValueError, 'mismatch'):
                     updates.update(data, selected=selected)
@@ -299,7 +301,7 @@ class UpdateTests(unittest.TestCase):
             self.assertEqual({p.relative_to(Path(before['sourceRoot'])): p.read_bytes() for p in Path(before['sourceRoot']).rglob('*') if p.is_file()}, old_bytes)
 
     def test_published_beta_selection_ignores_drafts_and_nonversion_tags(self):
-        releases = [{'tag_name': 'v0.22.3-beta'}, {'tag_name': 'v0.23.0-beta'},
+        releases = [release_fixture('0.22.3-beta'), release_fixture('0.23.0-beta'),
                     {'tag_name': 'v9.0.0', 'draft': True}, {'tag_name': 'preview-latest'}]
         with mock.patch.object(updates, 'metadata', return_value=releases):
             self.assertEqual(updates.latest_harness()['tag_name'], 'v0.23.0-beta')

@@ -1,7 +1,7 @@
 #!/bin/sh
 # Public, version-bound bootstrap. This entire file also works through `| sh`.
 set -eu
-VERSION=0.36.0-beta
+VERSION=0.36.1-beta
 fail() { printf 'HarnEX installer: %s\n' "$*" >&2; exit 1; }
 usage() {
   printf '%s\n' 'Usage: sh install_harnex.sh [OPTIONS]' \

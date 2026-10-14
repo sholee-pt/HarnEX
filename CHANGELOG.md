@@ -2,6 +2,7 @@
 
 | Version | Plan | Manifest | Transaction | Main change or patch |
 | :---: | :---: | :---: | :---: | --- |
+| [`v0.36.1‑beta`](#harnex-v0361-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Select and prepare updates only from complete releases for the current platform |
 | [`v0.36.0‑beta`](#harnex-v0360-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Introduce HarnEX and the harnex command with compatible installation migration |
 | [`v0.35.3‑beta`](#harness-for-codex-v0353-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve Windows managed-path identity during concurrent parent creation |
 | [`v0.35.2‑beta`](#harness-for-codex-v0352-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve configured instructions, refresh locked checkpoints and report external snapshot cleanup failures |
@@ -104,6 +105,13 @@
 | [`v0.2.1‑beta`](#harness-for-codex-v021-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | True no-op updates, complete action-map checks, CI and fixture dry-run corrections |
 | [`v0.2.0‑beta`](#harness-for-codex-v020-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | JSON proposal, no-write dry-run, guarded deterministic apply, instruction precedence |
 | [`v0.1.0‑beta`](#harness-for-codex-v010-beta) | Direct&nbsp;generation | Schema&nbsp;1 | None | Project-adaptive agents and skills, native Codex paths, initial ownership manifest |
+
+## HarnEX v0.36.1-beta
+
+- Select the newest published release with complete, uniquely identified assets for the current OS and architecture. Linux supports x86_64/aarch64; Windows requires its x86_64 ZIP and matching native package. Incomplete or untrusted platform assets are not advertised.
+- Download the platform-specific source archive, recheck the selected platform before writing, and extract Windows ZIPs with portable-path, file-type and size limits.
+- For an existing Windows integration, download and verify the matching native package before switching the active tool source. Preserve separate immutable version folders and existing project files; final integration registration remains a separate step.
+- Compare upgrades against the published v0.36.0-beta source and retain its artifact/evaluation compatibility. Published installation links remain pinned to available assets.
 
 ## HarnEX v0.36.0-beta
 

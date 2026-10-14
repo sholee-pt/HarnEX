@@ -10,7 +10,7 @@ The installer validates the old installation, creates the new command and record
 
 Storage paths (`harness-codex` on Linux and `HarnessCodex` on Windows), the `harness` Conda environment, `HARNESS_*` variables, ownership markers and project `.harness`/`.agents/skills/harness` paths remain stable. From v0.36.0-beta, the standalone installers are `install_harnex.sh` and `install_harnex.ps1`. Earlier releases retain their original `install_harness_codex` filenames. Archive names such as `harness-codex-VERSION-linux.tar.gz` remain compatibility identifiers; they do not select the installed command name.
 
-The published Linux v0.36.0-beta assets install `harnex` and provide `/harnex/` controls. The latest published Windows assets remain v0.35.3-beta and install `harness-codex`; they do not contain the HarnEX changes. Windows v0.36.0-beta source is available for the new command, but its matching native package still requires separate publication before full Windows integration can complete.
+The published Linux v0.36.0-beta assets install `harnex` and provide `/harnex/` controls. No Windows assets are currently listed in the published releases; the previously verified v0.35.3-beta release URL is unavailable. Windows v0.36.1-beta source is available for the new command, but its matching native package still requires separate publication before full Windows integration can complete.
 
 The [README installation guide](../README.md#installation-guide) provides the standard commands. Release installers are version-bound; subsequent `harnex update` follows published HarnEX releases. Explicit `--branch` pins retain the developer source-update path.
 
@@ -20,7 +20,7 @@ Interactive Linux `codex` launches without a branch pin check both release chann
 
 Interactive launch shows progress while checking releases and Auto compatibility. A failed release check keeps installed files available. Native fallback preserves Codex settings and history, but disables both HarnEX Auto and `/harnex/` management for that session. The terminal displays `status`, `init` and `config` commands for the selected project; run them after exiting Codex. An explicit native profile or `HARNESS_CODEX_NATIVE=1` keeps its original arguments and receives the same management guidance. Help and automation remain quiet native commands.
 
-The published v0.35.3-beta release includes separately verified Windows x86_64 assets. Windows installation prepares the management CLI; `init/config` then prepares the matching HarnEX-versioned native Codex package with Auto. Open a new terminal after integration registers PATH. Linux's official-package adapter, `/harnex/` management menu and independent Codex update flow do not apply to that Windows package. Use terminal management commands, and check that a target release includes its Windows ZIP, PowerShell installer and matching native package before updating. Graft automatic setup and persistent Jev login remain Linux-only; environment-provided Jev keys remain supported. See [release verification](distribution.md).
+Windows integration requires separately published Windows x86_64 assets, which are not currently available. Windows installation prepares the management CLI; `init/config` then prepares the matching HarnEX-versioned native Codex package with Auto. Open a new terminal after integration registers PATH. Linux's official-package adapter, `/harnex/` management menu and independent Codex update flow do not apply to that Windows package. Use terminal management commands; older updaters require you to check that a target release includes its Windows ZIP, PowerShell installer and matching native package before updating. Graft automatic setup and persistent Jev login remain Linux-only; environment-provided Jev keys remain supported. See [release verification](distribution.md).
 
 ## Windows setup and updates
 
@@ -28,7 +28,9 @@ First configuration needs an existing Codex CLI with working account/provider ac
 
 Run full `init/config` in an interactive terminal, including when using `--json` or `--settings native`. Those options do not enable unattended configuration. After successful setup, open a new terminal and use `codex --cd 'C:\path\to\project'`; `--project` does not change the parent shell's working directory. If another Codex still wins PATH lookup, compare `Get-Command codex -All` with `codexIntegration.directory` in `harnex status --project PATH --json`, and select the owned native executable explicitly.
 
-`update --check` chooses the highest published HarnEX version without checking Windows asset availability. The management-source updater uses the Linux-named archive on both platforms; that archive contains shared source, not a Linux Codex executable. When an integration already exists, `update` activates the new tool source before refreshing the matching native package. Missing Windows assets or an integration failure can therefore leave the tool updated while Codex integration still needs attention. Interactive `init/config` can also offer this unfiltered HarnEX update; skip it until that version has a verified Windows supplement, or use `--no-update-check` for that invocation. This flag does not make later configuration downloads offline.
+From v0.36.1-beta, `update --check` and interactive update prompts select the highest published release with complete assets for the current OS and architecture. Linux x86_64/aarch64 require their source archive and installer; Windows x86_64 requires its ZIP, PowerShell installer and matching native package. Both require checksum/build metadata and unique uploaded assets with trusted URLs and SHA-256 digests. Other-platform-only and incomplete releases are skipped. If no compatible release exists, the check reports that it is unavailable instead of claiming the installation is current. Windows downloads its ZIP rather than the Linux source archive. Older installed updaters do not have this filter; confirm their target's Windows files or use a verified release installer.
+
+For an existing Windows integration, the updater downloads and verifies the native package against the selected source commit before activating the new tool. Failed download, checksum, package validation or concurrent integration changes leave the previous tool active. Final integration/PATH registration still follows tool activation and can fail separately; this is not a transaction covering every installation component. Resolve that error and use `init/config` to retry integration. `--no-update-check` suppresses the interactive offer but does not make explicitly requested configuration downloads offline.
 
 For a selected verified Windows release, run its version-bound PowerShell installer with `-Existing reuse`, then use `init --project PATH` without a brief to retain an existing harness while refreshing integration, or `config --project PATH` for a reviewed project update. This reuse path requires an existing valid/compatible harness; resolve `status/doctor` errors first. A same-version `update` reports current and does not repair an earlier integration failure. Run `init/config` after resolving that failure. Reinstallation preserves downgrade checks; an older installer is not an automatic rollback.
 
@@ -72,19 +74,19 @@ For a separately published Windows release v0.36.0-beta or newer, download its `
 & ./install_harnex.ps1 -Existing reuse
 ```
 
-The [README Windows example](../README.md#for-windows) remains pinned to the latest verified Windows assets. If it still selects v0.35.3-beta, use that release's `install_harness_codex.ps1` filename instead.
+The [README Windows section](../README.md#for-windows) tracks current publication availability; it provides no release download command while Windows assets are unavailable. Earlier releases, when available, retain their original `install_harness_codex.ps1` filename.
 
 ## Source installation
 
 ```bash
-git clone --branch v0.36.0-beta --single-branch https://github.com/sholee-pt/HarnEX.git
+git clone --branch v0.36.1-beta --single-branch https://github.com/sholee-pt/HarnEX.git
 bash HarnEX/installer/install.sh
 source ~/.bashrc
 ```
 
 On Windows, the source installer can be exercised from PowerShell for development: `& ./HarnEX/installer/install.ps1` under your normal script execution policy. This does not establish a verified Windows native release. The source scripts install an existing checkout; `install_harnex.sh` and `.ps1` first download a release and then invoke the corresponding source installer. Installation does not alter project Git state.
 
-Selecting a branch in `git clone` selects the initial source only; it does not pin HarnEX's update channel. New installations without an explicit HarnEX branch pin follow published releases, while `reuse` preserves an existing pin. For deliberate development tracking, the Linux source installer accepts `--branch v0.36.0-beta`; the installed CLI also accepts `harnex update --branch v0.36.0-beta`. That CLI command can update source immediately and saves the pin. It does not publish or verify a matching Windows native package.
+Selecting a branch in `git clone` selects the initial source only; it does not pin HarnEX's update channel. New installations without an explicit HarnEX branch pin follow published releases, while `reuse` preserves an existing pin. For deliberate development tracking, the Linux source installer accepts `--branch v0.36.1-beta`; the installed CLI also accepts `harnex update --branch v0.36.1-beta`. That CLI command can update source immediately and saves the pin. It does not publish or verify a matching Windows native package.
 
 The v0.33.0-beta updater introduces a source-layout contract while retaining the
 complete earlier file layout as an upgrade bridge. Later refactors can declare
@@ -183,6 +185,8 @@ The installer displays an animated indicator and live elapsed seconds on an inte
 Interactive yes/no confirmations use `[Y/n]`: Enter, `y` and `yes` approve; `n` and `no` decline, ignoring capitalization and surrounding spaces. Unknown answers are asked again. Closed input or a noninteractive stream never counts as Enter. This also applies to uninstall, saved-key logout and shell activation. Numbered menus, API-key entry and reuse/reset choices retain their own input rules; existing `--yes` flags remain explicit automation options. `--dry-run` never deletes files.
 
 `update` shows current/latest versions and distinguishes an available update, a completed update and an already-current installation. An unchanged installation does not refresh its Codex integration or print update-completion advice. A failed check exits with an error and does not claim that the installation is current.
+
+Tool updates prepare a complete validated source snapshot in a separate immutable release directory, then switch the active pointer. Added and changed files come from that snapshot; removed files are absent from the new active version. Previous version directories are retained rather than merged into or automatically deleted from the new version. Settings, credentials and the existing Python environment are reused; project generators and generated project artifacts are refreshed separately through `config`. Locally modified managed files stop an update instead of being overwritten.
 
 The CLI removes only verified files from its own installation. Unowned files, empty directories and unrelated links in tool storage are preserved in place; only receipt-owned files enter removal staging. Pending recovery records and conflicting receipts still stop removal. New dedicated runtime files have immutable SHA-256 ownership receipts. Added or changed runtime files are retained and reported; reused and legacy Conda installations have no inferred ownership and remain installed. Temporary failure logs and other historical untracked files are not deleted by matching their names.
 

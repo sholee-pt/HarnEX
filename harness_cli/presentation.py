@@ -52,6 +52,8 @@ def update_report(value: dict) -> None:
     display.line('\n' + title, style='warning' if refused else 'success' if updated or not available else 'heading')
     display.line('  Current version: ' + clean(value.get('installation', {}).get('version', value.get('currentVersion', 'unknown'))), style='value')
     display.line('  Latest version:  ' + clean(value.get('availableVersion', 'unknown')), style='value')
+    if value.get('platform'):
+        display.line('  Platform:        ' + clean(value['platform']), style='muted')
     if updated:
         display.line('  Previous version: ' + clean(value.get('currentVersion', 'unknown')), style='muted')
     elif available:
