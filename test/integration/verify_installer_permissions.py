@@ -206,7 +206,7 @@ def main() -> int:
     try:
         bindings = {"baseline": source_binding(args.baseline), "candidate": source_binding(args.candidate)}
         report["sources"] = bindings
-        assert bindings["baseline"]["version"] == "0.36.0-beta", "baseline must be the pinned previous source"
+        assert bindings["baseline"]["version"] == "0.36.1-beta", "baseline must be the pinned previous source"
         assert bindings["candidate"]["version"] == version(Path(__file__).resolve().parents[2]), "candidate must match the current source version"
         if os.name != "posix":
             report.update(status="skipped", reason="POSIX directory mode semantics are unavailable; Windows ACL preservation is not verified.")

@@ -36,6 +36,13 @@ Do not build on every turn, inject the full graph, add agents, run Graft init,
 enable telemetry or call a summarization model. The query refreshes changed
 structural inputs on demand. No task requires Graft to be available.
 '''
+SKILL_HASH = hashlib.sha256(SKILL.encode()).hexdigest()
+# Exact bundled skill before the HarnEX command rename; not arbitrary old hashes.
+LEGACY_SKILL_HASH = '009074bb84f57de82c5b7ab108c73e405ab38aee298dfa75bcaaa972fa254d54'
+
+
+class RetrievalSettingsError(ValueError):
+    pass
 
 
 def register(commands):
@@ -95,12 +102,17 @@ def _save(path, value):
 def _load(path):
     if not path.exists():
         return None
-    value = json.loads(path.read_text(encoding='utf-8'))
+    try:
+        value = json.loads(path.read_text(encoding='utf-8'))
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise RetrievalSettingsError(f'Retrieval settings are invalid or unowned; files were preserved. Invalid JSON: {path}') from exc
     if (not isinstance(value, dict) or value.get('owner') != OWNER
-            or type(value.get('enabled')) is not bool or value.get('skillHash') != hashlib.sha256(SKILL.encode()).hexdigest()
+            or type(value.get('enabled')) is not bool
             or not all(isinstance(value.get(name), str) and (value[name] or not value['enabled']) for name in ('package', 'node'))
             or any(name in value and type(value[name]) is not bool for name in ('disabledByUser', 'skillOwned'))):
-        raise ValueError('Retrieval settings are invalid or unowned; files were preserved.')
+        raise RetrievalSettingsError(f'Retrieval settings are invalid or unowned; files were preserved. Invalid owner or fields: {path}')
+    if value.get('skillHash') not in (SKILL_HASH, LEGACY_SKILL_HASH):
+        raise RetrievalSettingsError(f'Retrieval settings are invalid or unowned; files were preserved. Unsupported skill hash: {path}')
     from .graft_sources import valid_sources
     valid_sources(value.get('externalSources', {}))
     return value
@@ -123,8 +135,29 @@ def _settings_or_new(path):
 
 def _check_skill(skill, settings):
     checked_path(skill)
-    if skill.exists() and (not settings.get('skillOwned', True) or skill.read_bytes() != SKILL.encode()):
+    if skill.exists() and (not settings.get('skillOwned', True)
+            or hashlib.sha256(skill.read_bytes()).hexdigest() not in (settings['skillHash'], SKILL_HASH)):
         raise ValueError('Existing retrieval skill is user-owned or modified; it was preserved.')
+
+
+def _replace_skill(skill, before, after, *, restore=None):
+    checked_path(skill)
+    original = skill.stat()
+    fd, name = tempfile.mkstemp(prefix='.retrieval-', dir=skill.parent)
+    temporary = Path(name)
+    try:
+        with os.fdopen(fd, 'wb') as stream:
+            stream.write(after)
+        os.chmod(temporary, (restore or original).st_mode & 0o7777)
+        if restore is not None:
+            os.utime(temporary, ns=(restore.st_atime_ns, restore.st_mtime_ns))
+        checked_path(skill)
+        if skill.stat() != original or skill.read_bytes() != before:
+            raise ValueError('Retrieval skill changed during migration; the concurrent edit was preserved.')
+        os.replace(temporary, skill)
+        return skill.stat()
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def _record_skill(root):
@@ -162,7 +195,7 @@ def storage(root):
 
 
 def automatic(root, source_root, *, disabled=False):
-    """Init convenience; never scan/rebuild a previously enabled project here."""
+    """Init convenience; unchanged enabled setups never scan/rebuild here."""
     settings = _load(checked_path(storage(root) / 'settings.json'))
     if not disabled and settings is None:
         previous = _load(checked_path(legacy_storage(root) / 'settings.json'))
@@ -172,7 +205,7 @@ def automatic(root, source_root, *, disabled=False):
         if settings.get('disabledByUser', not settings['enabled']):
             return {'state': 'disabled', 'guidance': 'Explicit Graft opt-out preserved.'}
         skill = checked_path(root / SKILL_PATH)
-        if settings['enabled'] and settings.get('skillOwned', True) and skill.is_file() and skill.read_bytes() == SKILL.encode():
+        if settings['enabled'] and settings['skillHash'] == SKILL_HASH and settings.get('skillOwned', True) and skill.is_file() and skill.read_bytes() == SKILL.encode():
             _record_skill(root)
             return {'state': 'enabled', 'guidance': 'Existing setup reused; retrieval refreshes only when queried.'}
     args = SimpleNamespace(project=root, graft_action='disable' if disabled else 'enable',
@@ -230,6 +263,7 @@ def execute(args, source_root):
         result = {'enabled': bool(settings and settings['enabled']), 'provider': 'graft',
                   'indexed': (cache / 'harness-ready.json').is_file(), 'mode': 'local-structural',
                   'skillInstalled': bool(settings and settings.get('skillOwned', True) and skill.is_file() and skill.read_bytes() == SKILL.encode())}
+        result['skillUpgradeRequired'] = bool(settings and settings['skillHash'] != SKILL_HASH)
         result['externalSources'] = (settings or {}).get('externalSources', {})
     elif action in {'add', 'remove'}:
         from .graft_sources import select, collect, valid_sources
@@ -257,7 +291,8 @@ def execute(args, source_root):
     elif action == 'disable':
         with _settings_lock(folder):
             settings = _settings_or_new(state_path)
-            remove_skill = settings.get('skillOwned', True) and skill.is_file() and skill.read_bytes() == SKILL.encode()
+            remove_skill = (settings.get('skillOwned', True) and skill.is_file()
+                            and hashlib.sha256(skill.read_bytes()).hexdigest() in (settings['skillHash'], SKILL_HASH))
             if settings['enabled'] or not settings.get('disabledByUser'):
                 settings['revision'] = uuid.uuid4().hex
             settings['enabled'] = False
@@ -277,10 +312,12 @@ def execute(args, source_root):
                 previous = _settings_or_new(state_path)
                 from .workspace_context import retrieval_owned
                 legacy = _load(checked_path(legacy_storage(root) / 'settings.json'))
-                if (skill.is_file() and skill.read_bytes() == SKILL.encode()
-                        and (getattr(args, 'adopt_skill', False) or retrieval_owned(root, previous['skillHash'])
-                             or legacy and legacy.get('skillOwned', True))):
+                digest = hashlib.sha256(skill.read_bytes()).hexdigest() if skill.is_file() else None
+                if (digest in (SKILL_HASH, LEGACY_SKILL_HASH)
+                        and (getattr(args, 'adopt_skill', False) or retrieval_owned(root, digest)
+                             or legacy and legacy.get('skillOwned', True) and legacy['skillHash'] == digest)):
                     previous['skillOwned'] = True
+                    previous['skillHash'] = digest
                 _check_skill(skill, previous)
                 # Reserve a retryable first setup before slow external work. A
                 # newer opt-out changes this receipt and cannot be overwritten.
@@ -332,14 +369,26 @@ def execute(args, source_root):
                 _check_skill(skill, current)
                 skill.parent.mkdir(parents=True, exist_ok=True)
                 created = None
+                replaced = None
+                before = skill.read_bytes() if skill.is_file() else None
+                original = skill.stat() if before is not None else None
                 try:
                     if not skill.exists():
                         with skill.open('x', encoding='utf-8', newline='\n') as stream:
                             metadata = os.fstat(stream.fileno())
                             created = (metadata.st_dev, metadata.st_ino)
                             stream.write(SKILL)
+                    elif before != SKILL.encode():
+                        replaced = _replace_skill(skill, before, SKILL.encode())
                     _save(state_path, settings)
                 except BaseException:
+                    if replaced is not None:
+                        try:
+                            checked_path(skill)
+                            if skill.stat() == replaced and skill.read_bytes() == SKILL.encode() and _load(state_path) == current:
+                                _replace_skill(skill, SKILL.encode(), before, restore=original)
+                        except (OSError, ValueError):
+                            pass
                     if created is not None:
                         try:
                             checked_path(skill)

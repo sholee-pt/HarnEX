@@ -472,14 +472,16 @@ def _configure_retrieval(args, source_root, root):
     mode = getattr(args, 'retrieval', None)
     if mode is None or getattr(args, 'dry_run', False) or getattr(args, 'install_only', False):
         return
-    from .graft import automatic
+    from .graft import automatic, RetrievalSettingsError
     try:
         with ui.Progress('Preparing local code retrieval', compact=True):
             report = automatic(root, source_root, disabled=mode == 'off')
         ui.report(report, title='Graft retrieval')
     except (OSError, ValueError, subprocess.SubprocessError) as exc:
+        guidance = ('Inspect the reported settings file before retrying; existing files were preserved.' if isinstance(exc, RetrievalSettingsError)
+                    else 'Retry with harnex graft enable --project PATH.')
         ui.report({'state': 'unavailable', 'guidance': 'The project harness remains usable with ordinary code search.',
-                   'warnings': [str(exc), 'Retry with harnex graft enable --project PATH.']}, title='Graft retrieval', error=True)
+                   'warnings': [str(exc), guidance]}, title='Graft retrieval', error=True)
         return
     if args.command == 'init' and report.get('state') == 'enabled':
         from .jev import automatic as automatic_jev

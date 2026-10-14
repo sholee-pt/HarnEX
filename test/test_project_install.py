@@ -38,8 +38,8 @@ class ProjectInstallTests(unittest.TestCase):
         baseline = permissions.copy_source(REPO_ROOT, self.base / "previous source")
         metadata = baseline / permissions.SKILL / "scripts/harness_metadata.py"
         current = permissions.version(REPO_ROOT)
-        self.assertNotEqual(current, "0.36.0-beta")
-        metadata.write_text(metadata.read_text(encoding="utf-8").replace(current, "0.36.0-beta"), encoding="utf-8")
+        self.assertNotEqual(current, "0.36.1-beta")
+        metadata.write_text(metadata.read_text(encoding="utf-8").replace(current, "0.36.1-beta"), encoding="utf-8")
         for candidate, expected in ((REPO_ROOT, "skipped"), (baseline, "failed")):
             with self.subTest(candidate=candidate):
                 output = self.base / "permission report.json"

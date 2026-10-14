@@ -4,7 +4,7 @@ Changes should keep HarnEX small, runtime-native, and safe to rerun. See the lic
 
 ## Branches
 
-- HarnEX development branches use `vX.Y.Z-beta`, with tags such as `v0.36.1-beta`. These are HarnEX versions, not Codex product versions.
+- HarnEX development branches use `vX.Y.Z-beta`, with tags such as `v0.36.2-beta`. These are HarnEX versions, not Codex product versions.
 - This repository contains the Codex edition only.
 - X marks major or large-scale changes; Y covers minor features, improvements, refactoring and optimization; Z covers bug fixes. Explanatory documentation-only changes do not increment the version.
 - Start a new version branch from the latest verified release branch. See [versioning](docs/versioning.md) for the current policy and historical label migrations.
@@ -75,8 +75,8 @@ Linux integration checks run in the manual Linux workflow. A separately authoriz
 
 ```bash
 conda run -n harness python test/integration/prepare_release_baselines.py --output /tmp/harness-baselines
-conda run -n harness python test/integration/verify_cli_upgrade.py --baseline /tmp/harness-baselines/v0360 --output /tmp/cli-upgrade.json
-conda run -n harness python test/integration/verify_release_upgrade.py --baseline /tmp/harness-baselines/v0360 --output /tmp/project-upgrade.json
+conda run -n harness python test/integration/verify_cli_upgrade.py --baseline /tmp/harness-baselines/v0361 --output /tmp/cli-upgrade.json
+conda run -n harness python test/integration/verify_release_upgrade.py --baseline /tmp/harness-baselines/v0361 --output /tmp/project-upgrade.json
 ```
 
 Release comparison runs only against the immediately preceding version baseline (v0.36.0-beta, `4dfc450df864627d276c8b28dfa77174e4a4e363`), defined in [prepare_release_baselines.py](test/integration/prepare_release_baselines.py). CI does not recreate the entire historical version matrix. Functional regression tests still check supported contracts and failure cases. Add an older source comparison only for a concrete compatibility defect that requires it.

@@ -43,6 +43,16 @@ does not discover the skill, open a fresh conversation or invoke the query
 explicitly. Existing project agents, the manifest and root instructions are
 unchanged. No new agent is required.
 
+From v0.36.2-beta, enable and automatic setup recognize the exact bundled retrieval
+skill from before the `harnex` command rename. An unchanged owned skill is updated
+while same-host external sources and cached graphs are preserved. Automatic setup
+retains explicit opt-outs; an explicit enable request re-enables retrieval.
+Status reads do not migrate files; `skillUpgradeRequired` reports an old receipt.
+Different hosts still require locally selected runtime paths and external sources.
+User-modified skills and unknown receipt hashes remain unchanged. An invalid-settings
+error identifies the file and failed check; inspect that evidence before retrying.
+Repeating enable without repairing an unsupported receipt does not resolve it.
+
 The adapter calls reviewed structural library APIs directly, bypassing Graft
 CLI startup, automatic version checks, init, global hooks and telemetry. It
 never enables the LLM/deep pass. Graft itself sends no project inputs to a model
@@ -136,7 +146,7 @@ the portable context receipt. Init on a new host can reuse that file while
 preparing a locally selected runtime; it does not import the old host's executable
 path, credentials or external bindings. For a legacy skill without that receipt,
 `harnex graft enable --adopt-skill --project PATH` explicitly adopts only
-the byte-identical bundled skill. Modified/user-authored skills remain preserved.
+the byte-identical current or recognized pre-rename bundled skill. Modified/user-authored skills remain preserved.
 
 Before Jev advice starts, the query rechecks Graft settings under the settings
 lock. A completed disable prevents a new advice request from that older query.

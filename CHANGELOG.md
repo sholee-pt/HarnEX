@@ -2,6 +2,7 @@
 
 | Version | Plan | Manifest | Transaction | Main change or patch |
 | :---: | :---: | :---: | :---: | --- |
+| [`v0.36.2‑beta`](#harnex-v0362-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Migrate recognized pre-rename Graft settings without losing user choices or edits |
 | [`v0.36.1‑beta`](#harnex-v0361-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Select and prepare updates only from complete releases for the current platform |
 | [`v0.36.0‑beta`](#harnex-v0360-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Introduce HarnEX and the harnex command with compatible installation migration |
 | [`v0.35.3‑beta`](#harness-for-codex-v0353-beta) | Schema&nbsp;3 | Schema&nbsp;7 | Schema&nbsp;2 | Preserve Windows managed-path identity during concurrent parent creation |
@@ -105,6 +106,13 @@
 | [`v0.2.1‑beta`](#harness-for-codex-v021-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | True no-op updates, complete action-map checks, CI and fixture dry-run corrections |
 | [`v0.2.0‑beta`](#harness-for-codex-v020-beta) | Schema&nbsp;1 | Schema&nbsp;2 | None | JSON proposal, no-write dry-run, guarded deterministic apply, instruction precedence |
 | [`v0.1.0‑beta`](#harness-for-codex-v010-beta) | Direct&nbsp;generation | Schema&nbsp;1 | None | Project-adaptive agents and skills, native Codex paths, initial ownership manifest |
+
+## HarnEX v0.36.2-beta
+
+- Accept the exact historical Graft retrieval skill hash from before the command rename; update an unchanged owned skill to `harnex` during enable or automatic setup.
+- Preserve disabled choices, host-local external sources and cached graphs. Reuse portable skill ownership without importing another host's executable paths or retrieval selections.
+- Preserve user edits and restore the prior skill after a failed settings commit when it remains unchanged. Interrupted migration remains retryable.
+- Report the invalid settings path and reason instead of recommending an unchanged retry. Compare release upgrades against published v0.36.1-beta.
 
 ## HarnEX v0.36.1-beta
 

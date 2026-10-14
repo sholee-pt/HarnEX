@@ -12,7 +12,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if ($Help) {
-    Write-Output 'HarnEX 0.36.1-beta Windows installer. Options: -CondaExe PATH, -CondaHome PATH, -DataDir PATH, -BinDir PATH, -AutoUpdate compatible|check|off, -Existing ask|reuse|reset, -NoModifyPath.'
+    Write-Output 'HarnEX 0.36.2-beta Windows installer. Options: -CondaExe PATH, -CondaHome PATH, -DataDir PATH, -BinDir PATH, -AutoUpdate compatible|check|off, -Existing ask|reuse|reset, -NoModifyPath.'
     return
 }
 if ($env:OS -ne 'Windows_NT' -or -not [Environment]::Is64BitProcess -or $env:PROCESSOR_ARCHITECTURE -ne 'AMD64') {
@@ -41,7 +41,7 @@ foreach ($directory in @($selectedData, $selectedBin, "$selectedData-runtime", $
         $current = Split-Path -Parent $current
     }
 }
-$version = '0.36.1-beta'
+$version = '0.36.2-beta'
 $name = "harness-codex-$version-windows.zip"
 $release = "https://github.com/sholee-pt/HarnEX/releases/download/v$version"
 $temporary = Join-Path ([IO.Path]::GetTempPath()) ('harness-codex-install-' + [guid]::NewGuid().ToString('N'))
