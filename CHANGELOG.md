@@ -116,7 +116,8 @@
 - Stop repeated init before preferences, hook trust or integration setup when the existing project generator fails ownership validation; preserve user edits.
 - Make CLI doctor check the same project generator ownership and report integration failures consistently in both its JSON validity and exit status.
 - Document all three configuration choices and distinguish published-release updates from an explicit development branch pin.
-- Compare upgrade checks against the published v0.36.3-beta source. This development version does not change the README's published installation URL.
+- Compare upgrade checks against the published v0.36.3-beta source.
+- Publish Linux and Windows installers plus the matching Windows native package from source commit `1b3e4ad03cf226e022251826ef5150eb318a1441`; update installation guidance to the available v0.36.4-beta assets.
 
 ## HarnEX v0.36.3-beta
 

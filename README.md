@@ -37,18 +37,18 @@ Behind that experience, HarnEX brings its own project-analysis, orchestration an
 
 Windows uses a separate native package and terminal management commands; it does not yet provide Linux's in-conversation management adapter. Routing rules and structural checks do not establish measured cost or quality gains. See [architecture](docs/architecture.md), [management](docs/management.md) and [routing](docs/routing.md).
 
-**Latest development changes:** v0.36.4-beta fixes platform release discovery, resumed-model validation and repeated init after project generator changes. It is not yet published; the installer below remains pinned to v0.36.3-beta, which skips reuse/reset when only shared PATH registration remains. Recognized pre-rename Graft settings remain supported; see [retrieval compatibility](docs/retrieval.md).
+**Latest changes:** v0.36.4-beta fixes platform release discovery, resumed-model validation, repeated init after project generator changes and inconsistent doctor results. It retains shared-PATH reinstall handling and recognized pre-rename Graft settings; see [retrieval compatibility](docs/retrieval.md).
 
-**Beta releases:** Linux **[v0.36.3-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.3-beta)** is published with the `harnex` command and `/harnex/` controls. No Windows assets are currently listed in the published releases. The previously verified v0.35.3-beta Windows release is no longer available at its release URL.
+**Beta releases:** **[v0.36.4-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.4-beta)** is published for Linux and Windows x86_64 from the same source commit. Linux includes `/harnex/` controls; Windows includes its separately verified native package. Both install the `harnex` command.
 
 ## Installation Guide
 
 ### For Linux
 
-**Latest published Linux release: [v0.36.3-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.3-beta)**
+**Latest published Linux release: [v0.36.4-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.4-beta)**
 
 ```bash
-curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v0.36.3-beta/install_harnex.sh | sh
+curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/v0.36.4-beta/install_harnex.sh | sh
 harnex --version
 ```
 
@@ -68,7 +68,17 @@ Supports Linux x86_64 and aarch64. Source cloning requires Git; installation req
 
 ### For Windows
 
-**Windows x86_64:** No downloadable Windows release is currently available on the [Releases page](https://github.com/sholee-pt/HarnEX/releases). To preview the HarnEX management CLI from source, run in 64-bit PowerShell under your normal script execution policy:
+**Latest published Windows release: [v0.36.4-beta](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.4-beta)**
+
+**Windows x86_64:** Run in 64-bit PowerShell under your normal script execution policy:
+
+```powershell
+Invoke-WebRequest 'https://github.com/sholee-pt/HarnEX/releases/download/v0.36.4-beta/install_harnex.ps1' -OutFile ./install_harnex.ps1
+& ./install_harnex.ps1
+harnex --version
+```
+
+For source installation or development:
 
 ```powershell
 git clone --branch v0.36.4-beta --single-branch https://github.com/sholee-pt/HarnEX.git HarnEX
@@ -76,9 +86,7 @@ git clone --branch v0.36.4-beta --single-branch https://github.com/sholee-pt/Har
 harnex --version
 ```
 
-The matching v0.36.4-beta Windows native package has not been published. Full Windows integration requires that separate release; source installation alone does not provide it. Existing installations can retain their verified Windows package while waiting for a compatible published update.
-
-When a Windows release is available, its standalone installer verifies the ZIP, prepares an isolated Python 3.11 environment and Git, and registers the command in user PATH. First project setup requires an already installed Codex CLI with working account/provider access: HarnEX runs that CLI before installing its own Windows integration. Use an interactive PowerShell terminal. If `codex` resolves to a `.cmd` or `.bat` wrapper, select the actual native `codex.exe` with `--codex-binary`; batch wrappers are rejected. The following full integration example requires matching HarnEX Windows assets to be published first. Replace its paths with your project, existing Markdown brief and native executable:
+The standalone installer verifies the ZIP, prepares an isolated Python 3.11 environment and Git, and registers the command in user PATH. First project setup requires an already installed Codex CLI with working account/provider access: HarnEX runs that CLI before installing its own Windows integration. Use an interactive PowerShell terminal. If `codex` resolves to a `.cmd` or `.bat` wrapper, select the actual native `codex.exe` with `--codex-binary`; batch wrappers are rejected. Replace the following paths with your project, existing Markdown brief and native executable:
 
 ```powershell
 harnex init --project 'C:\path\to\project' --goal-file 'C:\path\to\PROJECT.md' --codex-binary 'C:\path\to\codex.exe'

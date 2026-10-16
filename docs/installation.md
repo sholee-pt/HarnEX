@@ -6,13 +6,13 @@ HarnEX adds project-aware harness setup and management to Codex CLI. The default
 
 From v0.36.0-beta, the project and repository are **HarnEX**, the management command is `harnex`, and Linux in-conversation management uses `/harnex/`. The installer replaces the owned `harness-codex` command (or the earlier `harness` command) with `harnex`; it does not retain a command alias. Update scripts that invoke the previous command. The older `/harness/` in-conversation inputs remain readable.
 
-Use the published Linux installer in the [README](../README.md#for-linux), or install the current source with `bash HarnEX/installer/install.sh` on Linux or `./HarnEX/installer/install.ps1` on Windows, selecting `reuse` for existing settings. Older published updaters do not follow GitHub API repository redirects; use the current Linux release installer or the source installer for the first migration. If an explicit old branch pin prevents installing a newer version, choose `reset` to clear tool preferences or deliberately select a matching version; project harnesses are preserved.
+Use the published [Linux](../README.md#for-linux) or [Windows](../README.md#for-windows) installer, or install the current source with `bash HarnEX/installer/install.sh` on Linux or `./HarnEX/installer/install.ps1` on Windows, selecting `reuse` for existing settings. Older published updaters do not follow GitHub API repository redirects; use the current release installer for your platform or the source installer for the first migration. If an explicit old branch pin prevents installing a newer version, choose `reset` to clear tool preferences or deliberately select a matching version; project harnesses are preserved.
 
 The installer validates the old installation, creates the new command and records its ownership, then removes the verified old launchers. It refuses to replace an unrelated `harnex` file or delete a modified old launcher. An interrupted command replacement retains `.command-migration.json`; rerun installation after resolving reported conflicts. On Linux, whichever managed command is present can also run `update --repair-launcher`. On Windows, use `./HarnEX/installer/install.ps1 -Existing reuse` for the initial replacement and its recovery: an executing batch launcher cannot safely delete itself. Modified files are preserved.
 
 Storage paths (`harness-codex` on Linux and `HarnessCodex` on Windows), the `harness` Conda environment, `HARNESS_*` variables, ownership markers and project `.harness`/`.agents/skills/harness` paths remain stable. From v0.36.0-beta, the standalone installers are `install_harnex.sh` and `install_harnex.ps1`. Earlier releases retain their original `install_harness_codex` filenames. Archive names such as `harness-codex-VERSION-linux.tar.gz` remain compatibility identifiers; they do not select the installed command name.
 
-The published [Linux v0.36.3-beta assets](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.3-beta) install `harnex`, provide `/harnex/` controls, migrate recognized pre-rename Graft settings and skip reinstall choices when only shared PATH remains. No Windows assets are currently listed in the published releases; the previously verified v0.35.3-beta release URL is unavailable. Windows v0.36.4-beta development source is available for the new command, but its matching native package still requires separate publication before full Windows integration can complete.
+The published [v0.36.4-beta assets](https://github.com/sholee-pt/HarnEX/releases/tag/v0.36.4-beta) include Linux and Windows installers, source packages and the matching Windows x86_64 native package. Both platforms install `harnex` and include the platform-release discovery, resumed-model validation, guarded init and doctor fixes. Linux provides `/harnex/` controls and retains recognized pre-rename Graft migration. Both installers skip reinstall choices when only shared PATH remains. The [build report](https://github.com/sholee-pt/HarnEX/releases/download/v0.36.4-beta/build.json) binds both platforms to source commit `1b3e4ad03cf226e022251826ef5150eb318a1441`.
 
 The [README installation guide](../README.md#installation-guide) provides the standard commands. Release installers are version-bound; subsequent `harnex update` follows published HarnEX releases. Explicit `--branch` pins retain the developer source-update path.
 
@@ -22,7 +22,7 @@ Interactive Linux `codex` launches without a branch pin check both release chann
 
 Interactive launch shows progress while checking releases and Auto compatibility. A failed release check keeps installed files available. Native fallback preserves Codex settings and history, but disables both HarnEX Auto and `/harnex/` management for that session. The terminal displays `status`, `init` and `config` commands for the selected project; run them after exiting Codex. An explicit native profile or `HARNESS_CODEX_NATIVE=1` keeps its original arguments and receives the same management guidance. Help and automation remain quiet native commands.
 
-Windows integration requires separately published Windows x86_64 assets, which are not currently available. Windows installation prepares the management CLI; `init/config` then prepares the matching HarnEX-versioned native Codex package with Auto. Open a new terminal after integration registers PATH. Linux's official-package adapter, `/harnex/` management menu and independent Codex update flow do not apply to that Windows package. Use terminal management commands; older updaters require you to check that a target release includes its Windows ZIP, PowerShell installer and matching native package before updating. Graft automatic setup and persistent Jev login remain Linux-only; environment-provided Jev keys remain supported. See [release verification](distribution.md).
+Windows integration uses the separately published Windows x86_64 assets, available for v0.36.4-beta. Windows installation prepares the management CLI; `init/config` then prepares the matching HarnEX-versioned native Codex package with Auto. Open a new terminal after integration registers PATH. Linux's official-package adapter, `/harnex/` management menu and independent Codex update flow do not apply to that Windows package. Use terminal management commands; older updaters require you to check that a target release includes its Windows ZIP, PowerShell installer and matching native package before updating. Graft automatic setup and persistent Jev login remain Linux-only; environment-provided Jev keys remain supported. See [release verification](distribution.md).
 
 ## Windows setup and updates
 
@@ -61,7 +61,7 @@ points are preserved by either opt-out; they are not uninstalled.
 
 From v0.36.3-beta, the reuse/reset prompt requires a verified installed tool. A shared PATH entry left after uninstall is not an installation or saved tool preferences, so installation proceeds without that prompt. Explicit `--existing reset` still requests PATH reset. Command files without a verified installation are preserved and reported as a conflict before prompting; a nonempty unowned or damaged tool directory still requires inspection. The usual PATH registration checks continue to protect user-edited shell/registry settings.
 
-Older installers can still ask reuse/reset for shared PATH alone. Use the current published installer from the [README](../README.md#for-linux) after uninstall; a retained PATH entry by itself does not establish that tool removal failed. Retained project harnesses and Graft/Jev state are separate from tool-installation detection.
+Older installers can still ask reuse/reset for shared PATH alone. Use the current published installer for your platform from the [README](../README.md#installation-guide) after uninstall; a retained PATH entry by itself does not establish that tool removal failed. Retained project harnesses and Graft/Jev state are separate from tool-installation detection.
 
 `reuse` retains the repository transport and automatic-update policy. Branch pins are retained except for the [one-time legacy-to-beta migration](versioning.md). `reset` applies the supplied/default preferences, clears the update-check cache and rebuilds the exact managed PATH registration. Both preserve verified releases and runtime files, project harnesses, unrelated shell/registry settings and modified user content. Reset does not authorize removing unknown directories. Without a terminal, an existing installation requires an explicit choice.
 
@@ -74,13 +74,14 @@ curl -fsSL https://github.com/sholee-pt/HarnEX/releases/download/RELEASE_TAG/ins
 source ~/.bashrc
 ```
 
-For a separately published Windows release v0.36.0-beta or newer, download its `install_harnex.ps1` asset, then run:
+For the published Windows v0.36.4-beta release, download its installer and retain existing settings with:
 
 ```powershell
+Invoke-WebRequest 'https://github.com/sholee-pt/HarnEX/releases/download/v0.36.4-beta/install_harnex.ps1' -OutFile ./install_harnex.ps1
 & ./install_harnex.ps1 -Existing reuse
 ```
 
-The [README Windows section](../README.md#for-windows) tracks current publication availability; it provides no release download command while Windows assets are unavailable. Earlier releases, when available, retain their original `install_harness_codex.ps1` filename.
+The [README Windows section](../README.md#for-windows) tracks the latest available Windows installer independently of Linux. Earlier releases, when available, retain their original `install_harness_codex.ps1` filename.
 
 ## Source installation
 
